@@ -41,6 +41,7 @@
     --wine-bright:#C0596F;
     --moss:#3F6B4A;
     --emerald-bright:#6FAE84;
+    --rose-light:#C0596F;
     --glass:rgba(28,20,33,0.62);
     --glass-2:rgba(46,32,50,0.55);
     --glass-border:rgba(255,255,255,0.08);
@@ -406,6 +407,10 @@
   .btn{
     position:relative;
     overflow:hidden;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.5rem;
     border:1px solid var(--line-strong);
     background:var(--bg-raised);
     color:var(--ink);
@@ -419,6 +424,7 @@
     transition:background .15s, transform .12s, border-color .15s, box-shadow .15s, filter .15s;
   }
   .btn:hover{ transform:translateY(-1px); }
+  .btn-icon{ width:1.15em; height:1.15em; flex:none; }
   .btn::after{
     content:""; position:absolute; top:0; left:-75%; width:45%; height:100%;
     background:linear-gradient(120deg, transparent, rgba(255,255,255,0.28), transparent);
@@ -433,11 +439,21 @@
   .btn-present{
     background:linear-gradient(135deg, var(--emerald-bright), var(--moss) 70%);
     border-color:var(--moss); color:var(--ink);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.18), 0 4px 14px rgba(63,107,74,0.35);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.22), 0 8px 24px -6px rgba(63,107,74,0.55);
   }
-  .btn-present:hover{ filter:brightness(1.1); transform:translateY(-1px); }
-  .btn-absent{ background:transparent; border-color:var(--wine-bright); color:var(--wine-bright); border-width:1.5px; }
-  .btn-absent:hover{ background:rgba(192,89,111,0.14); }
+  .btn-present:hover{
+    filter:brightness(1.1); transform:translateY(-2px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.28), 0 12px 32px -6px rgba(63,107,74,0.65);
+  }
+  .btn-absent{
+    background:linear-gradient(135deg, var(--rose-light), var(--persimmon) 70%);
+    border-color:var(--persimmon); color:var(--ink);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.2), 0 8px 24px -6px rgba(123,42,59,0.5);
+  }
+  .btn-absent:hover{
+    filter:brightness(1.1); transform:translateY(-2px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.26), 0 12px 32px -6px rgba(123,42,59,0.6);
+  }
   .btn-primary{
     background:linear-gradient(135deg, var(--amber-strong), var(--amber) 55%, var(--gold-deep));
     border-color:var(--amber); color:#241706;
@@ -712,6 +728,7 @@
     --wine-bright:#7A2530;
     --moss:#4F8A62;
     --emerald-bright:#5FA173;
+    --rose-light:#E38FA0;
     --glass:rgba(255,253,246,0.66);
     --glass-2:rgba(243,234,209,0.58);
     --glass-border:rgba(92,63,12,0.14);
@@ -747,9 +764,17 @@
     background:linear-gradient(120deg, transparent, rgba(139,94,20,0.16), transparent);
   }
   :root[data-theme="light"] .btn-present{
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 14px rgba(79,138,98,0.28);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 24px -6px rgba(79,138,98,0.4);
   }
-  :root[data-theme="light"] .btn-absent:hover{ background:rgba(122,37,48,0.10); }
+  :root[data-theme="light"] .btn-present:hover{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.6), 0 12px 32px -6px rgba(79,138,98,0.5);
+  }
+  :root[data-theme="light"] .btn-absent{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 24px -6px rgba(122,37,48,0.35);
+  }
+  :root[data-theme="light"] .btn-absent:hover{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.6), 0 12px 32px -6px rgba(122,37,48,0.45);
+  }
   :root[data-theme="light"] .btn-danger:hover{ background:rgba(122,37,48,0.08); }
   :root[data-theme="light"] .btn-primary{
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 14px rgba(184,134,42,0.28);
@@ -862,8 +887,14 @@
             </div>
 
             <div class="action-row" style="margin-top:1rem;">
-              <button type="button" class="btn btn-lg btn-present" id="btnPresent">出席で受付</button>
-              <button type="button" class="btn btn-lg btn-absent" id="btnAbsent">欠席として記録</button>
+              <button type="button" class="btn btn-lg btn-present" id="btnPresent">
+                <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                出席で受付
+              </button>
+              <button type="button" class="btn btn-lg btn-absent" id="btnAbsent">
+                <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+                欠席として記録
+              </button>
             </div>
 
             <div class="panel-details" id="panelEventDetails" hidden>
