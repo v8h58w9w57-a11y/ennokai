@@ -1728,7 +1728,6 @@
       }
     });
     save(); renderOrgRosterSection(); syncPublicView();
-    ta.value = "";
     showToast(added + "名を追加しました（重複は無視）");
   });
   document.getElementById("rosterReplaceBtn").addEventListener("click", async function(){
@@ -1740,7 +1739,6 @@
     if(!ok) return;
     ev.roster = names.map(function(name){ return { id: uid(), name: name, status: "pending", source: "preset", updatedAt: Date.now() }; });
     save(); renderOrgRosterSection(); syncPublicView();
-    ta.value = "";
     showToast("名簿を置き換えました（" + names.length + "名）");
   });
 
