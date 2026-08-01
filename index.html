@@ -568,6 +568,50 @@
     .row .name{ font-size:0.9rem; }
   }
 
+  /* ---------- print view (A4) ---------- */
+  .print-toolbar{
+    display:flex; justify-content:space-between; gap:1rem;
+    max-width:820px; margin:0 auto 1.2rem; padding:1.5rem 1rem 0;
+  }
+  .print-sheet{
+    max-width:820px; margin:0 auto 3rem;
+    background:#FFFFFF; color:#241706;
+    padding:20mm 16mm;
+    border-radius:6px;
+    box-shadow:0 10px 34px rgba(0,0,0,0.25);
+    font-family:var(--font-jp);
+  }
+  .print-header{ text-align:center; border-bottom:2px solid #A8791E; padding-bottom:1rem; margin-bottom:1.3rem; }
+  .print-eyebrow{
+    font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.2em;
+    color:#8C6314; margin:0 0 0.4rem; text-transform:uppercase;
+  }
+  .print-title{ font-family:var(--font-serif); font-size:2.1rem; margin:0 0 0.4rem; color:#241706; }
+  .print-date{ margin:0; color:#4A3B22; font-size:1.05rem; }
+  .print-generated{ margin:0.35rem 0 0; color:#8A7550; font-size:0.82rem; }
+  .print-summary{
+    text-align:center; margin:0 0 1.6rem; font-weight:700; font-size:1.05rem; color:#241706;
+  }
+  .print-section{ margin-bottom:1.5rem; }
+  .print-section h2{
+    font-family:var(--font-serif); font-size:1.2rem; font-weight:700;
+    border-bottom:1px solid #D8C7A6; padding-bottom:0.35rem; margin:0 0 0.7rem; color:#241706;
+  }
+  .print-section h2 span{ font-family:var(--font-mono); font-size:0.85rem; font-weight:400; color:#8A7550; }
+  .print-list{ column-count:2; column-gap:2.2rem; margin:0; padding-left:1.5rem; }
+  .print-list li{ break-inside:avoid; padding:0.22rem 0; font-size:1rem; color:#241706; }
+  .print-list li.print-empty{ list-style:none; margin-left:-1.5rem; color:#8A7550; font-style:italic; font-size:0.92rem; }
+
+  @media print{
+    body *{ visibility:hidden; }
+    #printView, #printView *{ visibility:visible; }
+    #printView{ position:absolute; left:0; top:0; width:100%; margin:0; }
+    .no-print{ display:none !important; }
+    html::after, body::before{ display:none !important; }
+    .print-sheet{ box-shadow:none; margin:0; max-width:none; border-radius:0; }
+    @page{ size:A4; margin:16mm; }
+  }
+
   /* ================================================================
      WHITE / IVORY GORGEOUS THEME — toggle via [data-theme="light"]
      ================================================================ */
@@ -822,6 +866,7 @@
         <button class="btn" id="copyAbsentBtn">欠席者をコピー</button>
         <button class="btn" id="copyPendingBtn">未入力者をコピー</button>
       </div>
+      <button type="button" class="btn btn-primary btn-block" id="openPrintBtn" style="margin-top:0.8rem;">出欠リストを印刷する（A4）</button>
 
       <details class="section">
         <summary>名簿を管理する（事前入力）</summary>
@@ -858,6 +903,35 @@
     </section>
   </div>
 
+</div>
+
+<!-- ============ PRINT VIEW (A4) ============ -->
+<div id="printView" hidden>
+  <div class="print-toolbar no-print">
+    <button type="button" class="btn btn-sm btn-ghost" id="printBackBtn">← 主催者画面に戻る</button>
+    <button type="button" class="btn btn-sm btn-primary" id="printNowBtn">印刷する</button>
+  </div>
+  <div class="print-sheet" id="printSheet">
+    <header class="print-header">
+      <p class="print-eyebrow">YOKOYAMA KAKOSHO</p>
+      <h1 class="print-title" id="printEventName">行事名</h1>
+      <p class="print-date" id="printEventDate"></p>
+      <p class="print-generated" id="printGenerated"></p>
+    </header>
+    <p class="print-summary" id="printSummary"></p>
+    <section class="print-section">
+      <h2>出席者 <span id="printPresentCount"></span></h2>
+      <ol class="print-list" id="printPresentList"></ol>
+    </section>
+    <section class="print-section">
+      <h2>欠席者 <span id="printAbsentCount"></span></h2>
+      <ol class="print-list" id="printAbsentList"></ol>
+    </section>
+    <section class="print-section">
+      <h2>未入力 <span id="printPendingCount"></span></h2>
+      <ol class="print-list" id="printPendingList"></ol>
+    </section>
+  </div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -1442,6 +1516,62 @@
     switchView(false);
     showToast("すべてのデータをリセットしました");
   });
+
+  /* ================= PRINT VIEW (A4) ================= */
+  function fillPrintList(id, arr){
+    var el = document.getElementById(id);
+    el.innerHTML = "";
+    if(arr.length === 0){
+      var li = document.createElement("li");
+      li.className = "print-empty";
+      li.textContent = "該当者なし";
+      el.appendChild(li);
+      return;
+    }
+    arr.forEach(function(p){
+      var li = document.createElement("li");
+      li.textContent = p.name;
+      el.appendChild(li);
+    });
+  }
+  function renderPrintView(){
+    var ev = getEvent(orgEventId);
+    if(!ev) return false;
+
+    document.getElementById("printEventName").textContent = ev.name;
+    document.getElementById("printEventDate").textContent = ev.date || "";
+
+    var now = new Date();
+    var pad = function(n){ return String(n).padStart(2,"0"); };
+    document.getElementById("printGenerated").textContent =
+      "作成日時：" + now.getFullYear() + "/" + pad(now.getMonth()+1) + "/" + pad(now.getDate()) +
+      " " + pad(now.getHours()) + ":" + pad(now.getMinutes());
+
+    var present = ev.roster.filter(function(p){ return p.status === "present"; });
+    var absent = ev.roster.filter(function(p){ return p.status === "absent"; });
+    var pending = ev.roster.filter(function(p){ return p.status === "pending"; });
+
+    document.getElementById("printSummary").textContent =
+      "出席 " + present.length + "名　／　欠席 " + absent.length + "名　／　全体 " + ev.roster.length + "名";
+    document.getElementById("printPresentCount").textContent = "（" + present.length + "名）";
+    document.getElementById("printAbsentCount").textContent = "（" + absent.length + "名）";
+    document.getElementById("printPendingCount").textContent = "（" + pending.length + "名）";
+
+    fillPrintList("printPresentList", present);
+    fillPrintList("printAbsentList", absent);
+    fillPrintList("printPendingList", pending);
+    return true;
+  }
+  document.getElementById("openPrintBtn").addEventListener("click", function(){
+    if(!renderPrintView()){ showToast("行事が選択されていません"); return; }
+    document.getElementById("organizerView").hidden = true;
+    document.getElementById("printView").hidden = false;
+  });
+  document.getElementById("printBackBtn").addEventListener("click", function(){
+    document.getElementById("printView").hidden = true;
+    document.getElementById("organizerView").hidden = false;
+  });
+  document.getElementById("printNowBtn").addEventListener("click", function(){ window.print(); });
 
   /* ================= VIEW SWITCH / AUTH ================= */
   function switchView(showOrganizer){
