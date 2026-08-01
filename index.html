@@ -712,90 +712,90 @@
      ================================================================ */
   :root[data-theme="light"]{
     color-scheme: light;
-    --bg-deep:#FBF6E9;
-    --bg-panel:#FFFDF6;
-    --bg-panel-2:#F3EAD1;
-    --bg-raised:#EBDCB4;
-    --ink:#241B0E;
-    --ink-soft:#4A3B22;
-    --ink-muted:#8A7550;
-    --line:rgba(139,94,20,0.22);
-    --line-strong:rgba(139,94,20,0.4);
-    --amber:#B8862A;
-    --amber-strong:#8C6314;
-    --gold-deep:#5C3F0C;
-    --persimmon:#C9495F;
-    --wine-bright:#7A2530;
-    --moss:#4F8A62;
-    --emerald-bright:#5FA173;
-    --rose-light:#E38FA0;
-    --glass:rgba(255,253,246,0.66);
-    --glass-2:rgba(243,234,209,0.58);
-    --glass-border:rgba(92,63,12,0.14);
-    --shadow-ambient:0 24px 55px -18px rgba(92,63,12,0.22), 0 6px 16px rgba(92,63,12,0.08);
+    --bg-deep:#FAF8F4;
+    --bg-panel:#FFFFFF;
+    --bg-panel-2:#F4EFE6;
+    --bg-raised:#ECE2CF;
+    --ink:#20180D;
+    --ink-soft:#4A3C28;
+    --ink-muted:#8B7A5E;
+    --line:rgba(200,138,30,0.20);
+    --line-strong:rgba(200,138,30,0.38);
+    --amber:#CC8A1E;
+    --amber-strong:#A66A12;
+    --gold-deep:#7A4D0C;
+    --persimmon:#E8748A;
+    --wine-bright:#B23A52;
+    --moss:#3F9860;
+    --emerald-bright:#4FAF6E;
+    --rose-light:#F2A8B8;
+    --glass:rgba(255,255,255,0.72);
+    --glass-2:rgba(244,239,230,0.62);
+    --glass-border:rgba(122,77,12,0.14);
+    --shadow-ambient:0 24px 55px -18px rgba(122,77,12,0.20), 0 6px 16px rgba(122,77,12,0.08);
   }
   :root[data-theme="light"] body{
     background:
-      radial-gradient(ellipse 900px 460px at 50% -8%, rgba(184,134,42,0.12), transparent 62%),
-      radial-gradient(ellipse 700px 500px at 100% 100%, rgba(122,37,48,0.06), transparent 60%),
+      radial-gradient(ellipse 900px 460px at 50% -8%, rgba(204,138,30,0.16), transparent 62%),
+      radial-gradient(ellipse 700px 500px at 100% 100%, rgba(178,58,82,0.09), transparent 60%),
       var(--bg-deep);
   }
   :root[data-theme="light"] body::before{
-    background-image:repeating-linear-gradient(135deg, rgba(92,63,12,0.035) 0 1px, transparent 1px 3px);
+    background-image:repeating-linear-gradient(135deg, rgba(122,77,12,0.035) 0 1px, transparent 1px 3px);
     mix-blend-mode:multiply;
-    opacity:0.5;
+    opacity:0.45;
   }
   :root[data-theme="light"] html::after{
-    border-color:rgba(139,94,20,0.32);
+    border-color:rgba(200,138,30,0.34);
   }
   :root[data-theme="light"] .hero-brand::before{
     background-image:
-      radial-gradient(circle at 0 100%, transparent 24%, rgba(139,94,20,0.07) 25%, rgba(139,94,20,0.07) 27%, transparent 28%, transparent 100%),
-      radial-gradient(circle at 60px 100%, transparent 24%, rgba(139,94,20,0.07) 25%, rgba(139,94,20,0.07) 27%, transparent 28%, transparent 100%),
-      radial-gradient(circle at 30px 70%, transparent 24%, rgba(139,94,20,0.05) 25%, rgba(139,94,20,0.05) 27%, transparent 28%, transparent 100%);
+      radial-gradient(circle at 0 100%, transparent 24%, rgba(200,138,30,0.09) 25%, rgba(200,138,30,0.09) 27%, transparent 28%, transparent 100%),
+      radial-gradient(circle at 60px 100%, transparent 24%, rgba(200,138,30,0.09) 25%, rgba(200,138,30,0.09) 27%, transparent 28%, transparent 100%),
+      radial-gradient(circle at 30px 70%, transparent 24%, rgba(200,138,30,0.06) 25%, rgba(200,138,30,0.06) 27%, transparent 28%, transparent 100%);
   }
   :root[data-theme="light"] .sparkle{
-    box-shadow:0 0 6px 2px rgba(92,63,12,0.45);
+    box-shadow:0 0 8px 2px rgba(204,138,30,0.55);
   }
   :root[data-theme="light"] .btn::after{
-    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
   }
   :root[data-theme="light"] .event-card::after{
-    background:linear-gradient(120deg, transparent, rgba(139,94,20,0.16), transparent);
+    background:linear-gradient(120deg, transparent, rgba(200,138,30,0.2), transparent);
   }
   :root[data-theme="light"] .btn-present{
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 24px -6px rgba(79,138,98,0.4);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 24px -6px rgba(63,152,96,0.4);
   }
   :root[data-theme="light"] .btn-present:hover{
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.6), 0 12px 32px -6px rgba(79,138,98,0.5);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.6), 0 12px 32px -6px rgba(63,152,96,0.5);
   }
   :root[data-theme="light"] .btn-absent{
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 24px -6px rgba(122,37,48,0.35);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.5), 0 8px 24px -6px rgba(178,58,82,0.35);
   }
   :root[data-theme="light"] .btn-absent:hover{
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.6), 0 12px 32px -6px rgba(122,37,48,0.45);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.6), 0 12px 32px -6px rgba(178,58,82,0.45);
   }
-  :root[data-theme="light"] .btn-danger:hover{ background:rgba(122,37,48,0.08); }
+  :root[data-theme="light"] .btn-danger:hover{ background:rgba(178,58,82,0.08); }
   :root[data-theme="light"] .btn-primary{
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 14px rgba(184,134,42,0.28);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 14px rgba(204,138,30,0.3);
   }
   :root[data-theme="light"] .btn-primary:hover{
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.55), 0 6px 20px rgba(184,134,42,0.4);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.55), 0 6px 20px rgba(204,138,30,0.42);
   }
   :root[data-theme="light"] select:focus,
   :root[data-theme="light"] input:focus,
   :root[data-theme="light"] textarea:focus{
-    box-shadow:0 0 0 3px rgba(184,134,42,0.16);
+    box-shadow:0 0 0 3px rgba(204,138,30,0.18);
   }
   :root[data-theme="light"] select{
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%238C6314' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%23A66A12' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
   }
-  :root[data-theme="light"] .confirm-banner{ background:rgba(79,138,98,0.14); }
-  :root[data-theme="light"] .confirm-banner.is-absent{ background:rgba(201,73,95,0.14); }
+  :root[data-theme="light"] .confirm-banner{ background:rgba(63,152,96,0.14); }
+  :root[data-theme="light"] .confirm-banner.is-absent{ background:rgba(178,58,82,0.13); }
   :root[data-theme="light"] .toast{
-    box-shadow:0 8px 22px rgba(92,63,12,0.22), 0 0 0 1px rgba(184,134,42,0.15);
+    box-shadow:0 8px 22px rgba(122,77,12,0.2), 0 0 0 1px rgba(204,138,30,0.18);
   }
-  :root[data-theme="light"] ::selection{ background:var(--amber); color:#FFFDF6; }
+  :root[data-theme="light"] ::selection{ background:var(--amber); color:#FFFFFF; }
 </style>
 </head>
 <body>
