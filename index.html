@@ -48,6 +48,7 @@
     line-height:1.5;
     min-height:100vh;
     -webkit-font-smoothing:antialiased;
+    transition:background .5s ease, color .4s ease;
   }
   body::before{
     content:""; position:fixed; inset:0; pointer-events:none; z-index:1;
@@ -170,12 +171,26 @@
     content:""; position:absolute; left:50%; bottom:-4px; width:8px; height:8px;
     background:var(--amber); transform:translateX(-50%) rotate(45deg);
     box-shadow:0 0 6px rgba(201,161,68,0.7);
+    animation:framePulse 3s ease-in-out infinite;
   }
+  @media (prefers-reduced-motion:reduce){ .topbar::before{ animation:none; } .lantern{ animation:none; } }
   .brand{ display:flex; align-items:center; gap:0.9rem; }
-  .lantern{ width:38px; height:46px; flex:none; filter:drop-shadow(0 0 10px rgba(201,161,68,0.5)); animation:glow 3.6s ease-in-out infinite; }
+  .lantern{
+    width:38px; height:46px; flex:none; transform-origin:50% 6%;
+    filter:drop-shadow(0 0 10px rgba(201,161,68,0.5));
+    animation:glow 3.6s ease-in-out infinite, sway 4.5s ease-in-out infinite;
+  }
   @keyframes glow{
     0%,100%{ filter:drop-shadow(0 0 8px rgba(201,161,68,0.4)); }
     50%{ filter:drop-shadow(0 0 17px rgba(240,210,122,0.65)); }
+  }
+  @keyframes sway{
+    0%,100%{ transform:rotate(-2.5deg); }
+    50%{ transform:rotate(2.5deg); }
+  }
+  @keyframes framePulse{
+    0%,100%{ opacity:0.55; }
+    50%{ opacity:1; }
   }
   @keyframes riseIn{
     from{ opacity:0; transform:translateY(16px); }
@@ -238,6 +253,7 @@
     border-radius:18px;
     padding:1.4rem 1.3rem;
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.04), 0 14px 34px rgba(0,0,0,0.4);
+    transition:background .5s ease, border-color .5s ease, box-shadow .5s ease;
   }
   .panel::before, .dialog::before{
     content:""; position:absolute; top:0; left:0; right:0; height:2px;
@@ -456,7 +472,14 @@
   }
   .event-card:hover::after{ left:130%; }
   .event-card:hover{ border-color:var(--amber); transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,0.35); }
-  @media (prefers-reduced-motion:reduce){ .event-card::after{ transition:none; display:none; } }
+  .event-card{ animation:riseIn 0.5s cubic-bezier(.2,.8,.2,1) both; }
+  .event-card:nth-child(1){ animation-delay:0.03s; }
+  .event-card:nth-child(2){ animation-delay:0.09s; }
+  .event-card:nth-child(3){ animation-delay:0.15s; }
+  .event-card:nth-child(4){ animation-delay:0.21s; }
+  .event-card:nth-child(5){ animation-delay:0.27s; }
+  .event-card:nth-child(n+6){ animation-delay:0.33s; }
+  @media (prefers-reduced-motion:reduce){ .event-card::after{ transition:none; display:none; } .event-card{ animation:none; } }
   .event-card-name{ flex:1; font-family:var(--font-serif); font-size:1.15rem; font-weight:700; }
   .event-card-date{ font-family:var(--font-mono); font-size:0.82rem; color:var(--ink-muted); font-variant-numeric:tabular-nums; }
   .event-card-arrow{ color:var(--amber); font-size:1.3rem; flex:none; }
@@ -517,6 +540,90 @@
     .topbar{ flex-direction:column; align-items:flex-start; }
     .row .name{ font-size:0.9rem; }
   }
+
+  /* ================================================================
+     WHITE / IVORY GORGEOUS THEME — toggle via [data-theme="light"]
+     ================================================================ */
+  :root[data-theme="light"]{
+    color-scheme: light;
+    --bg-deep:#FBF6E9;
+    --bg-panel:#FFFDF6;
+    --bg-panel-2:#F3EAD1;
+    --bg-raised:#EBDCB4;
+    --ink:#241B0E;
+    --ink-soft:#4A3B22;
+    --ink-muted:#8A7550;
+    --line:rgba(139,94,20,0.22);
+    --line-strong:rgba(139,94,20,0.4);
+    --amber:#B8862A;
+    --amber-strong:#8C6314;
+    --gold-deep:#5C3F0C;
+    --persimmon:#C9495F;
+    --wine-bright:#7A2530;
+    --moss:#4F8A62;
+    --emerald-bright:#5FA173;
+  }
+  :root[data-theme="light"] body{
+    background:
+      radial-gradient(ellipse 900px 460px at 50% -8%, rgba(184,134,42,0.12), transparent 62%),
+      radial-gradient(ellipse 700px 500px at 100% 100%, rgba(122,37,48,0.06), transparent 60%),
+      var(--bg-deep);
+  }
+  :root[data-theme="light"] body::before{
+    background-image:repeating-linear-gradient(135deg, rgba(92,63,12,0.035) 0 1px, transparent 1px 3px);
+    mix-blend-mode:multiply;
+    opacity:0.5;
+  }
+  :root[data-theme="light"] html::after{
+    border-color:rgba(139,94,20,0.32);
+  }
+  :root[data-theme="light"] .panel,
+  :root[data-theme="light"] .dialog{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.7), 0 10px 26px rgba(92,63,12,0.14);
+  }
+  :root[data-theme="light"] .hero-brand{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.7), 0 10px 26px rgba(92,63,12,0.14);
+  }
+  :root[data-theme="light"] .hero-brand::before{
+    background-image:
+      radial-gradient(circle at 0 100%, transparent 24%, rgba(139,94,20,0.07) 25%, rgba(139,94,20,0.07) 27%, transparent 28%, transparent 100%),
+      radial-gradient(circle at 60px 100%, transparent 24%, rgba(139,94,20,0.07) 25%, rgba(139,94,20,0.07) 27%, transparent 28%, transparent 100%),
+      radial-gradient(circle at 30px 70%, transparent 24%, rgba(139,94,20,0.05) 25%, rgba(139,94,20,0.05) 27%, transparent 28%, transparent 100%);
+  }
+  :root[data-theme="light"] .sparkle{
+    box-shadow:0 0 6px 2px rgba(92,63,12,0.45);
+  }
+  :root[data-theme="light"] .btn::after{
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+  }
+  :root[data-theme="light"] .event-card::after{
+    background:linear-gradient(120deg, transparent, rgba(139,94,20,0.16), transparent);
+  }
+  :root[data-theme="light"] .btn-present{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 14px rgba(79,138,98,0.28);
+  }
+  :root[data-theme="light"] .btn-absent:hover{ background:rgba(122,37,48,0.10); }
+  :root[data-theme="light"] .btn-danger:hover{ background:rgba(122,37,48,0.08); }
+  :root[data-theme="light"] .btn-primary{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 14px rgba(184,134,42,0.28);
+  }
+  :root[data-theme="light"] .btn-primary:hover{
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.55), 0 6px 20px rgba(184,134,42,0.4);
+  }
+  :root[data-theme="light"] select:focus,
+  :root[data-theme="light"] input:focus,
+  :root[data-theme="light"] textarea:focus{
+    box-shadow:0 0 0 3px rgba(184,134,42,0.16);
+  }
+  :root[data-theme="light"] select{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%238C6314' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  }
+  :root[data-theme="light"] .confirm-banner{ background:rgba(79,138,98,0.14); }
+  :root[data-theme="light"] .confirm-banner.is-absent{ background:rgba(201,73,95,0.14); }
+  :root[data-theme="light"] .toast{
+    box-shadow:0 8px 22px rgba(92,63,12,0.22), 0 0 0 1px rgba(184,134,42,0.15);
+  }
+  :root[data-theme="light"] ::selection{ background:var(--amber); color:#FFFDF6; }
 </style>
 </head>
 <body>
@@ -541,6 +648,9 @@
           <p class="eyebrow">YOKOYAMA KAKOSHO — AUTUMN GATHERING</p>
           <h1>参加者受付</h1>
         </div>
+      </div>
+      <div class="header-right">
+        <button type="button" class="btn btn-sm btn-ghost theme-toggle-btn">ホワイトで表示</button>
       </div>
     </header>
 
@@ -629,6 +739,7 @@
         </div>
       </div>
       <div class="header-right">
+        <button type="button" class="btn btn-sm btn-ghost theme-toggle-btn">ホワイトで表示</button>
         <button type="button" class="btn btn-sm" id="backToPublicBtn">受付画面に戻る</button>
         <button type="button" class="btn btn-sm btn-ghost" id="logoutBtn">ログアウト</button>
       </div>
@@ -786,6 +897,26 @@
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
   }
   function getEvent(id){ return state.events.find(function(e){ return e.id === id; }); }
+
+  /* ---------- theme toggle ---------- */
+  var THEME_KEY = "yk_ennokai_theme";
+  function applyTheme(theme){
+    document.documentElement.setAttribute("data-theme", theme);
+    try{ localStorage.setItem(THEME_KEY, theme); }catch(e){}
+    var label = theme === "light" ? "ゴールドで表示" : "ホワイトで表示";
+    document.querySelectorAll(".theme-toggle-btn").forEach(function(b){ b.textContent = label; });
+  }
+  document.querySelectorAll(".theme-toggle-btn").forEach(function(b){
+    b.addEventListener("click", function(){
+      var current = document.documentElement.getAttribute("data-theme") || "dark";
+      applyTheme(current === "light" ? "dark" : "light");
+    });
+  });
+  (function initTheme(){
+    var saved = null;
+    try{ saved = localStorage.getItem(THEME_KEY); }catch(e){}
+    applyTheme(saved === "light" ? "light" : "dark");
+  })();
 
   /* ---------- hashing (lightweight, not real security) ---------- */
   function fnvHash(str){
