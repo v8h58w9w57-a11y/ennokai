@@ -171,26 +171,32 @@
     color:var(--ink-soft);
     line-height:1.85;
   }
-  .hero-details{
-    margin-top:0.2rem;
-    padding-top:0.9rem;
-    border-top:1px dashed var(--line-strong);
+  .panel-details{
+    margin-top:1.1rem;
+    padding:1rem 1.1rem;
+    border-radius:12px;
+    background:rgba(184,134,42,0.08);
+    border:1px solid var(--line);
     text-align:left;
     display:flex;
     flex-direction:column;
-    gap:0.55rem;
+    gap:0.7rem;
   }
-  .detail-row{ display:flex; align-items:baseline; gap:0.65rem; }
+  .detail-row{ display:flex; align-items:baseline; gap:0.65rem; flex-wrap:wrap; }
   .detail-label{
     flex:none; font-family:var(--font-mono); font-size:0.72rem; font-weight:700;
     letter-spacing:0.06em; color:var(--amber-strong);
     background:rgba(184,134,42,0.14); border:1px solid var(--line);
     border-radius:999px; padding:0.18rem 0.6rem;
   }
-  .detail-value{ font-size:0.98rem; color:var(--ink); line-height:1.5; }
+  .detail-value{ font-size:1.02rem; color:var(--ink); line-height:1.5; font-weight:700; }
+  .detail-block{ border-top:1px dashed var(--line-strong); padding-top:0.65rem; }
+  .detail-heading{
+    margin:0 0 0.35rem; font-size:0.78rem; font-weight:700; letter-spacing:0.04em;
+    color:var(--amber-strong); text-transform:uppercase;
+  }
   .detail-notes{
-    font-size:0.92rem; color:var(--ink-soft); line-height:1.7; white-space:pre-wrap;
-    padding-top:0.15rem;
+    font-size:0.94rem; color:var(--ink-soft); line-height:1.7; white-space:pre-wrap;
   }
   .hero-main{ display:flex; flex-direction:column; gap:1.5rem; min-width:0; }
   @media (min-width:900px){
@@ -785,15 +791,6 @@
           <div class="hero-sub">
             <p class="eyebrow" id="heroEventDate">YOKOYAMA KAKOSHO</p>
             <p class="hero-welcome">本日はお集まりいただき<br>誠にありがとうございます。<br>お名前をお選びください。</p>
-            <div class="hero-details" id="heroEventDetails" hidden>
-              <div class="detail-row" id="heroLocationRow" hidden>
-                <span class="detail-label">場所</span><span class="detail-value" id="heroLocationValue"></span>
-              </div>
-              <div class="detail-row" id="heroTimeRow" hidden>
-                <span class="detail-label">時間</span><span class="detail-value" id="heroTimeValue"></span>
-              </div>
-              <div class="detail-notes" id="heroNotesValue"></div>
-            </div>
           </div>
         </aside>
 
@@ -819,6 +816,23 @@
             <div class="action-row" style="margin-top:1rem;">
               <button type="button" class="btn btn-lg btn-present" id="btnPresent">出席で受付</button>
               <button type="button" class="btn btn-lg btn-absent" id="btnAbsent">欠席として記録</button>
+            </div>
+
+            <div class="panel-details" id="panelEventDetails" hidden>
+              <div class="detail-row" id="panelLocationRow" hidden>
+                <span class="detail-label">場所</span><span class="detail-value" id="panelLocationValue"></span>
+              </div>
+              <div class="detail-row" id="panelTimeRow" hidden>
+                <span class="detail-label">時間</span><span class="detail-value" id="panelTimeValue"></span>
+              </div>
+              <div class="detail-block" id="panelScheduleWrap" hidden>
+                <p class="detail-heading">スケジュール</p>
+                <div class="detail-notes" id="panelScheduleValue"></div>
+              </div>
+              <div class="detail-block" id="panelNotesWrap" hidden>
+                <p class="detail-heading">持ち物・備考</p>
+                <div class="detail-notes" id="panelNotesValue"></div>
+              </div>
             </div>
           </section>
 
@@ -876,6 +890,10 @@
       <div class="field-group">
         <label class="field-label" for="newEventTime">時間（任意）</label>
         <input type="text" id="newEventTime" placeholder="例）18:00〜20:00" autocomplete="off">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="newEventSchedule">スケジュール（任意）</label>
+        <textarea id="newEventSchedule" placeholder="例）18:00 開場&#10;18:30 開会&#10;20:00 終了"></textarea>
       </div>
       <div class="field-group">
         <label class="field-label" for="newEventNotes">持ち物・備考（任意）</label>
@@ -1251,16 +1269,20 @@
     document.getElementById("checkinTitle").textContent = ev.name + " の受付";
     document.getElementById("heroEventVertical").textContent = ev.name;
     document.getElementById("heroEventDate").textContent = ev.date || "YOKOYAMA KAKOSHO";
-    var detailsBox = document.getElementById("heroEventDetails");
+
+    var detailsBox = document.getElementById("panelEventDetails");
     var notes = eventNotes(ev);
-    var hasAny = !!(ev.location || ev.time || notes);
+    var hasAny = !!(ev.location || ev.time || ev.schedule || notes);
     detailsBox.hidden = !hasAny;
     if(hasAny){
-      document.getElementById("heroLocationRow").hidden = !ev.location;
-      if(ev.location){ document.getElementById("heroLocationValue").textContent = ev.location; }
-      document.getElementById("heroTimeRow").hidden = !ev.time;
-      if(ev.time){ document.getElementById("heroTimeValue").textContent = ev.time; }
-      document.getElementById("heroNotesValue").textContent = notes;
+      document.getElementById("panelLocationRow").hidden = !ev.location;
+      if(ev.location){ document.getElementById("panelLocationValue").textContent = ev.location; }
+      document.getElementById("panelTimeRow").hidden = !ev.time;
+      if(ev.time){ document.getElementById("panelTimeValue").textContent = ev.time; }
+      document.getElementById("panelScheduleWrap").hidden = !ev.schedule;
+      if(ev.schedule){ document.getElementById("panelScheduleValue").textContent = ev.schedule; }
+      document.getElementById("panelNotesWrap").hidden = !notes;
+      if(notes){ document.getElementById("panelNotesValue").textContent = notes; }
     }
 
     var sel = document.getElementById("rosterSelect");
@@ -1375,6 +1397,12 @@
       if(ev.time){ top.querySelector(".time").textContent = ev.time; }
       row.appendChild(top);
 
+      if(ev.schedule){
+        var sch = document.createElement("div");
+        sch.className = "event-manage-details";
+        sch.textContent = "スケジュール：\n" + ev.schedule;
+        row.appendChild(sch);
+      }
       var notes = eventNotes(ev);
       if(notes){
         var det = document.createElement("div");
@@ -1394,6 +1422,7 @@
     document.getElementById("newEventDate").value = "";
     document.getElementById("newEventLocation").value = "";
     document.getElementById("newEventTime").value = "";
+    document.getElementById("newEventSchedule").value = "";
     document.getElementById("newEventNotes").value = "";
   }
   document.getElementById("eventManageList").addEventListener("click", async function(e){
@@ -1407,6 +1436,7 @@
       document.getElementById("newEventDate").value = editEv.date || "";
       document.getElementById("newEventLocation").value = editEv.location || "";
       document.getElementById("newEventTime").value = editEv.time || "";
+      document.getElementById("newEventSchedule").value = editEv.schedule || "";
       document.getElementById("newEventNotes").value = eventNotes(editEv);
       document.getElementById("addEventBtn").textContent = "更新する";
       document.getElementById("cancelEditEventBtn").hidden = false;
@@ -1432,6 +1462,7 @@
     var dateInput = document.getElementById("newEventDate");
     var locationInput = document.getElementById("newEventLocation");
     var timeInput = document.getElementById("newEventTime");
+    var scheduleInput = document.getElementById("newEventSchedule");
     var notesInput = document.getElementById("newEventNotes");
     var name = nameInput.value.trim();
     if(!name){ showToast("行事名を入力してください"); return; }
@@ -1443,6 +1474,7 @@
         ev.date = dateInput.value.trim();
         ev.location = locationInput.value.trim();
         ev.time = timeInput.value.trim();
+        ev.schedule = scheduleInput.value.trim();
         ev.notes = notesInput.value.trim();
         delete ev.details;
         save();
@@ -1453,12 +1485,12 @@
       var newEv = {
         id: uid("e"), name: name, date: dateInput.value.trim(),
         location: locationInput.value.trim(), time: timeInput.value.trim(),
-        notes: notesInput.value.trim(), roster: []
+        schedule: scheduleInput.value.trim(), notes: notesInput.value.trim(), roster: []
       };
       state.events.push(newEv);
       save();
       orgEventId = newEv.id;
-      nameInput.value = ""; dateInput.value = ""; locationInput.value = ""; timeInput.value = ""; notesInput.value = "";
+      nameInput.value = ""; dateInput.value = ""; locationInput.value = ""; timeInput.value = ""; scheduleInput.value = ""; notesInput.value = "";
       showToast("「" + name + "」を追加しました");
     }
     renderOrganizer();
@@ -1682,6 +1714,7 @@
     var printParts = [];
     if(ev.location){ printParts.push("場所：" + ev.location); }
     if(ev.time){ printParts.push("時間：" + ev.time); }
+    if(ev.schedule){ printParts.push("スケジュール：" + ev.schedule); }
     if(printNotes){ printParts.push(printNotes); }
     if(printParts.length){ printDetailsEl.textContent = printParts.join("　／　"); printDetailsEl.hidden = false; }
     else { printDetailsEl.hidden = true; }
