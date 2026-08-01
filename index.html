@@ -175,11 +175,22 @@
     margin-top:0.2rem;
     padding-top:0.9rem;
     border-top:1px dashed var(--line-strong);
-    font-size:0.94rem;
-    color:var(--ink-soft);
-    line-height:1.75;
-    white-space:pre-wrap;
     text-align:left;
+    display:flex;
+    flex-direction:column;
+    gap:0.55rem;
+  }
+  .detail-row{ display:flex; align-items:baseline; gap:0.65rem; }
+  .detail-label{
+    flex:none; font-family:var(--font-mono); font-size:0.72rem; font-weight:700;
+    letter-spacing:0.06em; color:var(--amber-strong);
+    background:rgba(184,134,42,0.14); border:1px solid var(--line);
+    border-radius:999px; padding:0.18rem 0.6rem;
+  }
+  .detail-value{ font-size:0.98rem; color:var(--ink); line-height:1.5; }
+  .detail-notes{
+    font-size:0.92rem; color:var(--ink-soft); line-height:1.7; white-space:pre-wrap;
+    padding-top:0.15rem;
   }
   .hero-main{ display:flex; flex-direction:column; gap:1.5rem; min-width:0; }
   @media (min-width:900px){
@@ -774,7 +785,15 @@
           <div class="hero-sub">
             <p class="eyebrow" id="heroEventDate">YOKOYAMA KAKOSHO</p>
             <p class="hero-welcome">本日はお集まりいただき<br>誠にありがとうございます。<br>お名前をお選びください。</p>
-            <div class="hero-details" id="heroEventDetails" hidden></div>
+            <div class="hero-details" id="heroEventDetails" hidden>
+              <div class="detail-row" id="heroLocationRow" hidden>
+                <span class="detail-label">場所</span><span class="detail-value" id="heroLocationValue"></span>
+              </div>
+              <div class="detail-row" id="heroTimeRow" hidden>
+                <span class="detail-label">時間</span><span class="detail-value" id="heroTimeValue"></span>
+              </div>
+              <div class="detail-notes" id="heroNotesValue"></div>
+            </div>
           </div>
         </aside>
 
@@ -851,8 +870,16 @@
         <input type="text" id="newEventDate" placeholder="例）2026年10月10日" autocomplete="off">
       </div>
       <div class="field-group">
-        <label class="field-label" for="newEventDetails">詳細（任意）</label>
-        <textarea id="newEventDetails" placeholder="場所・時間・持ち物など"></textarea>
+        <label class="field-label" for="newEventLocation">場所（任意）</label>
+        <input type="text" id="newEventLocation" placeholder="例）本社3F大会議室" autocomplete="off">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="newEventTime">時間（任意）</label>
+        <input type="text" id="newEventTime" placeholder="例）18:00〜20:00" autocomplete="off">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="newEventNotes">持ち物・備考（任意）</label>
+        <textarea id="newEventNotes" placeholder="例）会費3,000円、私服可"></textarea>
       </div>
       <div class="action-row">
         <button type="button" class="btn btn-primary" id="addEventBtn">行事を追加</button>
@@ -1225,8 +1252,16 @@
     document.getElementById("heroEventVertical").textContent = ev.name;
     document.getElementById("heroEventDate").textContent = ev.date || "YOKOYAMA KAKOSHO";
     var detailsBox = document.getElementById("heroEventDetails");
-    if(ev.details){ detailsBox.textContent = ev.details; detailsBox.hidden = false; }
-    else { detailsBox.hidden = true; }
+    var notes = eventNotes(ev);
+    var hasAny = !!(ev.location || ev.time || notes);
+    detailsBox.hidden = !hasAny;
+    if(hasAny){
+      document.getElementById("heroLocationRow").hidden = !ev.location;
+      if(ev.location){ document.getElementById("heroLocationValue").textContent = ev.location; }
+      document.getElementById("heroTimeRow").hidden = !ev.time;
+      if(ev.time){ document.getElementById("heroTimeValue").textContent = ev.time; }
+      document.getElementById("heroNotesValue").textContent = notes;
+    }
 
     var sel = document.getElementById("rosterSelect");
     var prevValue = sel.value;
@@ -1309,6 +1344,8 @@
   /* ================= ORGANIZER VIEW: event management ================= */
   var editingEventId = null;
 
+  function eventNotes(ev){ return ev.notes || ev.details || ""; }
+
   function renderEventManageList(){
     var el = document.getElementById("eventManageList");
     el.innerHTML = "";
@@ -1326,18 +1363,23 @@
       top.innerHTML =
         '<span class="name"></span>' +
         (ev.date ? '<span class="date"></span>' : '') +
+        (ev.location ? '<span class="detail-label">場所</span><span class="date location"></span>' : '') +
+        (ev.time ? '<span class="detail-label">時間</span><span class="date time"></span>' : '') +
         '<div class="event-manage-actions">' +
           '<button type="button" class="btn btn-sm" data-edit-event="' + ev.id + '">編集</button>' +
           '<button type="button" class="btn btn-sm btn-danger" data-del-event="' + ev.id + '">削除</button>' +
         '</div>';
       top.querySelector(".name").textContent = ev.name;
       if(ev.date){ top.querySelector(".date").textContent = ev.date; }
+      if(ev.location){ top.querySelector(".location").textContent = ev.location; }
+      if(ev.time){ top.querySelector(".time").textContent = ev.time; }
       row.appendChild(top);
 
-      if(ev.details){
+      var notes = eventNotes(ev);
+      if(notes){
         var det = document.createElement("div");
         det.className = "event-manage-details";
-        det.textContent = ev.details;
+        det.textContent = notes;
         row.appendChild(det);
       }
       frag.appendChild(row);
@@ -1350,7 +1392,9 @@
     document.getElementById("cancelEditEventBtn").hidden = true;
     document.getElementById("newEventName").value = "";
     document.getElementById("newEventDate").value = "";
-    document.getElementById("newEventDetails").value = "";
+    document.getElementById("newEventLocation").value = "";
+    document.getElementById("newEventTime").value = "";
+    document.getElementById("newEventNotes").value = "";
   }
   document.getElementById("eventManageList").addEventListener("click", async function(e){
     var t = e.target;
@@ -1361,7 +1405,9 @@
       editingEventId = editId;
       document.getElementById("newEventName").value = editEv.name;
       document.getElementById("newEventDate").value = editEv.date || "";
-      document.getElementById("newEventDetails").value = editEv.details || "";
+      document.getElementById("newEventLocation").value = editEv.location || "";
+      document.getElementById("newEventTime").value = editEv.time || "";
+      document.getElementById("newEventNotes").value = eventNotes(editEv);
       document.getElementById("addEventBtn").textContent = "更新する";
       document.getElementById("cancelEditEventBtn").hidden = false;
       document.getElementById("newEventName").scrollIntoView({ behavior:"smooth", block:"center" });
@@ -1384,7 +1430,9 @@
   document.getElementById("addEventBtn").addEventListener("click", function(){
     var nameInput = document.getElementById("newEventName");
     var dateInput = document.getElementById("newEventDate");
-    var detailsInput = document.getElementById("newEventDetails");
+    var locationInput = document.getElementById("newEventLocation");
+    var timeInput = document.getElementById("newEventTime");
+    var notesInput = document.getElementById("newEventNotes");
     var name = nameInput.value.trim();
     if(!name){ showToast("行事名を入力してください"); return; }
 
@@ -1393,17 +1441,24 @@
       if(ev){
         ev.name = name;
         ev.date = dateInput.value.trim();
-        ev.details = detailsInput.value.trim();
+        ev.location = locationInput.value.trim();
+        ev.time = timeInput.value.trim();
+        ev.notes = notesInput.value.trim();
+        delete ev.details;
         save();
         showToast("「" + name + "」を更新しました");
       }
       exitEditEventMode();
     } else {
-      var newEv = { id: uid("e"), name: name, date: dateInput.value.trim(), details: detailsInput.value.trim(), roster: [] };
+      var newEv = {
+        id: uid("e"), name: name, date: dateInput.value.trim(),
+        location: locationInput.value.trim(), time: timeInput.value.trim(),
+        notes: notesInput.value.trim(), roster: []
+      };
       state.events.push(newEv);
       save();
       orgEventId = newEv.id;
-      nameInput.value = ""; dateInput.value = ""; detailsInput.value = "";
+      nameInput.value = ""; dateInput.value = ""; locationInput.value = ""; timeInput.value = ""; notesInput.value = "";
       showToast("「" + name + "」を追加しました");
     }
     renderOrganizer();
@@ -1623,7 +1678,12 @@
     document.getElementById("printEventName").textContent = ev.name;
     document.getElementById("printEventDate").textContent = ev.date || "";
     var printDetailsEl = document.getElementById("printEventDetails");
-    if(ev.details){ printDetailsEl.textContent = ev.details; printDetailsEl.hidden = false; }
+    var printNotes = eventNotes(ev);
+    var printParts = [];
+    if(ev.location){ printParts.push("場所：" + ev.location); }
+    if(ev.time){ printParts.push("時間：" + ev.time); }
+    if(printNotes){ printParts.push(printNotes); }
+    if(printParts.length){ printDetailsEl.textContent = printParts.join("　／　"); printDetailsEl.hidden = false; }
     else { printDetailsEl.hidden = true; }
 
     var now = new Date();
