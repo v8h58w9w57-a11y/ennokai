@@ -1153,7 +1153,7 @@
           <button type="button" class="btn btn-primary" id="rosterAppendBtn">名簿に追加する</button>
           <button type="button" class="btn btn-danger" id="rosterReplaceBtn">この内容で置き換える</button>
         </div>
-        <p class="hint">「追加する」は既存の名簿はそのままに新しい名前を加えます。「置き換える」は全行事の名簿と出欠状況をすべてリセットして貼り付けた内容にします。</p>
+        <p class="hint">現在の名簿があらかじめ表示されています。そのまま名前を追加・修正・削除して編集できます。「追加する」は削除した行を無視して新しい名前だけを反映、「置き換える」は削除も含めてこの内容に完全に一致させます（全行事の出欠記録もリセットされます）。</p>
       </div>
     </section>
 
@@ -1863,10 +1863,17 @@
     }
   }
 
+  function fillRosterBulkTextarea(){
+    var ta = document.getElementById("rosterBulk");
+    if(document.activeElement === ta) return;
+    ta.value = state.roster.map(function(p){ return p.name; }).join("\n");
+  }
+
   function renderOrganizer(){
     renderEventManageList();
     renderOrgEventSelect();
     renderOrgRosterSection();
+    fillRosterBulkTextarea();
   }
 
   function renderOrgRosterSection(){
@@ -1989,7 +1996,7 @@
         added++;
       }
     });
-    save(); renderOrgRosterSection(); syncPublicView();
+    save(); renderOrgRosterSection(); syncPublicView(); fillRosterBulkTextarea();
     showToast(added + "名を全行事の名簿に追加しました（重複は無視）");
   });
   document.getElementById("rosterReplaceBtn").addEventListener("click", async function(){
@@ -2000,7 +2007,7 @@
     if(!ok) return;
     state.roster = names.map(function(name){ return { id: uid("p"), name: name, source: "preset" }; });
     state.events.forEach(function(e2){ e2.attendance = {}; });
-    save(); renderOrgRosterSection(); syncPublicView();
+    save(); renderOrgRosterSection(); syncPublicView(); fillRosterBulkTextarea();
     showToast("名簿を置き換えました（" + names.length + "名）");
   });
 
