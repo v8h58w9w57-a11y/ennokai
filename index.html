@@ -109,6 +109,22 @@
   }
   @media (prefers-reduced-motion:reduce){ .aurora-blob{ animation:none; } }
   @media (max-width:700px){ .aurora{ opacity:0.6; } }
+
+  .dust{
+    position:absolute; bottom:-4%; width:5px; height:5px; border-radius:50%;
+    background:var(--amber-strong);
+    box-shadow:0 0 8px 2px rgba(240,210,122,0.8);
+    animation-name:dustFloat; animation-timing-function:ease-in-out; animation-iteration-count:infinite;
+    opacity:0;
+  }
+  @keyframes dustFloat{
+    0%{ transform:translate(0,0) scale(0.6); opacity:0; }
+    12%{ opacity:0.9; }
+    50%{ transform:translate(2vw,-46vh) scale(1); opacity:0.7; }
+    88%{ opacity:0.5; }
+    100%{ transform:translate(-2vw,-96vh) scale(0.5); opacity:0; }
+  }
+  @media (prefers-reduced-motion:reduce){ .dust{ display:none; } }
   html::after{
     content:""; position:fixed; inset:16px; pointer-events:none; z-index:3;
     border:1px solid rgba(201,161,68,0.22);
@@ -832,6 +848,14 @@
   <span class="aurora-blob b1"></span>
   <span class="aurora-blob b2"></span>
   <span class="aurora-blob b3"></span>
+  <span class="dust" style="left:8%; animation-delay:0s; animation-duration:14s;"></span>
+  <span class="dust" style="left:18%; animation-delay:2.4s; animation-duration:17s;"></span>
+  <span class="dust" style="left:30%; animation-delay:5.5s; animation-duration:13s;"></span>
+  <span class="dust" style="left:44%; animation-delay:1.2s; animation-duration:16s;"></span>
+  <span class="dust" style="left:58%; animation-delay:7.8s; animation-duration:15s;"></span>
+  <span class="dust" style="left:70%; animation-delay:3.6s; animation-duration:18s;"></span>
+  <span class="dust" style="left:82%; animation-delay:9.2s; animation-duration:14s;"></span>
+  <span class="dust" style="left:92%; animation-delay:0.8s; animation-duration:16s;"></span>
 </div>
 
 <div class="wrap">
@@ -851,7 +875,7 @@
           <line x1="19" y1="33" x2="19" y2="44" stroke="var(--amber)" stroke-width="1.4"/>
         </svg>
         <div>
-          <p class="eyebrow">YOKOYAMA KAKOSHO — AUTUMN GATHERING</p>
+          <p class="eyebrow">YOKOYAMA KAKOSHO — EVENT RECEPTION</p>
           <h1>参加者受付</h1>
         </div>
       </div>
@@ -888,7 +912,7 @@
             <rect x="16" y="30" width="6" height="3" rx="1" fill="var(--amber)"/>
             <line x1="19" y1="33" x2="19" y2="44" stroke="var(--amber)" stroke-width="1.4"/>
           </svg>
-          <p class="hero-vertical" id="heroEventVertical">秋の親睦会</p>
+          <p class="hero-vertical" id="heroEventVertical">受付</p>
           <div class="hero-sub">
             <p class="eyebrow" id="heroEventDate">YOKOYAMA KAKOSHO</p>
             <p class="hero-welcome">本日はお集まりいただき<br>誠にありがとうございます。<br>お名前をお選びください。</p>
@@ -988,7 +1012,7 @@
       <div class="event-manage-list" id="eventManageList"></div>
       <div class="field-group">
         <label class="field-label" for="newEventName">行事名</label>
-        <input type="text" id="newEventName" placeholder="例）秋の親睦会" autocomplete="off">
+        <input type="text" id="newEventName" placeholder="例）親睦会" autocomplete="off">
       </div>
       <div class="field-group">
         <label class="field-label" for="newEventDate">開催日（任意）</label>
@@ -1179,7 +1203,7 @@
       if(legacy){
         var lp = JSON.parse(legacy);
         if(Array.isArray(lp.roster) && lp.roster.length){
-          state.events = [{ id: uid("e"), name: "秋の親睦会", date: "", roster: lp.roster }];
+          state.events = [{ id: uid("e"), name: "親睦会", date: "", roster: lp.roster }];
         }
         if(typeof lp.passwordHash === "string") state.passwordHash = lp.passwordHash;
         save();
@@ -1320,6 +1344,7 @@
       btn.className = "event-card";
       btn.setAttribute("data-event-id", ev.id);
       btn.innerHTML =
+        '<span class="sparkle" style="top:14%; left:90%; animation-delay:' + (Math.random()*3).toFixed(1) + 's;"></span>' +
         '<span class="event-card-name"></span>' +
         (ev.checkinRequired === false ? '<span class="info-badge">お知らせ</span>' : '') +
         (ev.date ? '<span class="event-card-date"></span>' : '') +
