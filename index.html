@@ -233,31 +233,74 @@
   }
   .panel-details{
     margin-top:1.1rem;
-    padding:1rem 1.1rem;
-    border-radius:18px;
-    background:rgba(184,134,42,0.08);
-    border:1px solid var(--line);
+    padding:1.1rem;
+    border-radius:22px;
+    background:linear-gradient(165deg, var(--glass), var(--glass-2) 140%);
+    backdrop-filter:blur(16px) saturate(150%);
+    -webkit-backdrop-filter:blur(16px) saturate(150%);
+    border:1px solid var(--glass-border);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);
     text-align:left;
     display:flex;
     flex-direction:column;
-    gap:0.7rem;
+    gap:0.8rem;
   }
-  .detail-row{ display:flex; align-items:baseline; gap:0.65rem; flex-wrap:wrap; }
   .detail-label{
     flex:none; font-family:var(--font-mono); font-size:0.72rem; font-weight:700;
     letter-spacing:0.06em; color:var(--amber-strong);
     background:rgba(184,134,42,0.14); border:1px solid var(--line);
     border-radius:999px; padding:0.18rem 0.6rem;
   }
-  .detail-value{ font-size:1.02rem; color:var(--ink); line-height:1.5; font-weight:700; }
-  .detail-block{ border-top:1px dashed var(--line-strong); padding-top:0.65rem; }
+  .detail-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:0.7rem; }
+  .detail-tile{
+    display:flex; align-items:center; gap:0.7rem;
+    padding:0.7rem 0.85rem; border-radius:16px;
+    background:var(--bg-panel-2); border:1px solid var(--line);
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .detail-tile:hover{ transform:translateY(-1px); border-color:var(--amber); }
+  .detail-icon{
+    flex:none; width:2.2rem; height:2.2rem; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, var(--amber-strong), var(--amber) 70%);
+    color:#241706; box-shadow:inset 0 1px 0 rgba(255,255,255,0.35), 0 3px 10px -2px rgba(184,134,42,0.4);
+  }
+  .detail-icon svg{ width:1.15rem; height:1.15rem; }
+  .detail-tile-label{
+    margin:0 0 0.1rem; font-size:0.7rem; font-weight:700; letter-spacing:0.04em;
+    color:var(--ink-muted); text-transform:uppercase;
+  }
+  .detail-tile-value{ margin:0; font-size:1rem; font-weight:700; color:var(--ink); line-height:1.35; }
+  .detail-block{
+    padding:0.9rem 1rem; border-radius:16px;
+    background:var(--bg-panel-2); border:1px solid var(--line);
+  }
   .detail-heading{
-    margin:0 0 0.35rem; font-size:0.78rem; font-weight:700; letter-spacing:0.04em;
+    margin:0 0 0.6rem; display:flex; align-items:center; gap:0.45rem;
+    font-size:0.76rem; font-weight:700; letter-spacing:0.05em;
     color:var(--amber-strong); text-transform:uppercase;
   }
+  .detail-heading svg{ width:1rem; height:1rem; flex:none; }
   .detail-notes{
     font-size:0.94rem; color:var(--ink-soft); line-height:1.7; white-space:pre-wrap;
   }
+
+  .timeline{ list-style:none; margin:0; padding:0; }
+  .timeline li{
+    position:relative; padding:0 0 0.85rem 1.35rem;
+    font-size:0.94rem; color:var(--ink-soft); line-height:1.5;
+  }
+  .timeline li::before{
+    content:""; position:absolute; left:0; top:0.42em; width:0.55rem; height:0.55rem;
+    border-radius:50%; background:var(--amber);
+    box-shadow:0 0 0 3px rgba(184,134,42,0.2);
+  }
+  .timeline li::after{
+    content:""; position:absolute; left:0.23rem; top:1em; bottom:0; width:1px;
+    background:var(--line-strong);
+  }
+  .timeline li:last-child{ padding-bottom:0; }
+  .timeline li:last-child::after{ display:none; }
   .hero-main{ display:flex; flex-direction:column; gap:1.5rem; min-width:0; }
   @media (min-width:900px){
     .hero-main .panel, #organizerView .panel{ padding:2rem 2.2rem; }
@@ -954,18 +997,47 @@
             </div>
 
             <div class="panel-details" id="panelEventDetails" hidden>
-              <div class="detail-row" id="panelLocationRow" hidden>
-                <span class="detail-label">場所</span><span class="detail-value" id="panelLocationValue"></span>
-              </div>
-              <div class="detail-row" id="panelTimeRow" hidden>
-                <span class="detail-label">時間</span><span class="detail-value" id="panelTimeValue"></span>
+              <div class="detail-grid">
+                <div class="detail-tile" id="panelDateRow" hidden>
+                  <span class="detail-icon">
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3.5" y="4.5" width="13" height="12" rx="1.6" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 8h13M7 3v3M13 3v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  </span>
+                  <div>
+                    <p class="detail-tile-label">開催日</p>
+                    <p class="detail-tile-value" id="panelDateValue"></p>
+                  </div>
+                </div>
+                <div class="detail-tile" id="panelLocationRow" hidden>
+                  <span class="detail-icon">
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 18s6-5.2 6-9.5A6 6 0 0 0 4 8.5C4 12.8 10 18 10 18Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="10" cy="8.3" r="2.1" stroke="currentColor" stroke-width="1.6"/></svg>
+                  </span>
+                  <div>
+                    <p class="detail-tile-label">場所</p>
+                    <p class="detail-tile-value" id="panelLocationValue"></p>
+                  </div>
+                </div>
+                <div class="detail-tile" id="panelTimeRow" hidden>
+                  <span class="detail-icon">
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v4.2l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div>
+                    <p class="detail-tile-label">時間</p>
+                    <p class="detail-tile-value" id="panelTimeValue"></p>
+                  </div>
+                </div>
               </div>
               <div class="detail-block" id="panelScheduleWrap" hidden>
-                <p class="detail-heading">スケジュール</p>
-                <div class="detail-notes" id="panelScheduleValue"></div>
+                <p class="detail-heading">
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 5h12M4 10h12M4 15h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  スケジュール
+                </p>
+                <ul class="timeline" id="panelScheduleValue"></ul>
               </div>
               <div class="detail-block" id="panelNotesWrap" hidden>
-                <p class="detail-heading">持ち物・備考</p>
+                <p class="detail-heading">
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 3.5h10a1 1 0 0 1 1 1V17l-3-1.8-2 1.8-2-1.8-2 1.8-2-1.8V4.5a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                  持ち物・備考
+                </p>
                 <div class="detail-notes" id="panelNotesValue"></div>
               </div>
             </div>
@@ -1401,6 +1473,15 @@
     }
   }
 
+  function fillTimeline(el, text){
+    el.innerHTML = "";
+    text.split(/\r?\n/).map(function(s){ return s.trim(); }).filter(Boolean).forEach(function(line){
+      var li = document.createElement("li");
+      li.textContent = line;
+      el.appendChild(li);
+    });
+  }
+
   /* ================= PUBLIC VIEW: check-in ================= */
   var manualOpen = false;
 
@@ -1411,22 +1492,24 @@
     var checkinRequired = ev.checkinRequired !== false;
     document.getElementById("checkinTitle").textContent = checkinRequired ? (ev.name + " の受付") : (ev.name + " の詳細");
     document.getElementById("heroEventVertical").textContent = ev.name;
-    document.getElementById("heroEventDate").textContent = ev.date || "YOKOYAMA KAKOSHO";
+    document.getElementById("heroEventDate").textContent = "YOKOYAMA KAKOSHO";
     document.getElementById("checkinFormArea").hidden = !checkinRequired;
     document.getElementById("checkinNote").hidden = !checkinRequired;
     if(!checkinRequired){ document.getElementById("confirmBanner").hidden = true; }
 
     var detailsBox = document.getElementById("panelEventDetails");
     var notes = eventNotes(ev);
-    var hasAny = !!(ev.location || ev.time || ev.schedule || notes);
+    var hasAny = !!(ev.date || ev.location || ev.time || ev.schedule || notes);
     detailsBox.hidden = !hasAny;
     if(hasAny){
+      document.getElementById("panelDateRow").hidden = !ev.date;
+      if(ev.date){ document.getElementById("panelDateValue").textContent = ev.date; }
       document.getElementById("panelLocationRow").hidden = !ev.location;
       if(ev.location){ document.getElementById("panelLocationValue").textContent = ev.location; }
       document.getElementById("panelTimeRow").hidden = !ev.time;
       if(ev.time){ document.getElementById("panelTimeValue").textContent = ev.time; }
       document.getElementById("panelScheduleWrap").hidden = !ev.schedule;
-      if(ev.schedule){ document.getElementById("panelScheduleValue").textContent = ev.schedule; }
+      if(ev.schedule){ fillTimeline(document.getElementById("panelScheduleValue"), ev.schedule); }
       document.getElementById("panelNotesWrap").hidden = !notes;
       if(notes){ document.getElementById("panelNotesValue").textContent = notes; }
     }
