@@ -275,6 +275,12 @@
     padding:0.9rem 1rem; border-radius:16px;
     background:var(--bg-panel-2); border:1px solid var(--line);
   }
+  .roster-manage-box{
+    padding:1rem 1.1rem; border-radius:18px; margin-bottom:1.2rem;
+    background:linear-gradient(165deg, rgba(204,138,30,0.1), rgba(204,138,30,0.04));
+    border:1.5px solid var(--amber);
+    box-shadow:0 4px 16px -6px rgba(184,134,42,0.25);
+  }
   .detail-heading{
     margin:0 0 0.6rem; display:flex; align-items:center; gap:0.45rem;
     font-size:0.76rem; font-weight:700; letter-spacing:0.05em;
@@ -626,21 +632,37 @@
     display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;
     background:linear-gradient(165deg, var(--bg-panel-2), var(--bg-panel) 160%);
     border:1px solid var(--line);
+    border-left:4px solid var(--line-strong);
     border-radius:16px;
-    padding:0.55rem 0.6rem 0.55rem 0.9rem;
+    padding:0.55rem 0.6rem 0.55rem 0.85rem;
     transition:border-color .15s;
   }
   .row:hover{ border-color:var(--line-strong); }
+  .row.st-present{ border-left-color:var(--emerald-bright); }
+  .row.st-absent{ border-left-color:var(--wine-bright); }
+  .row.st-pending{ border-left-color:var(--line-strong); }
   .row .name{ flex:1; min-width:8rem; font-size:1.02rem; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .row .src-tag{ font-size:0.68rem; color:var(--amber); opacity:0.7; font-family:var(--font-mono); }
-  .status-group{ display:flex; gap:0.3rem; flex:none; }
+  .status-group{ display:flex; gap:0.35rem; flex:none; }
   .status-btn{
-    border:1px solid var(--line-strong); background:transparent; color:var(--ink-muted);
-    padding:0.35rem 0.65rem; border-radius:7px; font-size:0.74rem; font-weight:700; cursor:pointer;
+    display:inline-flex; align-items:center; gap:0.3rem;
+    border:1.5px solid var(--line-strong); background:transparent; color:var(--ink-muted);
+    padding:0.4rem 0.8rem; border-radius:999px; font-size:0.8rem; font-weight:700; cursor:pointer;
+    transition:transform .12s, border-color .15s, background .15s;
   }
-  .status-btn[data-s="present"][aria-pressed="true"]{ background:var(--moss); border-color:var(--emerald-bright); color:var(--ink); }
-  .status-btn[data-s="absent"][aria-pressed="true"]{ background:var(--persimmon); border-color:var(--wine-bright); color:var(--ink); }
+  .status-btn:hover{ transform:translateY(-1px); border-color:var(--amber); }
+  .status-btn .status-icon{ width:0.85rem; height:0.85rem; flex:none; }
+  .status-btn[data-s="present"][aria-pressed="true"]{
+    background:linear-gradient(135deg, var(--emerald-bright), var(--moss) 70%);
+    border-color:var(--moss); color:var(--ink);
+  }
+  .status-btn[data-s="absent"][aria-pressed="true"]{
+    background:linear-gradient(135deg, var(--rose-light), var(--persimmon) 70%);
+    border-color:var(--persimmon); color:var(--ink);
+  }
   .status-btn[data-s="pending"][aria-pressed="true"]{ background:var(--bg-raised); border-color:var(--ink-muted); color:var(--ink); }
+  :root[data-theme="light"] .status-btn[data-s="present"][aria-pressed="true"],
+  :root[data-theme="light"] .status-btn[data-s="absent"][aria-pressed="true"]{ color:#FFFFFF; }
   .del-btn{
     border:1px solid transparent; background:transparent; color:var(--ink-muted);
     width:2rem; height:2rem; border-radius:8px; cursor:pointer; font-size:0.95rem; line-height:1; flex:none;
@@ -1125,6 +1147,20 @@
         <select id="orgEventSelect"></select>
       </div>
 
+      <div class="roster-manage-box">
+        <p class="detail-heading" style="margin-bottom:0.5rem;">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 4.5h9M4 9h9M4 13.5h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="14" r="2.4" stroke="currentColor" stroke-width="1.4"/><path d="M16 12.8V14l1 .6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          名簿を入力する
+        </p>
+        <label class="field-label" for="rosterBulk">1行に1名ずつ貼り付けてください</label>
+        <textarea id="rosterBulk" placeholder="横山 太郎&#10;佐藤 花子&#10;鈴木 一郎"></textarea>
+        <div class="action-row" style="margin-top:0.6rem;">
+          <button type="button" class="btn btn-primary" id="rosterAppendBtn">名簿に追加する</button>
+          <button type="button" class="btn btn-danger" id="rosterReplaceBtn">この内容で置き換える</button>
+        </div>
+        <p class="hint">「追加する」は既存の名簿はそのままに新しい名前を加えます。「置き換える」は名簿と出欠状況をすべてリセットして貼り付けた内容にします。</p>
+      </div>
+
       <div class="stats">
         <div class="stat-tile st-present"><div class="label">出席</div><div class="value" id="statPresent">0</div></div>
         <div class="stat-tile st-absent"><div class="label">欠席</div><div class="value" id="statAbsent">0</div></div>
@@ -1149,19 +1185,6 @@
         <button class="btn" id="copyPendingBtn">未入力者をコピー</button>
       </div>
       <button type="button" class="btn btn-primary btn-block" id="openPrintBtn" style="margin-top:0.8rem;">出欠リストを印刷する（A4）</button>
-
-      <details class="section">
-        <summary>名簿を管理する（事前入力）</summary>
-        <div class="section-body">
-          <label class="field-label" for="rosterBulk">1行に1名ずつ貼り付けてください</label>
-          <textarea id="rosterBulk" placeholder="横山 太郎&#10;佐藤 花子&#10;鈴木 一郎"></textarea>
-          <div class="action-row">
-            <button type="button" class="btn btn-primary" id="rosterAppendBtn">追加登録</button>
-            <button type="button" class="btn btn-danger" id="rosterReplaceBtn">この内容で名簿を置き換える</button>
-          </div>
-          <p class="hint">「追加登録」は既存の名簿はそのままに新しい名前を加えます。「置き換える」は名簿と出欠状況をすべてリセットして貼り付けた内容にします。</p>
-        </div>
-      </details>
     </section>
 
     <section class="panel">
@@ -1836,12 +1859,17 @@
     }
 
     var statusLabel = { present:"出席", absent:"欠席", pending:"未入力" };
+    var statusIcon = {
+      present:'<svg class="status-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      absent:'<svg class="status-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
+      pending:'<svg class="status-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="2" fill="currentColor"/></svg>'
+    };
     var frag = document.createDocumentFragment();
     list.forEach(function(p){
       var row = document.createElement("div");
-      row.className = "row";
+      row.className = "row st-" + p.status;
       var statusBtns = ["present","absent","pending"].map(function(s){
-        return '<button type="button" class="status-btn" data-s="' + s + '" data-id="' + p.id + '" aria-pressed="' + (p.status===s) + '">' + statusLabel[s] + '</button>';
+        return '<button type="button" class="status-btn" data-s="' + s + '" data-id="' + p.id + '" aria-pressed="' + (p.status===s) + '">' + statusIcon[s] + statusLabel[s] + '</button>';
       }).join("");
       row.innerHTML =
         '<span class="name"></span>' +
