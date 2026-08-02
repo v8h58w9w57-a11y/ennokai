@@ -472,6 +472,18 @@
   .action-row{ display:flex; gap:0.7rem; flex-wrap:wrap; }
   .action-row .btn{ flex:1; min-width:9rem; }
 
+  .checkin-toggle{
+    display:flex; align-items:center; gap:0.6rem; margin-bottom:0.5rem;
+    font-size:0.92rem; font-weight:700; color:var(--ink-soft); cursor:pointer;
+  }
+  .checkin-toggle input{ width:1.15rem; height:1.15rem; accent-color:var(--amber); cursor:pointer; }
+
+  .info-badge{
+    font-family:var(--font-mono); font-size:0.68rem; font-weight:700; letter-spacing:0.04em;
+    color:var(--amber-strong); background:rgba(184,134,42,0.14); border:1px solid var(--line);
+    border-radius:999px; padding:0.16rem 0.55rem; flex:none;
+  }
+
   .toggle-link{
     background:none; border:none; color:var(--amber); font-size:0.83rem; font-weight:700;
     cursor:pointer; padding:0.3rem 0; text-align:left;
@@ -891,28 +903,30 @@
 
             <div id="confirmBanner" class="confirm-banner" hidden></div>
 
-            <div class="field-group">
-              <label class="field-label" for="rosterSelect">名簿から選択</label>
-              <select id="rosterSelect"></select>
-            </div>
+            <div id="checkinFormArea">
+              <div class="field-group">
+                <label class="field-label" for="rosterSelect">名簿から選択</label>
+                <select id="rosterSelect"></select>
+              </div>
 
-            <button type="button" class="toggle-link" id="manualToggle">▸ 名簿にない方はこちら（個別入力）</button>
-            <div class="field-group" id="manualField" hidden style="margin-top:0.6rem;">
-              <label class="field-label" for="manualInput">氏名を入力</label>
-              <input type="text" id="manualInput" placeholder="例）横山 太郎" autocomplete="off">
-            </div>
+              <button type="button" class="toggle-link" id="manualToggle">▸ 名簿にない方はこちら（個別入力）</button>
+              <div class="field-group" id="manualField" hidden style="margin-top:0.6rem;">
+                <label class="field-label" for="manualInput">氏名を入力</label>
+                <input type="text" id="manualInput" placeholder="例）横山 太郎" autocomplete="off">
+              </div>
 
-            <div class="current-status" id="currentStatusHint" hidden></div>
+              <div class="current-status" id="currentStatusHint" hidden></div>
 
-            <div class="action-row" style="margin-top:1rem;">
-              <button type="button" class="btn btn-lg btn-present" id="btnPresent">
-                <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                出席で受付
-              </button>
-              <button type="button" class="btn btn-lg btn-absent" id="btnAbsent">
-                <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
-                欠席で受付
-              </button>
+              <div class="action-row" style="margin-top:1rem;">
+                <button type="button" class="btn btn-lg btn-present" id="btnPresent">
+                  <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10.5l4 4 8-9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  出席で受付
+                </button>
+                <button type="button" class="btn btn-lg btn-absent" id="btnAbsent">
+                  <svg class="btn-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5.5 5.5l9 9M14.5 5.5l-9 9" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+                  欠席で受付
+                </button>
+              </div>
             </div>
 
             <div class="panel-details" id="panelEventDetails" hidden>
@@ -933,7 +947,7 @@
             </div>
           </section>
 
-          <p class="note">選択（または入力）した方の出欠を記録します。同じ方を選び直せば記録を修正できます。</p>
+          <p class="note" id="checkinNote">選択（または入力）した方の出欠を記録します。同じ方を選び直せば記録を修正できます。</p>
         </div>
       </div>
     </div>
@@ -996,6 +1010,11 @@
         <label class="field-label" for="newEventNotes">持ち物・備考（任意）</label>
         <textarea id="newEventNotes" placeholder="例）会費3,000円、私服可"></textarea>
       </div>
+      <label class="checkin-toggle">
+        <input type="checkbox" id="newEventCheckinRequired" checked>
+        <span>出欠の受付を行う</span>
+      </label>
+      <p class="hint" style="margin-bottom:0.8rem;">チェックを外すと、名簿・出欠ボタンのない「お知らせのみ」の行事として一覧に表示されます。</p>
       <div class="action-row">
         <button type="button" class="btn btn-primary" id="addEventBtn">行事を追加</button>
         <button type="button" class="btn btn-ghost" id="cancelEditEventBtn" hidden>キャンセル</button>
@@ -1302,6 +1321,7 @@
       btn.setAttribute("data-event-id", ev.id);
       btn.innerHTML =
         '<span class="event-card-name"></span>' +
+        (ev.checkinRequired === false ? '<span class="info-badge">お知らせ</span>' : '') +
         (ev.date ? '<span class="event-card-date"></span>' : '') +
         '<span class="event-card-arrow">›</span>';
       btn.querySelector(".event-card-name").textContent = ev.name;
@@ -1363,9 +1383,13 @@
     var ev = getEvent(publicEventId);
     if(!ev){ showEventList(); return; }
 
-    document.getElementById("checkinTitle").textContent = ev.name + " の受付";
+    var checkinRequired = ev.checkinRequired !== false;
+    document.getElementById("checkinTitle").textContent = checkinRequired ? (ev.name + " の受付") : (ev.name + " の詳細");
     document.getElementById("heroEventVertical").textContent = ev.name;
     document.getElementById("heroEventDate").textContent = ev.date || "YOKOYAMA KAKOSHO";
+    document.getElementById("checkinFormArea").hidden = !checkinRequired;
+    document.getElementById("checkinNote").hidden = !checkinRequired;
+    if(!checkinRequired){ document.getElementById("confirmBanner").hidden = true; }
 
     var detailsBox = document.getElementById("panelEventDetails");
     var notes = eventNotes(ev);
@@ -1507,6 +1531,7 @@
       top.className = "event-manage-top";
       top.innerHTML =
         '<span class="name"></span>' +
+        (ev.checkinRequired === false ? '<span class="info-badge">お知らせ</span>' : '') +
         (ev.date ? '<span class="date"></span>' : '') +
         (ev.location ? '<span class="detail-label">場所</span><span class="date location"></span>' : '') +
         (ev.time ? '<span class="detail-label">時間</span><span class="date time"></span>' : '') +
@@ -1547,6 +1572,7 @@
     document.getElementById("newEventTime").value = "";
     document.getElementById("newEventSchedule").value = "";
     document.getElementById("newEventNotes").value = "";
+    document.getElementById("newEventCheckinRequired").checked = true;
   }
   document.getElementById("eventManageList").addEventListener("click", async function(e){
     var t = e.target;
@@ -1561,6 +1587,7 @@
       document.getElementById("newEventTime").value = editEv.time || "";
       document.getElementById("newEventSchedule").value = editEv.schedule || "";
       document.getElementById("newEventNotes").value = eventNotes(editEv);
+      document.getElementById("newEventCheckinRequired").checked = editEv.checkinRequired !== false;
       document.getElementById("addEventBtn").textContent = "更新する";
       document.getElementById("cancelEditEventBtn").hidden = false;
       document.getElementById("newEventName").scrollIntoView({ behavior:"smooth", block:"center" });
@@ -1587,6 +1614,7 @@
     var timeInput = document.getElementById("newEventTime");
     var scheduleInput = document.getElementById("newEventSchedule");
     var notesInput = document.getElementById("newEventNotes");
+    var checkinRequired = document.getElementById("newEventCheckinRequired").checked;
     var name = nameInput.value.trim();
     if(!name){ showToast("行事名を入力してください"); return; }
 
@@ -1599,6 +1627,7 @@
         ev.time = timeInput.value.trim();
         ev.schedule = scheduleInput.value.trim();
         ev.notes = notesInput.value.trim();
+        ev.checkinRequired = checkinRequired;
         delete ev.details;
         save();
         showToast("「" + name + "」を更新しました");
@@ -1608,12 +1637,14 @@
       var newEv = {
         id: uid("e"), name: name, date: dateInput.value.trim(),
         location: locationInput.value.trim(), time: timeInput.value.trim(),
-        schedule: scheduleInput.value.trim(), notes: notesInput.value.trim(), roster: []
+        schedule: scheduleInput.value.trim(), notes: notesInput.value.trim(),
+        checkinRequired: checkinRequired, roster: []
       };
       state.events.push(newEv);
       save();
       orgEventId = newEv.id;
       nameInput.value = ""; dateInput.value = ""; locationInput.value = ""; timeInput.value = ""; scheduleInput.value = ""; notesInput.value = "";
+      document.getElementById("newEventCheckinRequired").checked = true;
       showToast("「" + name + "」を追加しました");
     }
     renderOrganizer();
@@ -1621,14 +1652,15 @@
 
   function renderOrgEventSelect(){
     var sel = document.getElementById("orgEventSelect");
-    if(state.events.length === 0){
-      sel.innerHTML = '<option value="">行事がありません</option>';
+    var trackable = state.events.filter(function(e){ return e.checkinRequired !== false; });
+    if(trackable.length === 0){
+      sel.innerHTML = '<option value="">出欠確認が必要な行事はありません</option>';
       orgEventId = null;
       return;
     }
-    var keep = orgEventId && getEvent(orgEventId) ? orgEventId : state.events[0].id;
+    var keep = orgEventId && trackable.some(function(e){ return e.id === orgEventId; }) ? orgEventId : trackable[0].id;
     sel.innerHTML = "";
-    state.events.forEach(function(ev){
+    trackable.forEach(function(ev){
       var opt = document.createElement("option");
       opt.value = ev.id;
       opt.textContent = ev.name + (ev.date ? "（" + ev.date + "）" : "");
