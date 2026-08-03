@@ -1466,6 +1466,54 @@
     return p;
   }
 
+  /* ================= LEGACY LOCAL DATA RECOVERY ================= */
+  var LEGACY_IMPORT_FLAG = "yk_ennokai_legacy_import_done";
+  function getLegacyNames(){
+    var keys = ["yk_ennokai_reception_v4", "yk_ennokai_reception_v3", "yk_ennokai_reception_v2"];
+    for(var i = 0; i < keys.length; i++){
+      var raw;
+      try{ raw = localStorage.getItem(keys[i]); }catch(e){ raw = null; }
+      if(!raw) continue;
+      var names = [];
+      try{
+        var d = JSON.parse(raw);
+        if(d.roster && Array.isArray(d.roster)){
+          names = d.roster.map(function(p){ return p.name; }).filter(Boolean);
+        } else if(d.events && Array.isArray(d.events)){
+          var seen = {};
+          d.events.forEach(function(e){
+            (e.roster || []).forEach(function(p){
+              if(p.name && !seen[p.name]){ seen[p.name] = true; names.push(p.name); }
+            });
+          });
+        }
+      }catch(e){ continue; }
+      if(names.length) return names;
+    }
+    return [];
+  }
+  async function maybeImportLegacyRoster(){
+    var done;
+    try{ done = localStorage.getItem(LEGACY_IMPORT_FLAG); }catch(e){ done = null; }
+    if(done) return;
+    var names = getLegacyNames();
+    if(!names.length){
+      try{ localStorage.setItem(LEGACY_IMPORT_FLAG, "1"); }catch(e){}
+      return;
+    }
+    var newOnes = names.filter(function(n){ return !findPersonByName(n); });
+    var ok = await askConfirm("この端末に以前保存されていた名簿（" + names.length + "名、うち新規" + newOnes.length + "名）が見つかりました。全行事共通の名簿に追加しますか？");
+    try{ localStorage.setItem(LEGACY_IMPORT_FLAG, "1"); }catch(e){}
+    if(!ok) return;
+    if(newOnes.length){
+      await sb.from("ennokai_roster").insert(newOnes.map(function(name){ return { name: name, source: "preset" }; }));
+      await refreshFromCloud();
+      showToast(newOnes.length + "名を名簿に追加しました");
+    } else {
+      showToast("追加する新しい名前はありませんでした");
+    }
+  }
+
   /* ================= PUBLIC VIEW: event list ================= */
   function renderEventList(){
     var listEl = document.getElementById("eventList");
@@ -2143,12 +2191,14 @@
       passOverlay.classList.remove("show");
       switchView(true);
       showToast("パスワードを設定しました");
+      await maybeImportLegacyRoster();
     } else {
       var h = await hashPassword(p1);
       if(h === state.passwordHash){
         try{ sessionStorage.setItem(SESSION_KEY, "1"); }catch(e){}
         passOverlay.classList.remove("show");
         switchView(true);
+        await maybeImportLegacyRoster();
       } else {
         passErr.textContent = "パスワードが違います";
       }
@@ -2171,7 +2221,10 @@
       showToast("通信に失敗しました。ネットワーク接続を確認してください");
     }
     setupRealtime();
-    if(isAuthed()){ switchView(true); }
+    if(isAuthed()){
+      switchView(true);
+      await maybeImportLegacyRoster();
+    }
   })();
 })();
 </script>
