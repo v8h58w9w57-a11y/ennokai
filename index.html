@@ -1276,78 +1276,69 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function(){
   "use strict";
-  var STORAGE_KEY = "yk_ennokai_reception_v4";
-  var V3_KEY = "yk_ennokai_reception_v3";
-  var LEGACY_KEY = "yk_ennokai_reception_v2";
   var SESSION_KEY = "yk_ennokai_organizer_auth";
+  var SUPABASE_URL = "https://hbhfnljsclypokouevxe.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_B6Cv8rJVcsnaD1iFlqZOWw_WmU3Te-3";
+  var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   var state = { roster: [], events: [], passwordHash: null };
   var publicEventId = null;
   var orgEventId = null;
 
   function uid(prefix){ return (prefix || "p") + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
-
-  function migrateEventsWithOwnRosterToShared(events, passwordHash){
-    state.roster = [];
-    state.events = [];
-    var nameToId = {};
-    (events || []).forEach(function(oldEv){
-      var newEv = {
-        id: oldEv.id, name: oldEv.name, date: oldEv.date || "",
-        location: oldEv.location || "", time: oldEv.time || "", schedule: oldEv.schedule || "",
-        notes: oldEv.notes || oldEv.details || "", checkinRequired: oldEv.checkinRequired,
-        attendance: {}
-      };
-      (oldEv.roster || []).forEach(function(p){
-        var pid = nameToId[p.name];
-        if(!pid){
-          pid = uid("p");
-          nameToId[p.name] = pid;
-          state.roster.push({ id: pid, name: p.name, source: p.source || "preset" });
-        }
-        if(p.status === "present" || p.status === "absent"){ newEv.attendance[pid] = p.status; }
-      });
-      state.events.push(newEv);
-    });
-    if(typeof passwordHash === "string"){ state.passwordHash = passwordHash; }
-  }
-
-  function load(){
-    try{
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if(raw){
-        var parsed = JSON.parse(raw);
-        if(Array.isArray(parsed.roster)) state.roster = parsed.roster;
-        if(Array.isArray(parsed.events)) state.events = parsed.events;
-        if(typeof parsed.passwordHash === "string") state.passwordHash = parsed.passwordHash;
-        return;
-      }
-      var v3raw = localStorage.getItem(V3_KEY);
-      if(v3raw){
-        var v3 = JSON.parse(v3raw);
-        migrateEventsWithOwnRosterToShared(v3.events, v3.passwordHash);
-        save();
-        return;
-      }
-      var legacy = localStorage.getItem(LEGACY_KEY);
-      if(legacy){
-        var lp = JSON.parse(legacy);
-        var pseudoEvents = (Array.isArray(lp.roster) && lp.roster.length)
-          ? [{ id: uid("e"), name: "親睦会", date: "", roster: lp.roster }]
-          : [];
-        migrateEventsWithOwnRosterToShared(pseudoEvents, lp.passwordHash);
-        save();
-      }
-    }catch(e){ /* storage unavailable — start empty */ }
-  }
-  function save(){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
-  }
   function getEvent(id){ return state.events.find(function(e){ return e.id === id; }); }
   function getPerson(id){ return state.roster.find(function(p){ return p.id === id; }); }
+
+  /* ---------- cloud sync (Supabase) ---------- */
+  async function loadFromCloud(){
+    var rosterRes = await sb.from("ennokai_roster").select("*").order("created_at");
+    var eventsRes = await sb.from("ennokai_events").select("*").order("created_at");
+    var attRes = await sb.from("ennokai_attendance").select("*");
+    var settingsRes = await sb.from("ennokai_settings").select("*").eq("id", 1).maybeSingle();
+
+    state.roster = (rosterRes.data || []).map(function(r){
+      return { id: r.id, name: r.name, source: r.source };
+    });
+
+    var attByEvent = {};
+    (attRes.data || []).forEach(function(a){
+      if(!attByEvent[a.event_id]) attByEvent[a.event_id] = {};
+      attByEvent[a.event_id][a.person_id] = a.status;
+    });
+    state.events = (eventsRes.data || []).map(function(e){
+      return {
+        id: e.id, name: e.name, date: e.date || "", location: e.location || "", time: e.time || "",
+        schedule: e.schedule || "", notes: e.notes || "", checkinRequired: e.checkin_required,
+        attendance: attByEvent[e.id] || {}
+      };
+    });
+    state.passwordHash = settingsRes.data ? settingsRes.data.password_hash : null;
+  }
+
+  async function refreshFromCloud(){
+    try{ await loadFromCloud(); }
+    catch(e){ showToast("通信に失敗しました。ネットワーク接続を確認してください"); return; }
+    renderOrganizer();
+    syncPublicView();
+  }
+
+  var realtimeRefreshTimer = null;
+  function scheduleCloudRefresh(){
+    clearTimeout(realtimeRefreshTimer);
+    realtimeRefreshTimer = setTimeout(refreshFromCloud, 350);
+  }
+  function setupRealtime(){
+    sb.channel("ennokai-sync")
+      .on("postgres_changes", { event: "*", schema: "public", table: "ennokai_roster" }, scheduleCloudRefresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "ennokai_events" }, scheduleCloudRefresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "ennokai_attendance" }, scheduleCloudRefresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "ennokai_settings" }, scheduleCloudRefresh)
+      .subscribe();
+  }
 
   /* ---------- theme toggle ---------- */
   var THEME_KEY = "yk_ennokai_theme";
@@ -1456,14 +1447,22 @@
     var n = name.trim();
     return state.roster.find(function(p){ return p.name === n; });
   }
-  function setStatus(ev, name, status){
+  async function setStatus(ev, name, status){
     var n = name.trim();
     if(!n || !ev) return null;
     var p = findPersonByName(n);
-    if(!p){ p = { id: uid("p"), name: n, source: "manual" }; state.roster.push(p); }
+    if(!p){
+      var ins = await sb.from("ennokai_roster").insert({ name: n, source: "manual" }).select().single();
+      if(ins.error){ showToast("登録に失敗しました"); return null; }
+      p = { id: ins.data.id, name: ins.data.name, source: ins.data.source };
+      state.roster.push(p);
+    }
     if(!ev.attendance){ ev.attendance = {}; }
     ev.attendance[p.id] = status;
-    save();
+    await sb.from("ennokai_attendance").upsert(
+      { event_id: ev.id, person_id: p.id, status: status, updated_at: new Date().toISOString() },
+      { onConflict: "event_id,person_id" }
+    );
     return p;
   }
 
@@ -1657,12 +1656,13 @@
     return selVal || "";
   }
 
-  function handleCheckIn(status){
+  async function handleCheckIn(status){
     var ev = getEvent(publicEventId);
     if(!ev) return;
     var name = currentEntryName();
     if(!name){ showToast("氏名を選択または入力してください"); return; }
-    setStatus(ev, name, status);
+    var p = await setStatus(ev, name, status);
+    if(!p) return;
 
     var banner = document.getElementById("confirmBanner");
     banner.hidden = false;
@@ -1676,8 +1676,7 @@
     manualOpen = false; manualField.hidden = true;
     manualToggleBtn.textContent = "▸ 名簿にない方はこちら（個別入力）";
 
-    renderCheckin();
-    renderOrganizer();
+    await refreshFromCloud();
     spawnSparkleBurst(document.getElementById("checkinPanel"));
 
     setTimeout(function(){ banner.hidden = true; }, 3200);
@@ -1772,17 +1771,15 @@
       if(!ev) return;
       var ok = await askConfirm("「" + ev.name + "」を削除します。この行事の出欠記録は削除されますが、名簿（全行事共通）はそのまま残ります。よろしいですか？");
       if(!ok) return;
-      state.events = state.events.filter(function(x){ return x.id !== id; });
-      save();
+      await sb.from("ennokai_events").delete().eq("id", id);
       if(orgEventId === id){ orgEventId = null; }
       if(publicEventId === id){ publicEventId = null; }
       if(editingEventId === id){ exitEditEventMode(); }
-      renderOrganizer();
-      syncPublicView();
+      await refreshFromCloud();
     }
   });
   document.getElementById("cancelEditEventBtn").addEventListener("click", exitEditEventMode);
-  document.getElementById("addEventBtn").addEventListener("click", function(){
+  document.getElementById("addEventBtn").addEventListener("click", async function(){
     var nameInput = document.getElementById("newEventName");
     var dateInput = document.getElementById("newEventDate");
     var locationInput = document.getElementById("newEventLocation");
@@ -1793,36 +1790,26 @@
     var name = nameInput.value.trim();
     if(!name){ showToast("行事名を入力してください"); return; }
 
+    var payload = {
+      name: name, date: dateInput.value.trim(), location: locationInput.value.trim(),
+      time: timeInput.value.trim(), schedule: scheduleInput.value.trim(),
+      notes: notesInput.value.trim(), checkin_required: checkinRequired
+    };
+
     if(editingEventId){
-      var ev = getEvent(editingEventId);
-      if(ev){
-        ev.name = name;
-        ev.date = dateInput.value.trim();
-        ev.location = locationInput.value.trim();
-        ev.time = timeInput.value.trim();
-        ev.schedule = scheduleInput.value.trim();
-        ev.notes = notesInput.value.trim();
-        ev.checkinRequired = checkinRequired;
-        delete ev.details;
-        save();
-        showToast("「" + name + "」を更新しました");
-      }
+      var res = await sb.from("ennokai_events").update(payload).eq("id", editingEventId);
+      if(res.error){ showToast("更新に失敗しました"); return; }
+      showToast("「" + name + "」を更新しました");
       exitEditEventMode();
     } else {
-      var newEv = {
-        id: uid("e"), name: name, date: dateInput.value.trim(),
-        location: locationInput.value.trim(), time: timeInput.value.trim(),
-        schedule: scheduleInput.value.trim(), notes: notesInput.value.trim(),
-        checkinRequired: checkinRequired, roster: []
-      };
-      state.events.push(newEv);
-      save();
-      orgEventId = newEv.id;
+      var ins = await sb.from("ennokai_events").insert(payload).select().single();
+      if(ins.error){ showToast("追加に失敗しました"); return; }
+      orgEventId = ins.data.id;
       nameInput.value = ""; dateInput.value = ""; locationInput.value = ""; timeInput.value = ""; scheduleInput.value = ""; notesInput.value = "";
       document.getElementById("newEventCheckinRequired").checked = true;
       showToast("「" + name + "」を追加しました");
     }
-    renderOrganizer();
+    await refreshFromCloud();
   });
 
   function renderOrgEventSelect(){
@@ -1940,18 +1927,24 @@
     var t = e.target;
     if(t.matches("[data-s]")){
       var pid = t.getAttribute("data-id");
-      if(!ev.attendance){ ev.attendance = {}; }
-      ev.attendance[pid] = t.getAttribute("data-s");
-      save(); renderOrgRosterSection(); syncPublicView();
+      var st = t.getAttribute("data-s");
+      if(st === "pending"){
+        await sb.from("ennokai_attendance").delete().eq("event_id", ev.id).eq("person_id", pid);
+      } else {
+        await sb.from("ennokai_attendance").upsert(
+          { event_id: ev.id, person_id: pid, status: st, updated_at: new Date().toISOString() },
+          { onConflict: "event_id,person_id" }
+        );
+      }
+      await refreshFromCloud();
     } else if(t.matches("[data-del]")){
       var delId = t.getAttribute("data-del");
       var person = getPerson(delId);
       if(!person) return;
       var ok = await askConfirm("「" + person.name + "」を名簿から削除します。すべての行事の出欠記録からも削除されます。よろしいですか？");
       if(!ok) return;
-      state.roster = state.roster.filter(function(x){ return x.id !== delId; });
-      state.events.forEach(function(e2){ if(e2.attendance){ delete e2.attendance[delId]; } });
-      save(); renderOrgRosterSection(); syncPublicView();
+      await sb.from("ennokai_roster").delete().eq("id", delId);
+      await refreshFromCloud();
     }
   });
 
@@ -1985,19 +1978,17 @@
   function parseNames(raw){
     return raw.split(/\r?\n|,|、/).map(function(s){ return s.trim(); }).filter(Boolean);
   }
-  document.getElementById("rosterAppendBtn").addEventListener("click", function(){
+  document.getElementById("rosterAppendBtn").addEventListener("click", async function(){
     var ta = document.getElementById("rosterBulk");
     var names = parseNames(ta.value);
     if(names.length === 0){ showToast("名前が入力されていません"); return; }
-    var added = 0;
-    names.forEach(function(name){
-      if(!findPersonByName(name)){
-        state.roster.push({ id: uid("p"), name: name, source: "preset" });
-        added++;
-      }
-    });
-    save(); renderOrgRosterSection(); syncPublicView(); fillRosterBulkTextarea();
-    showToast(added + "名を全行事の名簿に追加しました（重複は無視）");
+    var newOnes = names.filter(function(name){ return !findPersonByName(name); });
+    if(newOnes.length){
+      await sb.from("ennokai_roster").insert(newOnes.map(function(name){ return { name: name, source: "preset" }; }));
+    }
+    await refreshFromCloud();
+    fillRosterBulkTextarea();
+    showToast(newOnes.length + "名を全行事の名簿に追加しました（重複は無視）");
   });
   document.getElementById("rosterReplaceBtn").addEventListener("click", async function(){
     var ta = document.getElementById("rosterBulk");
@@ -2005,9 +1996,10 @@
     if(names.length === 0){ showToast("名前が入力されていません"); return; }
     var ok = await askConfirm("全ての行事で共有している名簿を、貼り付けた " + names.length + "名で置き換えます。すべての行事の出欠記録も削除されます。よろしいですか？");
     if(!ok) return;
-    state.roster = names.map(function(name){ return { id: uid("p"), name: name, source: "preset" }; });
-    state.events.forEach(function(e2){ e2.attendance = {}; });
-    save(); renderOrgRosterSection(); syncPublicView(); fillRosterBulkTextarea();
+    await sb.from("ennokai_roster").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+    await sb.from("ennokai_roster").insert(names.map(function(name){ return { name: name, source: "preset" }; }));
+    await refreshFromCloud();
+    fillRosterBulkTextarea();
     showToast("名簿を置き換えました（" + names.length + "名）");
   });
 
@@ -2017,8 +2009,9 @@
     var p2 = document.getElementById("newPass2").value;
     if(!p1){ showToast("パスワードを入力してください"); return; }
     if(p1 !== p2){ showToast("確認用パスワードが一致しません"); return; }
-    state.passwordHash = await hashPassword(p1);
-    save();
+    var hash = await hashPassword(p1);
+    await sb.from("ennokai_settings").update({ password_hash: hash }).eq("id", 1);
+    await refreshFromCloud();
     document.getElementById("newPass1").value = "";
     document.getElementById("newPass2").value = "";
     showToast("パスワードを変更しました");
@@ -2026,11 +2019,12 @@
   document.getElementById("resetAllBtn").addEventListener("click", async function(){
     var ok = await askConfirm("行事・名簿・出欠状況・パスワードをすべて削除します。この操作は取り消せません。よろしいですか？");
     if(!ok) return;
-    state = { roster: [], events: [], passwordHash: null };
+    await sb.from("ennokai_events").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+    await sb.from("ennokai_roster").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+    await sb.from("ennokai_settings").update({ password_hash: null }).eq("id", 1);
     orgEventId = null; publicEventId = null;
-    save();
     try{ sessionStorage.removeItem(SESSION_KEY); }catch(e){}
-    renderOrganizer();
+    await refreshFromCloud();
     switchView(false);
     showToast("すべてのデータをリセットしました");
   });
@@ -2142,8 +2136,9 @@
     if(isSetupMode){
       var p2 = document.getElementById("passInput2").value;
       if(p1 !== p2){ passErr.textContent = "確認用パスワードが一致しません"; return; }
-      state.passwordHash = await hashPassword(p1);
-      save();
+      var newHash = await hashPassword(p1);
+      await sb.from("ennokai_settings").update({ password_hash: newHash }).eq("id", 1);
+      await refreshFromCloud();
       try{ sessionStorage.setItem(SESSION_KEY, "1"); }catch(e){}
       passOverlay.classList.remove("show");
       switchView(true);
@@ -2168,10 +2163,16 @@
   });
 
   /* ================= INIT ================= */
-  load();
-  showEventList();
-  renderOrganizer();
-  if(isAuthed()){ switchView(true); }
+  (async function init(){
+    showEventList();
+    try{
+      await refreshFromCloud();
+    }catch(e){
+      showToast("通信に失敗しました。ネットワーク接続を確認してください");
+    }
+    setupRealtime();
+    if(isAuthed()){ switchView(true); }
+  })();
 })();
 </script>
 </body>
