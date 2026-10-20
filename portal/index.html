@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFF7F2">
+<title>親睦会ポータル</title>
+<link rel="icon" type="image/png" href="../icon-192x192-any.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF7F2; --card:#FFFFFF; --ink:#3B3241; --muted:#8E8494; --line:rgba(59,50,65,.09);
+  --peach:#FF9A8B; --peach-soft:#FFE3DD; --mint:#5CC9A7; --mint-soft:#DDF5EC; --lav:#A08CF0; --lav-soft:#ECE7FF;
+  --sky:#6BB8F0; --sky-soft:#E0F0FC; --lemon:#F6C453; --lemon-soft:#FFF3D3; --rose:#F27BA5; --rose-soft:#FFE1EC;
+  --boy:#5B9BF0; --girl:#F27BA5;
+  --shadow:0 18px 40px -26px rgba(90,60,90,.45);
+  --font:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;
+  --font-title:"Zen Maru Gothic","M PLUS Rounded 1c","Hiragino Maru Gothic ProN",sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{font-family:var(--font);color:var(--ink);background:
+  radial-gradient(600px 380px at 0% -5%, #FFE6DF 0%, transparent 70%),
+  radial-gradient(600px 420px at 105% 0%, #EEE9FF 0%, transparent 65%),
+  var(--bg);
+  min-height:100vh; line-height:1.7; -webkit-font-smoothing:antialiased; padding-bottom:calc(84px + env(safe-area-inset-bottom));}
+button{font:inherit;color:inherit}
+a{color:inherit}
+
+/* ---------- header / nav ---------- */
+.top{position:sticky;top:0;z-index:20;padding:calc(10px + env(safe-area-inset-top)) 18px 10px;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(255,247,242,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;font-size:20px;background:linear-gradient(135deg,var(--peach),var(--lav));box-shadow:0 8px 18px -8px rgba(255,120,120,.7)}
+.logo b{font-family:var(--font-title);font-size:1.12rem;font-weight:900;letter-spacing:.04em}
+.logo small{display:block;font-size:.62rem;letter-spacing:.24em;color:var(--muted);font-weight:700;margin-top:-3px}
+.top-admin{border:none;background:var(--card);border-radius:999px;padding:7px 14px;font-size:.8rem;font-weight:800;box-shadow:var(--shadow);cursor:pointer}
+.top-admin.on{background:var(--ink);color:#fff}
+.tabbar{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;display:flex;gap:4px;padding:6px;border-radius:24px;
+  background:rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 20px 40px -18px rgba(70,40,80,.5);border:1px solid var(--line)}
+.tabbar a{display:flex;flex-direction:column;align-items:center;gap:1px;min-width:66px;padding:6px 10px;border-radius:18px;text-decoration:none;font-size:.68rem;font-weight:800;color:var(--muted);transition:background .2s,color .2s}
+.tabbar a span{font-size:1.25rem;line-height:1.2}
+.tabbar a.on{background:linear-gradient(135deg,var(--peach-soft),var(--lav-soft));color:var(--ink)}
+
+main{max-width:1000px;margin:0 auto;padding:22px 18px 30px}
+.view{animation:fadeUp .45s cubic-bezier(.16,1,.3,1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1.page{font-family:var(--font-title);font-size:1.7rem;font-weight:900;margin:.2em 0 .1em;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
+.card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.section-title{font-family:var(--font-title);font-weight:900;font-size:1.1rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+.empty{color:var(--muted);text-align:center;padding:34px 10px;font-size:.92rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;cursor:pointer;border-radius:999px;padding:11px 20px;font-weight:800;font-size:.92rem;background:var(--card);box-shadow:var(--shadow);text-decoration:none;min-height:44px;touch-action:manipulation}
+.btn.primary{color:#fff;background:linear-gradient(120deg,var(--peach),var(--rose) 55%,var(--lav))}
+.btn.ghost{background:transparent;box-shadow:none;border:1.5px solid var(--line)}
+.btn.sm{padding:7px 14px;min-height:36px;font-size:.82rem}
+.btn:active{transform:scale(.97)}
+
+/* ---------- home ---------- */
+.hello{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.next{position:relative;overflow:hidden;padding:26px 26px 22px;margin-top:6px;color:#fff;border:none;
+  background:linear-gradient(130deg,var(--c1,#FF9A8B),var(--c2,#A08CF0))}
+.next::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.18)}
+.next .tag{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.14em;background:rgba(255,255,255,.25);padding:3px 12px;border-radius:999px}
+.next .emoji{position:absolute;right:22px;bottom:12px;font-size:4.6rem;filter:drop-shadow(0 10px 18px rgba(0,0,0,.18));animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+.next h2{font-family:var(--font-title);font-weight:900;font-size:1.6rem;margin:10px 0 4px;line-height:1.35;max-width:78%}
+.next .meta{font-size:.92rem;opacity:.95;display:flex;flex-wrap:wrap;gap:4px 14px}
+.next .count{margin-top:14px;display:flex;align-items:baseline;gap:6px;font-weight:800}
+.next .count b{font-family:var(--font-title);font-size:2.4rem;line-height:1}
+.next .actions{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+.next .actions .btn{background:#fff;color:var(--ink)}
+.next .actions .btn.glass{background:rgba(255,255,255,.22);color:#fff;box-shadow:none}
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.ev{display:flex;gap:14px;align-items:center;padding:16px 18px;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.ev:hover{transform:translateY(-3px)}
+.ev .ico{flex:none;width:54px;height:54px;border-radius:18px;display:grid;place-items:center;font-size:1.7rem;background:var(--soft,#FFE3DD)}
+.ev .t{font-weight:800;line-height:1.4}
+.ev .d{font-size:.8rem;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:800;padding:2px 10px;border-radius:999px;background:var(--mint-soft);color:#2E9C79}
+.pill.wait{background:var(--lemon-soft);color:#B48714}
+
+/* ---------- calendar ---------- */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-head h2{font-family:var(--font-title);font-size:1.35rem;font-weight:900;margin:0}
+.cal-nav{display:flex;gap:6px}
+.cal-nav button{width:40px;height:40px;border-radius:14px;border:none;background:var(--card);box-shadow:var(--shadow);cursor:pointer;font-size:1.1rem}
+.cal{padding:14px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dow{text-align:center;font-size:.72rem;font-weight:800;color:var(--muted);padding:4px 0}
+.dow.sun{color:#E2677F}.dow.sat{color:#4E8FD8}
+.day{min-height:84px;border-radius:16px;padding:6px;background:#FFFBF8;border:1px solid transparent;display:flex;flex-direction:column;gap:3px}
+.day.out{opacity:.35}
+.day.today{border-color:var(--peach);background:#FFF1EC}
+.day .n{font-size:.78rem;font-weight:800}
+.day.sun .n{color:#E2677F}.day.sat .n{color:#4E8FD8}
+.chip{display:block;font-size:.68rem;font-weight:800;line-height:1.3;padding:3px 6px;border-radius:9px;text-decoration:none;color:var(--ink);background:var(--soft,#FFE3DD);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tbd{margin-top:14px;padding:16px 18px}
+.tbd h3{margin:0 0 8px;font-size:.95rem}
+@media (max-width:620px){.day{min-height:62px;padding:4px}.chip{font-size:0;padding:0;height:8px;border-radius:4px;background:var(--dot,#FF9A8B)}}
+
+/* ---------- event detail ---------- */
+.back{display:inline-flex;align-items:center;gap:4px;text-decoration:none;font-weight:800;font-size:.86rem;color:var(--muted);margin-bottom:10px}
+.hero{position:relative;overflow:hidden;padding:30px 28px 26px;border:none;color:#fff;background:linear-gradient(130deg,var(--c1),var(--c2))}
+.hero .emoji{position:absolute;right:20px;top:18px;font-size:5rem;animation:bob 3.4s ease-in-out infinite;filter:drop-shadow(0 10px 18px rgba(0,0,0,.18))}
+.hero::before{content:"";position:absolute;left:-40px;bottom:-70px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.16)}
+.hero h1{font-family:var(--font-title);font-weight:900;font-size:1.9rem;line-height:1.35;margin:6px 0 12px;max-width:80%;position:relative}
+.facts{display:flex;flex-wrap:wrap;gap:8px;position:relative}
+.fact{background:rgba(255,255,255,.24);border-radius:14px;padding:8px 14px;font-size:.9rem;font-weight:700}
+.fact small{display:block;font-size:.66rem;letter-spacing:.14em;opacity:.85}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-top:16px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+@media (max-width:480px){.tl::before{left:83px}.tl li{grid-template-columns:72px 1fr;gap:20px}.tl li::before{left:78px}.tl .tm{font-size:.72rem}}
+.box{padding:20px 22px}
+.box h3{margin:0 0 12px;font-family:var(--font-title);font-size:1.05rem;font-weight:900;display:flex;align-items:center;gap:8px}
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:103px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--peach-soft),var(--lav-soft))}
+.tl li{display:grid;grid-template-columns:92px 1fr;gap:30px;padding:7px 0;position:relative}
+.tl li::before{content:"";position:absolute;left:98px;top:14px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--peach)}
+.tl li:nth-child(3n+2)::before{border-color:var(--lav)}.tl li:nth-child(3n)::before{border-color:var(--mint)}
+.tl .tm{font-weight:800;font-size:.8rem;color:var(--muted);text-align:right;padding-top:2px;line-height:1.5}
+.tl .tx{font-size:.93rem}
+.notes{white-space:pre-wrap;font-size:.93rem}
+.att{display:flex;gap:10px}
+.att div{flex:1;border-radius:18px;padding:12px;text-align:center;font-weight:800}
+.att b{display:block;font-family:var(--font-title);font-size:1.9rem;line-height:1.1}
+.att .p{background:var(--mint-soft);color:#2E9C79}.att .a{background:var(--rose-soft);color:#C94F7E}.att .w{background:#F3F0F5;color:var(--muted)}
+.bar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:#F3F0F5;margin:14px 0 4px}
+.bar i{display:block;height:100%}
+
+/* ---------- embedded check-in ---------- */
+.embed{position:fixed;inset:0;z-index:60;background:rgba(40,25,45,.42);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.embed .sheet{width:min(1000px,100%);height:min(92vh,100%);background:#fff;border-radius:26px 26px 0 0;overflow:hidden;display:flex;flex-direction:column;animation:sheetUp .35s cubic-bezier(.16,1,.3,1)}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+.embed .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 10px 20px;border-bottom:1px solid var(--line);font-weight:800}
+.embed iframe{flex:1;width:100%;border:0}
+.full-embed{height:calc(100vh - 210px);min-height:520px;width:100%;border:0;border-radius:24px;background:#fff;box-shadow:var(--shadow)}
+
+/* ---------- admin ---------- */
+.seg{display:inline-flex;background:#fff;border-radius:999px;padding:4px;box-shadow:var(--shadow);gap:2px}
+.seg button{border:none;background:none;border-radius:999px;padding:8px 16px;font-weight:800;font-size:.86rem;cursor:pointer;color:var(--muted)}
+.seg button.on{background:var(--ink);color:#fff}
+.field{display:flex;flex-direction:column;gap:6px;font-size:.8rem;font-weight:800;color:var(--muted)}
+select,input[type=number],input[type=password],input[type=text]{font:inherit;font-size:1rem;font-weight:700;color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:10px 14px;background:#fff;min-height:46px}
+select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4px var(--lav-soft)}
+.panel{padding:20px 22px;margin-top:14px}
+.row-flex{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.stat{border-radius:14px;padding:6px 12px;font-size:.82rem;font-weight:800;background:#F7F4F8}
+.stat.b{background:#E6F0FD;color:#2F6FC4}.stat.g{background:var(--rose-soft);color:#C94F7E}.stat.u{background:var(--lemon-soft);color:#A07812}
+.warn{margin-top:12px;padding:10px 14px;border-radius:14px;background:var(--lemon-soft);color:#8A6A10;font-size:.85rem;font-weight:700}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:16px}
+.team{padding:14px;border-radius:22px;background:#fff;box-shadow:var(--shadow);border:2px solid transparent;transition:border-color .15s,transform .15s;min-height:120px}
+.team.drop{border-color:var(--lav);transform:translateY(-2px)}
+.team.target{border-color:var(--peach);border-style:dashed}
+.team-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.team-name{display:flex;align-items:center;gap:8px;font-family:var(--font-title);font-weight:900}
+.team-dot{width:14px;height:14px;border-radius:50%;background:var(--tc)}
+.team-count{font-size:.72rem;font-weight:800;color:var(--muted)}
+.members{display:flex;flex-wrap:wrap;gap:6px}
+.m{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:999px;font-size:.84rem;font-weight:800;background:#F7F4F8;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:manipulation;border:2px solid transparent}
+.m i{width:8px;height:8px;border-radius:50%;background:#C9C1CF;flex:none}
+.m.boy i{background:var(--boy)}.m.girl i{background:var(--girl)}
+.m.sel{border-color:var(--ink);background:#fff;box-shadow:0 6px 16px -8px rgba(0,0,0,.4)}
+.m.gone{opacity:.45;text-decoration:line-through}
+.pool{margin-top:16px;padding:14px;border-radius:22px;border:2px dashed var(--line);background:rgba(255,255,255,.6)}
+.pool.drop{border-color:var(--lav)}
+.hint{font-size:.8rem;color:var(--muted);margin:10px 2px 0}
+.gender-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;margin-top:12px}
+.g-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 8px 8px 14px;border-radius:16px;background:#fff;box-shadow:0 8px 20px -18px rgba(0,0,0,.4);border:1px solid var(--line)}
+.g-row .nm{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.g-btns{display:flex;gap:4px;flex:none}
+.g-btns button{border:1.5px solid var(--line);background:#fff;border-radius:999px;min-width:46px;min-height:40px;font-weight:800;cursor:pointer;touch-action:manipulation}
+.g-btns button.on.boy{background:var(--boy);border-color:var(--boy);color:#fff}
+.g-btns button.on.girl{background:var(--girl);border-color:var(--girl);color:#fff}
+.gate{max-width:420px;margin:40px auto;padding:30px 26px;text-align:center}
+.gate .big{font-size:3rem}
+.gate input{width:100%;margin:14px 0 6px;text-align:center}
+.err{color:#D2486F;font-size:.85rem;font-weight:700;min-height:1.2em}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:800;font-size:.86rem;z-index:80;transition:opacity .25s,transform .3s}
+.toast.show{opacity:1;transform:translateX(-50%)}
+
+/* ---------- print (teams) ---------- */
+@page{size:A4 portrait;margin:14mm}
+@media print{
+  body{background:#fff;padding:0}
+  .top,.tabbar,.no-print,.toast,.embed{display:none!important}
+  main{padding:0;max-width:none}
+  .team{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+  .board{grid-template-columns:repeat(3,1fr)}
+  .m{background:#fff;border:1px solid #ddd}
+  .print-only{display:block!important;font-family:var(--font-title)}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="logo" href="#/"><span class="logo-mark">🎈</span><span><b>親睦会</b><small>FRIENDSHIP CLUB</small></span></a>
+  <button class="top-admin" id="adminBtn" type="button">🔒 主催者</button>
+</header>
+<main id="app"></main>
+<nav class="tabbar">
+  <a href="#/" data-tab="home"><span>🏠</span>ホーム</a>
+  <a href="#/calendar" data-tab="calendar"><span>📅</span>カレンダー</a>
+  <a href="#/checkin" data-tab="checkin"><span>✅</span>出欠受付</a>
+  <a href="#/teams" data-tab="teams"><span>🤝</span>チーム分け</a>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  "use strict";
+  var sb = window.supabase.createClient("https://hbhfnljsclypokouevxe.supabase.co", "sb_publishable_B6Cv8rJVcsnaD1iFlqZOWw_WmU3Te-3");
+  var SESSION_KEY = "yk_ennokai_organizer_auth"; // ennokai と共通（同じサイトなので、どちらかでログインすれば両方開く）
+  var ENNOKAI_URL = "../index.html";
+  var app = document.getElementById("app");
+  var S = { roster: [], events: [], att: {}, teams: {}, passwordHash: null, hasGender: true, hasTeams: true, loaded: false };
+
+  /* ---------- 小物 ---------- */
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]; }); }
+  var toastT = null;
+  function toast(msg){ var t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove("show"); }, 2400); }
+  function half(s){ return String(s || "").replace(/[０-９]/g, function(c){ return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); }).replace(/[／]/g, "/").replace(/[－ー−]/g, "-"); }
+  function isAdmin(){ try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch(e){ return false; } }
+  function hashPassword(pw){
+    var enc = new TextEncoder().encode(pw);
+    return crypto.subtle.digest("SHA-256", enc).then(function(buf){ return "sha256:" + Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2, "0"); }).join(""); });
+  }
+
+  // 行事の日付は自由に書かれているので、読み取れる範囲でカレンダー用の日付にする
+  function parseDate(raw){
+    var s = half(raw).replace(/\s/g, "");
+    var m = s.match(/(\d{4})[年\/.-](\d{1,2})[月\/.-](\d{1,2})/);
+    if (m) return { y: +m[1], m: +m[2], d: +m[3], exact: true };
+    m = s.match(/(\d{4})[年\/.-](\d{1,2})月?/);
+    if (m) return { y: +m[1], m: +m[2], d: null, exact: false };
+    m = s.match(/^(\d{1,2})[月\/](\d{1,2})/);
+    if (m) { var y = new Date().getFullYear(); return { y: y, m: +m[1], d: +m[2], exact: true }; }
+    return null;
+  }
+  var THEMES = [
+    { k: /スポーツ|運動|卓球|バスケ|ボウリング|ボーリング|ゴルフ|体育/, e: "🏓", c1: "#FF9A8B", c2: "#F6C453", soft: "#FFE3DD", dot: "#FF9A8B" },
+    { k: /祭り|まつり|祭/, e: "🏮", c1: "#FF8A80", c2: "#FFB86B", soft: "#FFE6D6", dot: "#FF8A80" },
+    { k: /忘年|新年|飲み|宴|懇親|歓迎|送別/, e: "🍻", c1: "#A08CF0", c2: "#F27BA5", soft: "#ECE7FF", dot: "#A08CF0" },
+    { k: /BBQ|バーベキュー|焼肉|食事|ランチ|昼食/i, e: "🍖", c1: "#F6A04D", c2: "#F27BA5", soft: "#FFEBD6", dot: "#F6A04D" },
+    { k: /旅行|研修|見学|バス/, e: "🚌", c1: "#6BB8F0", c2: "#5CC9A7", soft: "#E0F0FC", dot: "#6BB8F0" },
+    { k: /花見|桜/, e: "🌸", c1: "#F7A1C4", c2: "#C9A6F5", soft: "#FFE1EC", dot: "#F7A1C4" },
+    { k: /クリスマス|X'?mas/i, e: "🎄", c1: "#5CC9A7", c2: "#F27BA5", soft: "#DDF5EC", dot: "#5CC9A7" },
+  ];
+  var FALLBACK = [
+    { e: "🎉", c1: "#FF9A8B", c2: "#A08CF0", soft: "#FFE3DD", dot: "#FF9A8B" },
+    { e: "🎈", c1: "#6BB8F0", c2: "#A08CF0", soft: "#E0F0FC", dot: "#6BB8F0" },
+    { e: "✨", c1: "#5CC9A7", c2: "#6BB8F0", soft: "#DDF5EC", dot: "#5CC9A7" },
+  ];
+  function theme(ev){
+    var t = THEMES.find(function(x){ return x.k.test(ev.name + " " + (ev.schedule || "")); });
+    if (t) return t;
+    var h = 0; for (var i = 0; i < ev.id.length; i++) h = (h * 31 + ev.id.charCodeAt(i)) >>> 0;
+    return FALLBACK[h % FALLBACK.length];
+  }
+  function counts(ev){
+    var a = S.att[ev.id] || {}, p = 0, ab = 0;
+    S.roster.forEach(function(r){ if (a[r.id] === "present") p++; else if (a[r.id] === "absent") ab++; });
+    return { present: p, absent: ab, pending: S.roster.length - p - ab, total: S.roster.length };
+  }
+  function sortedEvents(){
+    return S.events.slice().sort(function(a, b){
+      var da = parseDate(a.date), db = parseDate(b.date);
+      var ka = da ? da.y * 10000 + da.m * 100 + (da.d || 0) : 99999999, kb = db ? db.y * 10000 + db.m * 100 + (db.d || 0) : 99999999;
+      return ka - kb;
+    });
+  }
+  function daysUntil(pd){
+    if (!pd || !pd.exact) return null;
+    var t = new Date(); t.setHours(0, 0, 0, 0);
+    return Math.round((new Date(pd.y, pd.m - 1, pd.d) - t) / 86400000);
+  }
+  function upcoming(){
+    return sortedEvents().filter(function(ev){ var d = daysUntil(parseDate(ev.date)); return d === null || d >= 0; });
+  }
+
+  /* ---------- データ ---------- */
+  async function load(){
+    var r = await sb.from("ennokai_roster").select("*").order("created_at");
+    var e = await sb.from("ennokai_events").select("*").order("created_at");
+    var a = await sb.from("ennokai_attendance").select("*");
+    var st = await sb.from("ennokai_settings").select("*").eq("id", 1).maybeSingle();
+    var t = await sb.from("ennokai_teams").select("*");
+    if (r.error || e.error) throw (r.error || e.error);
+    S.roster = (r.data || []).map(function(x){ return { id: x.id, name: x.name, gender: x.gender || null }; });
+    S.hasGender = !!(r.data && r.data.length && Object.prototype.hasOwnProperty.call(r.data[0], "gender"));
+    S.events = (e.data || []).map(function(x){ return { id: x.id, name: x.name, date: x.date || "", location: x.location || "", time: x.time || "", schedule: x.schedule || "", notes: x.notes || "" }; });
+    S.att = {};
+    (a.data || []).forEach(function(x){ (S.att[x.event_id] = S.att[x.event_id] || {})[x.person_id] = x.status; });
+    S.passwordHash = st.data ? st.data.password_hash : null;
+    S.hasTeams = !t.error;
+    S.teams = {};
+    (t.data || []).forEach(function(x){ S.teams[x.event_id] = x.data || {}; });
+    S.loaded = true;
+  }
+  var refreshT = null;
+  function scheduleRefresh(){ clearTimeout(refreshT); refreshT = setTimeout(function(){ load().then(function(){ if (!busyTeams) render(); }).catch(function(){}); }, 400); }
+  sb.channel("portal-sync")
+    .on("postgres_changes", { event: "*", schema: "public", table: "ennokai_roster" }, scheduleRefresh)
+    .on("postgres_changes", { event: "*", schema: "public", table: "ennokai_events" }, scheduleRefresh)
+    .on("postgres_changes", { event: "*", schema: "public", table: "ennokai_attendance" }, scheduleRefresh)
+    .subscribe();
+
+  /* ---------- 画面 ---------- */
+  function setTab(name){
+    document.querySelectorAll(".tabbar a").forEach(function(a){ a.classList.toggle("on", a.dataset.tab === name); });
+    var b = document.getElementById("adminBtn");
+    b.classList.toggle("on", isAdmin());
+    b.textContent = isAdmin() ? "🔓 主催者モード" : "🔒 主催者";
+  }
+  function fmtDate(ev){
+    var pd = parseDate(ev.date);
+    if (pd && pd.exact) { var w = "日月火水木金土"[new Date(pd.y, pd.m - 1, pd.d).getDay()]; return pd.m + "月" + pd.d + "日（" + w + "）"; }
+    return ev.date || "日程調整中";
+  }
+
+  function viewHome(){
+    var ups = upcoming();
+    var next = ups[0];
+    var h = '<div class="view"><div class="hello"><div><h1 class="page">こんにちは 👋</h1><p class="sub">親睦会の行事・出欠・チーム分けをまとめて見られます</p></div></div>';
+    if (next) {
+      var th = theme(next), c = counts(next), dd = daysUntil(parseDate(next.date));
+      h += '<div class="card next" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><span class="tag">NEXT EVENT</span><div class="emoji">' + th.e + '</div>'
+        + '<h2>' + esc(next.name) + '</h2><div class="meta"><span>📅 ' + esc(fmtDate(next)) + '</span>' + (next.time ? '<span>⏰ ' + esc(next.time) + '</span>' : '') + (next.location ? '<span>📍 ' + esc(next.location) + '</span>' : '') + '</div>'
+        + (dd !== null ? '<div class="count">' + (dd === 0 ? '<b>今日</b>開催！' : 'あと<b>' + dd + '</b>日') + '</div>' : '')
+        + '<div class="actions"><a class="btn" href="#/event/' + next.id + '">詳しく見る</a><button class="btn glass" data-checkin="' + next.id + '">✅ 出欠を入力</button><span class="btn glass" style="cursor:default">出席 ' + c.present + '名</span></div></div>';
+    } else {
+      h += '<div class="card empty">予定されている行事はまだありません</div>';
+    }
+    h += '<div class="section-title">🗓 これからの行事</div>';
+    h += ups.length > 1 ? '<div class="list">' + ups.slice(1).map(evCard).join("") + '</div>' : '<div class="card empty">ほかの予定はまだありません</div>';
+    var past = sortedEvents().filter(function(ev){ return ups.indexOf(ev) < 0; }).reverse();
+    if (past.length) h += '<div class="section-title">📸 これまでの行事</div><div class="list">' + past.map(evCard).join("") + '</div>';
+    return h + '</div>';
+  }
+  function evCard(ev){
+    var th = theme(ev), c = counts(ev);
+    return '<a class="card ev" href="#/event/' + ev.id + '" style="--soft:' + th.soft + '"><span class="ico">' + th.e + '</span><span><span class="t">' + esc(ev.name) + '</span><br><span class="d">📅 ' + esc(fmtDate(ev)) + (ev.location ? '　📍 ' + esc(ev.location) : '') + '</span><br><span class="pill">出席 ' + c.present + '名</span> ' + (c.pending ? '<span class="pill wait">未入力 ' + c.pending + '名</span>' : '') + '</span></a>';
+  }
+
+  var calY, calM;
+  function viewCalendar(){
+    var now = new Date();
+    if (calY == null) { var first = upcoming().map(function(e){ return parseDate(e.date); }).find(function(p){ return p; }); calY = first ? first.y : now.getFullYear(); calM = first ? first.m : now.getMonth() + 1; }
+    var start = new Date(calY, calM - 1, 1), startDow = start.getDay(), days = new Date(calY, calM, 0).getDate();
+    var cells = [], i;
+    var prevDays = new Date(calY, calM - 1, 0).getDate();
+    for (i = startDow - 1; i >= 0; i--) cells.push({ d: prevDays - i, out: true });
+    for (i = 1; i <= days; i++) cells.push({ d: i });
+    while (cells.length % 7) cells.push({ d: cells.length - days - startDow + 1, out: true });
+    var byDay = {}, monthOnly = [], tbd = [];
+    S.events.forEach(function(ev){
+      var pd = parseDate(ev.date);
+      if (pd && pd.y === calY && pd.m === calM) { if (pd.exact) (byDay[pd.d] = byDay[pd.d] || []).push(ev); else monthOnly.push(ev); }
+      else if (!pd) tbd.push(ev);
+    });
+    var today = new Date();
+    var h = '<div class="view"><div class="cal-head"><h2>' + calY + '年 ' + calM + '月</h2><div class="cal-nav"><button data-cal="-1" aria-label="前の月">‹</button><button data-cal="0" aria-label="今月">●</button><button data-cal="1" aria-label="次の月">›</button></div></div>';
+    h += '<div class="card cal"><div class="cal-grid">' + ["日","月","火","水","木","金","土"].map(function(w, k){ return '<div class="dow' + (k === 0 ? ' sun' : k === 6 ? ' sat' : '') + '">' + w + '</div>'; }).join("");
+    cells.forEach(function(c, k){
+      var isToday = !c.out && today.getFullYear() === calY && today.getMonth() + 1 === calM && today.getDate() === c.d;
+      h += '<div class="day' + (c.out ? ' out' : '') + (isToday ? ' today' : '') + (k % 7 === 0 ? ' sun' : k % 7 === 6 ? ' sat' : '') + '"><span class="n">' + c.d + '</span>'
+        + (!c.out && byDay[c.d] ? byDay[c.d].map(function(ev){ var th = theme(ev); return '<a class="chip" href="#/event/' + ev.id + '" style="--soft:' + th.soft + ';--dot:' + th.dot + '">' + th.e + ' ' + esc(ev.name) + '</a>'; }).join("") : '') + '</div>';
+    });
+    h += '</div></div>';
+    if (monthOnly.length) h += '<div class="card tbd"><h3>🗓 ' + calM + '月中（日にち調整中）</h3><div class="list">' + monthOnly.map(evCard).join("") + '</div></div>';
+    if (tbd.length) h += '<div class="card tbd"><h3>⏳ 日程調整中</h3><div class="list">' + tbd.map(evCard).join("") + '</div></div>';
+    return h + '</div>';
+  }
+
+  function parseSchedule(text){
+    return String(text || "").split(/\n/).map(function(l){ return l.trim(); }).filter(Boolean).reduce(function(out, line){
+      var m = half(line).match(/^(\d{1,2}[:：]\d{2}(?:\s*[〜~\-]\s*(?:\d{1,2}[:：]\d{2})?)?\s*(?:頃)?)\s*(.*)$/);
+      if (m) out.push({ tm: m[1].replace(/\s/g, ""), tx: line.slice(line.length - m[2].length) });
+      else if (out.length) out[out.length - 1].tx += " " + line;
+      else out.push({ tm: "", tx: line });
+      return out;
+    }, []);
+  }
+  function viewEvent(id){
+    var ev = S.events.find(function(e){ return e.id === id; });
+    if (!ev) return '<div class="view card empty">行事が見つかりませんでした</div>';
+    var th = theme(ev), c = counts(ev), sch = parseSchedule(ev.schedule);
+    var pct = function(n){ return c.total ? (n / c.total * 100).toFixed(1) : 0; };
+    var h = '<div class="view"><a class="back" href="#/">‹ ホームへ</a>';
+    h += '<div class="card hero" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><div class="emoji">' + th.e + '</div><h1>' + esc(ev.name) + '</h1><div class="facts">'
+      + '<div class="fact"><small>DATE</small>📅 ' + esc(fmtDate(ev)) + '</div>'
+      + (ev.time ? '<div class="fact"><small>TIME</small>⏰ ' + esc(ev.time) + '</div>' : '')
+      + (ev.location ? '<div class="fact"><small>PLACE</small>📍 ' + esc(ev.location) + '</div>' : '') + '</div></div>';
+    h += '<div class="grid2"><div class="card box"><h3>🕒 当日の流れ</h3>' + (sch.length ? '<ul class="tl">' + sch.map(function(s){ return '<li><span class="tm">' + esc(s.tm) + '</span><span class="tx">' + esc(s.tx) + '</span></li>'; }).join("") + '</ul>' : '<div class="empty">まだ決まっていません</div>')
+      + (ev.notes ? '<h3 style="margin-top:20px">📝 メモ</h3><div class="notes">' + esc(ev.notes) + '</div>' : '') + '</div>';
+    h += '<div><div class="card box"><h3>✅ 出欠状況</h3><div class="att"><div class="p"><b>' + c.present + '</b>出席</div><div class="a"><b>' + c.absent + '</b>欠席</div><div class="w"><b>' + c.pending + '</b>未入力</div></div>'
+      + '<div class="bar"><i style="width:' + pct(c.present) + '%;background:var(--mint)"></i><i style="width:' + pct(c.absent) + '%;background:var(--rose)"></i></div>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn primary" data-checkin="' + ev.id + '">✅ 出欠を入力する</button></div></div>';
+    if (isAdmin()) h += '<div class="card box" style="margin-top:16px"><h3>🤝 チーム分け</h3><p class="sub" style="margin:0 0 10px">出席者 ' + c.present + '名をチームに分けます</p><a class="btn" href="#/teams/' + ev.id + '">チーム分けを開く</a></div>';
+    return h + '</div></div></div>';
+  }
+
+  function viewCheckin(){
+    return '<div class="view"><h1 class="page">出欠受付</h1><p class="sub">いつもの出欠アプリ（宴の会）をそのまま使えます</p><iframe class="full-embed" src="' + ENNOKAI_URL + '" title="出欠受付"></iframe></div>';
+  }
+  function openCheckin(){
+    var wrap = document.createElement("div");
+    wrap.className = "embed";
+    wrap.innerHTML = '<div class="sheet"><div class="sheet-head"><span>✅ 出欠受付</span><button class="btn sm ghost" data-close>閉じる</button></div><iframe src="' + ENNOKAI_URL + '" title="出欠受付"></iframe></div>';
+    wrap.addEventListener("click", function(e){ if (e.target === wrap || e.target.closest("[data-close]")) { wrap.remove(); load().then(render); } });
+    document.body.appendChild(wrap);
+  }
+
+  /* ---------- 主催者ログイン（ennokai と同じパスワード） ---------- */
+  function viewGate(next){
+    return '<div class="view card gate"><div class="big">🔒</div><h2 style="font-family:var(--font-title);margin:.2em 0">主催者用</h2><p class="sub">出欠アプリ（宴の会）と同じ主催者パスワードを入れてください</p>'
+      + '<input type="password" id="gatePw" placeholder="パスワード" autocomplete="current-password"><div class="err" id="gateErr"></div><button class="btn primary" id="gateGo" data-next="' + esc(next || "") + '" style="width:100%">ひらく</button></div>';
+  }
+  async function tryLogin(next){
+    var pw = document.getElementById("gatePw").value;
+    var err = document.getElementById("gateErr");
+    if (!pw) { err.textContent = "パスワードを入力してください"; return; }
+    if (!S.passwordHash) { err.textContent = "先に出欠アプリ（宴の会）の主催者画面でパスワードを設定してください"; return; }
+    if ((await hashPassword(pw)) !== S.passwordHash) { err.textContent = "パスワードが違います"; return; }
+    try { sessionStorage.setItem(SESSION_KEY, "1"); } catch(e){}
+    toast("主催者モードになりました");
+    location.hash = next || "#/teams";
+    render();
+  }
+
+  /* ---------- チーム分け ---------- */
+  var TEAM_COLORS = ["#FF8A80", "#F6C453", "#5CC9A7", "#6BB8F0", "#A08CF0", "#F27BA5", "#F6A04D", "#4FC3C7", "#9CCC65", "#B39DDB", "#FFB74D", "#90A4AE"];
+  var TEAM_NAMES = ["レッド", "イエロー", "グリーン", "ブルー", "パープル", "ピンク", "オレンジ", "ターコイズ", "ライム", "ラベンダー", "サンセット", "グレー"];
+  var draft = null, selected = null, busyTeams = false, adminTab = "teams";
+  function present(evId){ var a = S.att[evId] || {}; return S.roster.filter(function(r){ return a[r.id] === "present"; }); }
+  function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  // 男女それぞれ均等に、人数も揃うように配る
+  function autoTeams(people, n){
+    var teams = []; for (var i = 0; i < n; i++) teams.push({ name: TEAM_NAMES[i % TEAM_NAMES.length], color: TEAM_COLORS[i % TEAM_COLORS.length], members: [] });
+    var by = { 女: [], 男: [], "": [] };
+    shuffle(people).forEach(function(p){ by[p.gender === "女" || p.gender === "男" ? p.gender : ""].push(p); });
+    var gcount = function(t, g){ return t.members.filter(function(id){ var p = S.roster.find(function(r){ return r.id === id; }); return p && (p.gender || "") === g; }).length; };
+    ["女", "男", ""].forEach(function(g){
+      by[g].forEach(function(p){
+        var best = shuffle(teams).sort(function(a, b){ return (a.members.length - b.members.length) || (gcount(a, g) - gcount(b, g)); })[0];
+        best.members.push(p.id);
+      });
+    });
+    return { teams: teams, pool: [] };
+  }
+  function emptyTeams(people, n){
+    var teams = []; for (var i = 0; i < n; i++) teams.push({ name: TEAM_NAMES[i % TEAM_NAMES.length], color: TEAM_COLORS[i % TEAM_COLORS.length], members: [] });
+    return { teams: teams, pool: people.map(function(p){ return p.id; }) };
+  }
+  function person(id){ return S.roster.find(function(r){ return r.id === id; }); }
+  function chipHtml(id, evId){
+    var p = person(id), a = S.att[evId] || {};
+    var cls = "m" + (p && p.gender === "男" ? " boy" : p && p.gender === "女" ? " girl" : "") + (selected === id ? " sel" : "") + (a[id] !== "present" ? " gone" : "");
+    return '<span class="' + cls + '" draggable="true" data-pid="' + id + '"><i></i>' + esc(p ? p.name : "（名簿から削除）") + '</span>';
+  }
+  function teamStats(t){
+    var b = 0, g = 0; t.members.forEach(function(id){ var p = person(id); if (p && p.gender === "男") b++; else if (p && p.gender === "女") g++; });
+    return t.members.length + '名' + (b || g ? '（♂' + b + ' ♀' + g + '）' : '');
+  }
+  function viewTeams(evId){
+    if (!isAdmin()) return viewGate("#/teams" + (evId ? "/" + evId : ""));
+    var evs = sortedEvents();
+    if (!evId && evs.length) evId = (upcoming()[0] || evs[0]).id;
+    var ev = S.events.find(function(e){ return e.id === evId; });
+    var h = '<div class="view"><h1 class="page">主催者メニュー</h1><p class="sub">チーム分けと、名簿の男女の設定ができます</p>'
+      + '<div class="seg no-print"><button data-atab="teams" class="' + (adminTab === "teams" ? "on" : "") + '">🤝 チーム分け</button><button data-atab="gender" class="' + (adminTab === "gender" ? "on" : "") + '">👫 名簿の男女</button></div>';
+    if (!S.hasTeams || !S.hasGender) h += '<div class="warn">⚠️ データベースの準備がまだです（SQLを1回実行してください）。それまでは' + (!S.hasGender ? '男女の設定と' : '') + (!S.hasTeams ? 'チームの保存' : '') + 'ができません。</div>';
+    if (adminTab === "gender") return h + viewGender() + '</div>';
+    if (!ev) return h + '<div class="card empty">行事がありません</div></div>';
+    var ppl = present(ev.id), saved = S.teams[ev.id];
+    if (!draft || draft.evId !== ev.id) draft = saved && saved.teams ? { evId: ev.id, teams: JSON.parse(JSON.stringify(saved.teams)), pool: (saved.pool || []).slice(), dirty: false } : { evId: ev.id, teams: [], pool: [], dirty: false };
+    // 保存後に出席になった人は「未割り当て」に入れる
+    var placed = {}; draft.teams.forEach(function(t){ t.members.forEach(function(id){ placed[id] = 1; }); }); draft.pool.forEach(function(id){ placed[id] = 1; });
+    ppl.forEach(function(p){ if (!placed[p.id] && draft.teams.length) draft.pool.push(p.id); });
+    var b = ppl.filter(function(p){ return p.gender === "男"; }).length, g = ppl.filter(function(p){ return p.gender === "女"; }).length, u = ppl.length - b - g;
+    var defN = draft.teams.length || Math.max(2, Math.min(12, Math.round(ppl.length / 4) || 2));
+    h += '<div class="card panel no-print"><div class="row-flex"><label class="field" style="flex:1;min-width:220px">行事<select id="teamEv">' + evs.map(function(e){ return '<option value="' + e.id + '"' + (e.id === ev.id ? ' selected' : '') + '>' + esc(e.name) + '（' + esc(fmtDate(e)) + '）</option>'; }).join("") + '</select></label>'
+      + '<label class="field">チーム数<input type="number" id="teamN" min="2" max="12" value="' + defN + '" style="width:110px"></label>'
+      + '<button class="btn primary" id="autoBtn">🎲 自動で分ける</button><button class="btn" id="manualBtn">✋ 手動で分ける</button></div>'
+      + '<div class="stats"><span class="stat">出席 ' + ppl.length + '名</span><span class="stat b">♂ 男性 ' + b + '名</span><span class="stat g">♀ 女性 ' + g + '名</span>' + (u ? '<span class="stat u">未設定 ' + u + '名</span>' : '') + '</div>'
+      + (u ? '<div class="warn">男女が未設定の人が ' + u + '名います。「👫 名簿の男女」で設定すると、男女比もそろえて分けられます。</div>' : '') + '</div>';
+    if (!draft.teams.length) return h + '<div class="card empty" style="margin-top:14px">「🎲 自動で分ける」でランダムに作るか、「✋ 手動で分ける」で空のチームから自分で振り分けられます。</div></div>';
+    h += '<div class="row-flex no-print" style="margin-top:16px;justify-content:space-between"><span class="hint" style="margin:0">💡 名前を押してから、移したいチーム（または「未割り当て」）を押すと移動できます。パソコンはドラッグでも動かせます。</span>'
+      + '<span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" id="reshuffleBtn">🔀 もう一度シャッフル</button><button class="btn sm" id="printBtn">🖨 印刷</button><button class="btn sm primary" id="saveBtn">💾 ' + (draft.dirty ? '保存する' : '保存済み') + '</button></span></div>';
+    h += '<h2 class="print-only" style="display:none">' + esc(ev.name) + '　チーム表</h2>';
+    h += '<div class="board">' + draft.teams.map(function(t, i){
+      return '<div class="team' + (selected ? ' target' : '') + '" data-team="' + i + '" style="--tc:' + t.color + '"><div class="team-head"><span class="team-name"><span class="team-dot"></span>' + esc(t.name) + '</span><span class="team-count">' + teamStats(t) + '</span></div><div class="members">' + t.members.map(function(id){ return chipHtml(id, ev.id); }).join("") + '</div></div>';
+    }).join("") + '</div>';
+    h += '<div class="pool no-print' + (selected ? ' target' : '') + '" data-team="pool"><div class="team-head"><span class="team-name">📥 未割り当て</span><span class="team-count">' + draft.pool.length + '名</span></div><div class="members">' + (draft.pool.length ? draft.pool.map(function(id){ return chipHtml(id, ev.id); }).join("") : '<span class="hint" style="margin:0">ここに入れた人はどのチームにも入りません</span>') + '</div></div>';
+    return h + '</div>';
+  }
+  function viewGender(){
+    if (!S.roster.length) return '<div class="card empty" style="margin-top:14px">名簿が未登録です（出欠アプリの主催者画面で登録してください）</div>';
+    var b = S.roster.filter(function(p){ return p.gender === "男"; }).length, g = S.roster.filter(function(p){ return p.gender === "女"; }).length;
+    return '<div class="card panel"><div class="stats" style="margin:0"><span class="stat">名簿 ' + S.roster.length + '名</span><span class="stat b">♂ ' + b + '名</span><span class="stat g">♀ ' + g + '名</span><span class="stat u">未設定 ' + (S.roster.length - b - g) + '名</span></div><p class="hint">一度設定すれば、すべての行事のチーム分けで使われます。</p></div>'
+      + '<div class="gender-list">' + S.roster.map(function(p){
+        return '<div class="g-row"><span class="nm">' + esc(p.name) + '</span><span class="g-btns"><button class="boy' + (p.gender === "男" ? " on" : "") + '" data-g="男" data-pid="' + p.id + '">男</button><button class="girl' + (p.gender === "女" ? " on" : "") + '" data-g="女" data-pid="' + p.id + '">女</button></span></div>';
+      }).join("") + '</div>';
+  }
+  function moveTo(pid, target){
+    draft.teams.forEach(function(t){ t.members = t.members.filter(function(x){ return x !== pid; }); });
+    draft.pool = draft.pool.filter(function(x){ return x !== pid; });
+    if (target === "pool") draft.pool.push(pid); else draft.teams[+target].members.push(pid);
+    draft.dirty = true; selected = null; render();
+  }
+  async function saveTeams(){
+    if (!S.hasTeams) { toast("先にSQLを実行してください"); return; }
+    busyTeams = true;
+    var payload = { event_id: draft.evId, team_count: draft.teams.length, data: { teams: draft.teams, pool: draft.pool }, updated_at: new Date().toISOString() };
+    var res = await sb.from("ennokai_teams").upsert(payload, { onConflict: "event_id" });
+    busyTeams = false;
+    if (res.error) { toast("保存できませんでした"); return; }
+    S.teams[draft.evId] = payload.data; draft.dirty = false; toast("チームを保存しました"); render();
+  }
+
+  /* ---------- ルーティング ---------- */
+  function route(){ return location.hash.replace(/^#\/?/, "").split("/"); }
+  function render(){
+    if (!S.loaded) { app.innerHTML = '<div class="empty">読み込み中…</div>'; return; }
+    var r = route(), tab = r[0] || "home";
+    setTab(tab === "event" ? "home" : tab);
+    if (tab === "calendar") app.innerHTML = viewCalendar();
+    else if (tab === "event") app.innerHTML = viewEvent(r[1]);
+    else if (tab === "checkin") { if (!app.querySelector(".full-embed")) app.innerHTML = viewCheckin(); }
+    else if (tab === "teams") app.innerHTML = viewTeams(r[1]);
+    else if (tab === "admin") app.innerHTML = viewGate("#/teams");
+    else app.innerHTML = viewHome();
+  }
+  window.addEventListener("hashchange", function(){ selected = null; window.scrollTo(0, 0); render(); });
+
+  /* ---------- 操作 ---------- */
+  document.addEventListener("click", async function(e){
+    var t;
+    if ((t = e.target.closest("[data-checkin]"))) { openCheckin(); return; }
+    if ((t = e.target.closest("[data-cal]"))) {
+      var d = +t.dataset.cal;
+      if (d === 0) { var n = new Date(); calY = n.getFullYear(); calM = n.getMonth() + 1; }
+      else { calM += d; if (calM < 1) { calM = 12; calY--; } if (calM > 12) { calM = 1; calY++; } }
+      render(); return;
+    }
+    if (e.target.closest("#adminBtn")) {
+      if (isAdmin()) { if (location.hash.indexOf("#/teams") === 0) { try { sessionStorage.removeItem(SESSION_KEY); } catch(x){} toast("主催者モードを終了しました"); location.hash = "#/"; render(); } else location.hash = "#/teams"; }
+      else location.hash = "#/admin";
+      return;
+    }
+    if ((t = e.target.closest("#gateGo"))) { tryLogin(t.dataset.next); return; }
+    if ((t = e.target.closest("[data-atab]"))) { adminTab = t.dataset.atab; render(); return; }
+    if ((t = e.target.closest("[data-g]"))) {
+      if (!S.hasGender) { toast("先にSQLを実行してください"); return; }
+      var p = person(t.dataset.pid), g = p.gender === t.dataset.g ? null : t.dataset.g, old = p.gender;
+      p.gender = g; render();
+      var res = await sb.from("ennokai_roster").update({ gender: g }).eq("id", p.id);
+      if (res.error) { p.gender = old; render(); toast("保存できませんでした"); }
+      return;
+    }
+    if (e.target.closest("#autoBtn") || e.target.closest("#reshuffleBtn") || e.target.closest("#manualBtn")) {
+      var n = Math.max(2, Math.min(12, +document.getElementById("teamN").value || 2));
+      var ppl = present(draft.evId);
+      if (ppl.length < n) { toast("出席者よりチーム数が多いです"); return; }
+      var r = e.target.closest("#manualBtn") ? emptyTeams(ppl, n) : autoTeams(ppl, n);
+      draft.teams = r.teams; draft.pool = r.pool; draft.dirty = true; selected = null; render();
+      toast(e.target.closest("#manualBtn") ? n + "チームの枠を作りました。名前を押して振り分けてください" : n + "チームに分けました（保存を押すと確定します）");
+      return;
+    }
+    if (e.target.closest("#saveBtn")) { saveTeams(); return; }
+    if (e.target.closest("#printBtn")) { window.print(); return; }
+    if ((t = e.target.closest(".m[data-pid]"))) { selected = selected === t.dataset.pid ? null : t.dataset.pid; render(); return; }
+    if ((t = e.target.closest("[data-team]")) && selected) { moveTo(selected, t.dataset.team); return; }
+  });
+  document.addEventListener("change", function(e){
+    if (e.target.id === "teamEv") { draft = null; selected = null; location.hash = "#/teams/" + e.target.value; }
+  });
+  document.addEventListener("keydown", function(e){ if (e.key === "Enter" && e.target.id === "gatePw") tryLogin(document.getElementById("gateGo").dataset.next); });
+  // パソコン用: ドラッグで移動
+  document.addEventListener("dragstart", function(e){ var m = e.target.closest && e.target.closest(".m[data-pid]"); if (m) { e.dataTransfer.setData("text/plain", m.dataset.pid); e.dataTransfer.effectAllowed = "move"; } });
+  document.addEventListener("dragover", function(e){ var z = e.target.closest && e.target.closest("[data-team]"); if (z) { e.preventDefault(); z.classList.add("drop"); } });
+  document.addEventListener("dragleave", function(e){ var z = e.target.closest && e.target.closest("[data-team]"); if (z) z.classList.remove("drop"); });
+  document.addEventListener("drop", function(e){ var z = e.target.closest && e.target.closest("[data-team]"); if (!z) return; e.preventDefault(); var pid = e.dataTransfer.getData("text/plain"); if (pid) moveTo(pid, z.dataset.team); });
+  window.addEventListener("beforeunload", function(e){ if (draft && draft.dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+  render();
+  load().then(render).catch(function(){ app.innerHTML = '<div class="card empty">読み込みに失敗しました。通信を確認して再読み込みしてください。</div>'; });
+})();
+</script>
+</body>
+</html>
