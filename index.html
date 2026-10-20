@@ -2187,6 +2187,7 @@
       var e = await sb.from("ennokai_events").select("*").order("created_at");
       var a = await sb.from("ennokai_attendance").select("*");
       var t = await sb.from("ennokai_teams").select("*");
+      var mt = await sb.from("ennokai_meetings").select("*");
       if(r.error || e.error || a.error) return false;
       var nameOf = {}; (r.data || []).forEach(function(p){ nameOf[p.id] = p.name; });
       var att = {};
@@ -2201,7 +2202,8 @@
         v: 1,
         roster: (r.data || []).map(function(p){ return { name: p.name, gender: p.gender || null, source: p.source || "preset" }; }),
         events: (e.data || []).map(function(x){ return { id: x.id, name: x.name, date: x.date, location: x.location, time: x.time, schedule: x.schedule, notes: x.notes, checkin_required: x.checkin_required }; }),
-        attendance: att, teams: teams
+        attendance: att, teams: teams,
+        meetings: mt.error ? [] : (mt.data || [])
       };
       var attCount = (a.data || []).length;
       var summary = "名簿 " + data.roster.length + "名・行事 " + data.events.length + "件・出欠 " + attCount + "件";
@@ -2277,6 +2279,11 @@
         return { event_id: evId, team_count: t.team_count || (t.teams || []).length, data: { teams: (t.teams || []).map(function(tm){ return { name: tm.name, color: tm.color, members: toIds(tm.members), pinned: toIds(tm.pinned) }; }), pool: toIds(t.pool) }, updated_at: new Date().toISOString() };
       });
       if(trows.length) await sb.from("ennokai_teams").upsert(trows, { onConflict: "event_id" });
+      // 5) 打ち合わせ
+      if(d.meetings && evIds.length){
+        await sb.from("ennokai_meetings").delete().in("event_id", evIds);
+        if(d.meetings.length) await sb.from("ennokai_meetings").insert(d.meetings);
+      }
       await refreshFromCloud();
       renderBackupList();
       showToast(fmtWhen(b.created_at) + " の状態に戻しました");
