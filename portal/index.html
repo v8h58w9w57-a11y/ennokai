@@ -249,7 +249,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .m .pin-btn:hover{background:#fff;color:var(--muted)}
 .m .pin-btn.on{color:#fff;background:var(--ink)}
 .m.pinned{background:#fff;border-color:rgba(59,50,65,.18)}
-.sel-banner{position:sticky;top:calc(64px + env(safe-area-inset-top));z-index:15;margin-top:14px;padding:10px 14px;border-radius:16px;background:var(--ink);color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sel-banner{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom));z-index:35;width:min(560px,calc(100% - 28px));padding:10px 14px;border-radius:16px;background:var(--ink);color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 18px 40px -16px rgba(0,0,0,.5)}
 .sel-banner .btn{background:#fff;color:var(--ink);box-shadow:none}
 .edit-form{display:grid;gap:14px}
 .edit-form textarea{font:inherit;font-size:1rem;font-weight:600;color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;min-height:200px;resize:vertical;line-height:1.7}
@@ -262,6 +262,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 #ef-datepick::-webkit-datetime-edit{display:none}
 #ef-datepick::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:auto;height:auto;opacity:.6;cursor:pointer;background-position:center;background-size:22px}
 @media print{.m .pin-btn{display:none}}
+.still .view{animation:none}
+.team,.pool,.pend-box{transition:border-color .4s ease}
 </style>
 </head>
 <body>
@@ -636,6 +638,27 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       + (pend.length ? '<div class="ps-pend"><b>出欠未入力（参加が決まったら空いている欄に書き足し）</b>：' + pend.map(function(p){ return esc(p.name); }).join("、") + '</div>' : '')
       + '<div class="ps-foot">作成 ' + d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate() + '　親睦会ポータル</div></section>';
   }
+  // 入れ替え・移動を、名前がゆっくり新しい場所へすべるように見せる
+  function flipRender(moved){
+    var before = {};
+    document.querySelectorAll(".board .m[data-pid], .pool .m[data-pid], .pend-box .m[data-pid]").forEach(function(el){ before[el.dataset.pid] = el.getBoundingClientRect(); });
+    render();
+    if (reduceMotion) return;
+    document.querySelectorAll(".board .m[data-pid], .pool .m[data-pid], .pend-box .m[data-pid]").forEach(function(el){
+      var b = before[el.dataset.pid], a = el.getBoundingClientRect();
+      var hit = moved && moved.indexOf(el.dataset.pid) >= 0;
+      if (b) {
+        var dx = b.left - a.left, dy = b.top - a.top;
+        if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+          el.animate([{ transform: "translate(" + dx + "px," + dy + "px)", zIndex: 5 }, { transform: "none", zIndex: 5 }], { duration: hit ? 1100 : 900, easing: "cubic-bezier(.33,0,.15,1)" });
+        }
+      } else if (hit) {
+        el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900, easing: "ease-out" });
+      }
+      if (hit) el.animate([{ backgroundColor: "#FFF1EC" }, { backgroundColor: "#FFF1EC", offset: .6 }, { backgroundColor: "" }], { duration: 2000, easing: "ease-out" });
+    });
+  }
+  var reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   function where(pid){
     for (var i = 0; i < draft.teams.length; i++) { var k = draft.teams[i].members.indexOf(pid); if (k >= 0) return { list: draft.teams[i].members, i: k, team: i }; }
     var j = draft.pool.indexOf(pid); if (j >= 0) return { list: draft.pool, i: j, team: "pool" };
@@ -649,7 +672,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (wa && wb) { wa.list[wa.i] = b; wb.list[wb.i] = a; if (wa.team !== wb.team) { unpin(a); unpin(b); } }
     else if (wa) { wa.list[wa.i] = b; unpin(a); }
     else { wb.list[wb.i] = a; unpin(b); }
-    draft.dirty = true; selected = null; render();
+    draft.dirty = true; selected = null; flipRender([a, b]);
   }
   // b の前に a を差し込む（ドラッグ用）
   function insertBefore(a, b){
@@ -657,14 +680,14 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var wb0 = where(b); if (!wb0) { moveTo(a, "pending"); return; }
     var wa = where(a); if (wa) { wa.list.splice(wa.i, 1); if (wa.team !== wb0.team) unpin(a); }
     var wb = where(b); wb.list.splice(wb.i, 0, a);
-    draft.dirty = true; selected = null; render();
+    draft.dirty = true; selected = null; flipRender([a]);
   }
   function moveTo(pid, target){
     var w0 = where(pid); if (!w0 || w0.team !== (target === "pool" || target === "pending" ? target : +target)) unpin(pid);
     draft.teams.forEach(function(t){ t.members = t.members.filter(function(x){ return x !== pid; }); });
     draft.pool = draft.pool.filter(function(x){ return x !== pid; });
     if (target === "pool") draft.pool.push(pid); else if (target !== "pending") draft.teams[+target].members.push(pid);
-    draft.dirty = true; selected = null; render();
+    draft.dirty = true; selected = null; flipRender([pid]);
   }
   async function saveTeams(){
     if (!S.hasTeams) { toast("先にSQLを実行してください"); return; }
@@ -678,7 +701,11 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 
   /* ---------- ルーティング ---------- */
   function route(){ return location.hash.replace(/^#\/?/, "").split("/"); }
+  var lastRoute = null;
   function render(){
+    var routeKey = location.hash;
+    app.classList.toggle("still", routeKey === lastRoute);
+    lastRoute = routeKey;
     if (!S.loaded) { app.innerHTML = '<div class="empty">読み込み中…</div>'; return; }
     var r = route(), tab = r[0] || "home";
     setTab(tab === "event" || tab === "edit" ? "home" : tab);
@@ -723,7 +750,9 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       if (ppl.length < n) { toast("出席者よりチーム数が多いです"); return; }
       var keepPins = !e.target.closest("#manualBtn") && draft.teams.length === n && draft.teams.some(function(t){ return (t.pinned || []).length; });
       var r = e.target.closest("#manualBtn") ? emptyTeams(ppl, n) : autoTeams(ppl, n, keepPins ? draft.teams : null);
-      draft.teams = r.teams; draft.pool = r.pool; draft.dirty = true; selected = null; render();
+      var hadTeams = draft.teams.length === r.teams.length;
+      draft.teams = r.teams; draft.pool = r.pool; draft.dirty = true; selected = null;
+      if (hadTeams) flipRender([]); else render();
       toast(e.target.closest("#manualBtn") ? n + "チームの枠を作りました。名前を押して振り分けてください" : keepPins ? "固定した人はそのままで、ほかの人をシャッフルしました" : n + "チームに分けました（保存を押すと確定します）");
       return;
     }
