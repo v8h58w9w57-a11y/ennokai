@@ -710,6 +710,20 @@
   .event-card-date{ font-family:var(--font-mono); font-size:0.82rem; color:var(--ink-muted); font-variant-numeric:tabular-nums; }
   .event-card-arrow{ color:var(--amber); font-size:1.3rem; flex:none; }
 
+  /* ---------- 行事の編集中の表示 ---------- */
+  .event-manage-row.is-editing{ border-color:var(--amber); box-shadow:0 0 0 2px var(--amber), 0 10px 24px -14px rgba(201,161,68,.6); }
+  .event-manage-row.is-editing .name::before{ content:"編集中"; display:inline-block; margin-right:.5rem; padding:.1rem .55rem; border-radius:999px; background:var(--amber); color:#fff; font-size:.72rem; font-weight:800; vertical-align:.1em; }
+  .event-manage-row.is-editing [data-edit-event]{ background:var(--amber); border-color:var(--amber); color:#fff; }
+  .event-form{ border-radius:18px; transition:box-shadow .3s, background .3s; }
+  .event-form.is-editing{ padding:1rem; margin:0 -0.4rem; background:rgba(201,161,68,0.08); box-shadow:0 0 0 2px var(--amber); }
+  .edit-banner{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; padding:.7rem .9rem; margin-bottom:.9rem; border-radius:14px; background:var(--amber); color:#fff; font-weight:700; }
+  .edit-banner-ic{ font-size:1.1rem; }
+  .edit-banner-text{ flex:1; min-width:10rem; }
+  .edit-banner .btn{ color:#fff; border-color:rgba(255,255,255,.6); }
+  /* ---------- 一括で出席 ---------- */
+  .bulk-row{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.2rem 0 .8rem; }
+  .bulk-btn{ flex:1; min-width:12rem; min-height:2.9rem; font-weight:800; }
+  #bulkPendingPresentBtn{ border-color:var(--emerald-bright); color:var(--emerald-bright); }
   /* ---------- event manage rows (organizer) ---------- */
   .event-manage-list{ display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem; }
   .event-manage-row{
@@ -1108,6 +1122,12 @@
     <section class="panel">
       <h2>行事を管理する <span class="en">Events</span></h2>
       <div class="event-manage-list" id="eventManageList"></div>
+      <div class="event-form" id="eventForm">
+      <div class="edit-banner" id="editBanner" hidden>
+        <span class="edit-banner-ic">✎</span>
+        <span class="edit-banner-text">「<b id="editBannerName"></b>」を編集中です</span>
+        <button type="button" class="btn btn-sm btn-ghost" id="editBannerCancel">編集をやめる</button>
+      </div>
       <div class="field-group">
         <label class="field-label" for="newEventName">行事名</label>
         <input type="text" id="newEventName" placeholder="例）親睦会" autocomplete="off">
@@ -1140,6 +1160,7 @@
       <div class="action-row">
         <button type="button" class="btn btn-primary" id="addEventBtn">行事を追加</button>
         <button type="button" class="btn btn-ghost" id="cancelEditEventBtn" hidden>キャンセル</button>
+      </div>
       </div>
     </section>
 
@@ -1184,6 +1205,10 @@
           <button type="button" data-filter="absent" aria-pressed="false">欠席</button>
           <button type="button" data-filter="pending" aria-pressed="false">未入力</button>
         </div>
+      </div>
+      <div class="bulk-row">
+        <button type="button" class="btn bulk-btn" id="bulkPendingPresentBtn">未入力の人を全員「出席」にする</button>
+        <button type="button" class="btn btn-ghost bulk-btn" id="bulkAllPresentBtn">全員を「出席」にする</button>
       </div>
       <div class="roster" id="orgRoster"></div>
 
@@ -1751,7 +1776,7 @@
     var frag = document.createDocumentFragment();
     state.events.forEach(function(ev){
       var row = document.createElement("div");
-      row.className = "event-manage-row";
+      row.className = "event-manage-row" + (ev.id === editingEventId ? " is-editing" : "");
 
       var top = document.createElement("div");
       top.className = "event-manage-top";
@@ -1762,7 +1787,7 @@
         (ev.location ? '<span class="detail-label">場所</span><span class="date location"></span>' : '') +
         (ev.time ? '<span class="detail-label">時間</span><span class="date time"></span>' : '') +
         '<div class="event-manage-actions">' +
-          '<button type="button" class="btn btn-sm" data-edit-event="' + ev.id + '">編集</button>' +
+          '<button type="button" class="btn btn-sm" data-edit-event="' + ev.id + '">' + (ev.id === editingEventId ? '編集中' : '編集') + '</button>' +
           '<button type="button" class="btn btn-sm btn-danger" data-del-event="' + ev.id + '">削除</button>' +
         '</div>';
       top.querySelector(".name").textContent = ev.name;
@@ -1788,8 +1813,16 @@
     });
     el.appendChild(frag);
   }
+  function showEditState(ev){
+    var banner = document.getElementById("editBanner");
+    banner.hidden = !ev;
+    if(ev) document.getElementById("editBannerName").textContent = ev.name;
+    document.getElementById("eventForm").classList.toggle("is-editing", !!ev);
+    renderEventManageList();
+  }
   function exitEditEventMode(){
     editingEventId = null;
+    showEditState(null);
     document.getElementById("addEventBtn").textContent = "行事を追加";
     document.getElementById("cancelEditEventBtn").hidden = true;
     document.getElementById("newEventName").value = "";
@@ -1800,8 +1833,9 @@
     document.getElementById("newEventNotes").value = "";
     document.getElementById("newEventCheckinRequired").checked = true;
   }
+  document.getElementById("editBannerCancel").addEventListener("click", function(){ exitEditEventMode(); });
   document.getElementById("eventManageList").addEventListener("click", async function(e){
-    var t = e.target;
+    var t = e.target.closest("[data-edit-event], [data-del-event]") || e.target;
     if(t.matches("[data-edit-event]")){
       var editId = t.getAttribute("data-edit-event");
       var editEv = getEvent(editId);
@@ -1816,7 +1850,8 @@
       document.getElementById("newEventCheckinRequired").checked = editEv.checkinRequired !== false;
       document.getElementById("addEventBtn").textContent = "更新する";
       document.getElementById("cancelEditEventBtn").hidden = false;
-      document.getElementById("newEventName").scrollIntoView({ behavior:"smooth", block:"center" });
+      showEditState(editEv);
+      document.getElementById("editBanner").scrollIntoView({ behavior:"smooth", block:"center" });
     } else if(t.matches("[data-del-event]")){
       var id = t.getAttribute("data-del-event");
       var ev = getEvent(id);
@@ -2018,6 +2053,33 @@
       await refreshFromCloud();
     }
   });
+
+  async function bulkPresent(onlyPending){
+    var ev = getEvent(orgEventId); if(!ev){ showToast("行事が選択されていません"); return; }
+    if(!ev.attendance) ev.attendance = {};
+    var targets = state.roster.filter(function(p){ var st = ev.attendance[p.id]; return onlyPending ? !st : st !== "present"; });
+    if(!targets.length){ showToast(onlyPending ? "未入力の人はいません" : "すでに全員が出席です"); return; }
+    var ok = await askConfirm((onlyPending ? "未入力の " : "出席以外の ") + targets.length + "名を、まとめて「出席」にします。よろしいですか？");
+    if(!ok) return;
+    var prev = {};
+    targets.forEach(function(p){ prev[p.id] = ev.attendance[p.id]; ev.attendance[p.id] = "present"; });
+    renderOrganizer(); syncPublicView();
+    var now = new Date().toISOString();
+    var res = await sb.from("ennokai_attendance").upsert(
+      targets.map(function(p){ return { event_id: ev.id, person_id: p.id, status: "present", updated_at: now }; }),
+      { onConflict: "event_id,person_id" }
+    );
+    if(res && res.error){
+      targets.forEach(function(p){ if(prev[p.id]) ev.attendance[p.id] = prev[p.id]; else delete ev.attendance[p.id]; });
+      renderOrganizer(); syncPublicView();
+      showToast("保存できませんでした。通信を確認してもう一度お試しください");
+      return;
+    }
+    showToast(targets.length + "名を「出席」にしました");
+    scheduleCloudRefresh();
+  }
+  document.getElementById("bulkPendingPresentBtn").addEventListener("click", function(){ bulkPresent(true); });
+  document.getElementById("bulkAllPresentBtn").addEventListener("click", function(){ bulkPresent(false); });
 
   document.getElementById("orgSearch").addEventListener("input", function(e){ orgSearch = e.target.value; renderOrgRosterSection(); });
   document.querySelectorAll(".filter-tabs button").forEach(function(btn){
