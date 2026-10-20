@@ -722,6 +722,7 @@
   .edit-banner .btn{ color:#fff; border-color:rgba(255,255,255,.6); }
   .org-editing-note{ margin-top:.5rem; padding:.45rem .8rem; border-radius:12px; background:rgba(201,161,68,0.14); color:var(--amber); font-size:.84rem; font-weight:800; }
   #orgEventSelect.is-editing{ border-color:var(--amber); box-shadow:0 0 0 2px var(--amber); }
+  #confirmMsg{ white-space:pre-line; }
   /* ---------- 一括で出席 ---------- */
   .bulk-row{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.2rem 0 .8rem; }
   .bulk-btn{ flex:1; min-width:12rem; min-height:2.9rem; font-weight:800; }
@@ -1178,7 +1179,7 @@
         <textarea id="rosterBulk" placeholder="横山 太郎&#10;佐藤 花子&#10;鈴木 一郎"></textarea>
         <div class="action-row" style="margin-top:0.6rem;">
           <button type="button" class="btn btn-primary" id="rosterAppendBtn">名簿に追加する</button>
-          <button type="button" class="btn btn-danger" id="rosterReplaceBtn">この内容で置き換える</button>
+          <button type="button" class="btn btn-danger" id="rosterReplaceBtn">この内容に合わせる（同じ名前の人はそのまま）</button>
         </div>
         <p class="hint">現在の名簿があらかじめ表示されています。そのまま名前を追加・修正・削除して編集できます。「追加する」は削除した行を無視して新しい名前だけを反映、「置き換える」は削除も含めてこの内容に完全に一致させます（全行事の出欠記録もリセットされます）。</p>
       </div>
@@ -2134,17 +2135,27 @@
     fillRosterBulkTextarea();
     showToast(newOnes.length + "名を全行事の名簿に追加しました（重複は無視）");
   });
+  // 置き換え: 名前が同じ人はそのまま残す（男女・出欠・チームも消えない）。新しい名前は追加、リストにない人だけ削除
   document.getElementById("rosterReplaceBtn").addEventListener("click", async function(){
     var ta = document.getElementById("rosterBulk");
     var names = parseNames(ta.value);
     if(names.length === 0){ showToast("名前が入力されていません"); return; }
-    var ok = await askConfirm("全ての行事で共有している名簿を、貼り付けた " + names.length + "名で置き換えます。すべての行事の出欠記録も削除されます。よろしいですか？");
+    var key = function(n){ return String(n).replace(/[\s　]/g, ""); };
+    var want = {}; names.forEach(function(n){ want[key(n)] = n; });
+    var have = {}; state.roster.forEach(function(p){ have[key(p.name)] = p; });
+    var keep = state.roster.filter(function(p){ return want[key(p.name)]; });
+    var remove = state.roster.filter(function(p){ return !want[key(p.name)]; });
+    var add = Object.keys(want).filter(function(k){ return !have[k]; }).map(function(k){ return want[k]; });
+    if(!add.length && !remove.length){ showToast("名簿に変更はありません"); return; }
+    var msg = "名簿を貼り付けた内容に合わせます。\n・そのまま残す：" + keep.length + "名（男女・出欠は消えません）\n・追加：" + add.length + "名"
+      + "\n・削除：" + remove.length + "名" + (remove.length ? "（" + remove.slice(0, 6).map(function(p){ return p.name; }).join("、") + (remove.length > 6 ? " ほか" : "") + "。この人の出欠記録も消えます）" : "") + "\nよろしいですか？";
+    var ok = await askConfirm(msg);
     if(!ok) return;
-    await sb.from("ennokai_roster").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-    await sb.from("ennokai_roster").insert(names.map(function(name){ return { name: name, source: "preset" }; }));
+    if(add.length) await sb.from("ennokai_roster").insert(add.map(function(name){ return { name: name, source: "preset" }; }));
+    if(remove.length) await sb.from("ennokai_roster").delete().in("id", remove.map(function(p){ return p.id; }));
     await refreshFromCloud();
     fillRosterBulkTextarea();
-    showToast("名簿を置き換えました（" + names.length + "名）");
+    showToast("名簿を更新しました（残す " + keep.length + "・追加 " + add.length + "・削除 " + remove.length + "）");
   });
 
   /* -------- settings: password change / reset -------- */
