@@ -720,6 +720,8 @@
   .edit-banner-ic{ font-size:1.1rem; }
   .edit-banner-text{ flex:1; min-width:10rem; }
   .edit-banner .btn{ color:#fff; border-color:rgba(255,255,255,.6); }
+  .org-editing-note{ margin-top:.5rem; padding:.45rem .8rem; border-radius:12px; background:rgba(201,161,68,0.14); color:var(--amber); font-size:.84rem; font-weight:800; }
+  #orgEventSelect.is-editing{ border-color:var(--amber); box-shadow:0 0 0 2px var(--amber); }
   /* ---------- 一括で出席 ---------- */
   .bulk-row{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.2rem 0 .8rem; }
   .bulk-btn{ flex:1; min-width:12rem; min-height:2.9rem; font-weight:800; }
@@ -1188,6 +1190,7 @@
       <div class="field-group">
         <label class="field-label" for="orgEventSelect">表示する行事</label>
         <select id="orgEventSelect"></select>
+        <div class="org-editing-note" id="orgEditingNote" hidden>✎ いま編集中の行事の出欠を表示しています</div>
       </div>
 
       <div class="stats">
@@ -1823,6 +1826,7 @@
   function exitEditEventMode(){
     editingEventId = null;
     showEditState(null);
+    renderOrgEventSelect();
     document.getElementById("addEventBtn").textContent = "行事を追加";
     document.getElementById("cancelEditEventBtn").hidden = true;
     document.getElementById("newEventName").value = "";
@@ -1850,7 +1854,11 @@
       document.getElementById("newEventCheckinRequired").checked = editEv.checkinRequired !== false;
       document.getElementById("addEventBtn").textContent = "更新する";
       document.getElementById("cancelEditEventBtn").hidden = false;
+      // 出欠状況も、編集中の行事に切り替える（出欠を取る行事のときだけ）
+      if(editEv.checkinRequired !== false) orgEventId = editId;
       showEditState(editEv);
+      renderOrgEventSelect();
+      renderOrgRosterSection();
       document.getElementById("editBanner").scrollIntoView({ behavior:"smooth", block:"center" });
     } else if(t.matches("[data-del-event]")){
       var id = t.getAttribute("data-del-event");
@@ -1912,11 +1920,14 @@
     trackable.forEach(function(ev){
       var opt = document.createElement("option");
       opt.value = ev.id;
-      opt.textContent = ev.name + (ev.date ? "（" + ev.date + "）" : "");
+      opt.textContent = (ev.id === editingEventId ? "【編集中】" : "") + ev.name + (ev.date ? "（" + ev.date + "）" : "");
       sel.appendChild(opt);
     });
     sel.value = keep;
     orgEventId = keep;
+    var editingShown = !!editingEventId && keep === editingEventId;
+    document.getElementById("orgEditingNote").hidden = !editingShown;
+    sel.classList.toggle("is-editing", editingShown);
   }
   document.getElementById("orgEventSelect").addEventListener("change", function(e){
     orgEventId = e.target.value || null;
