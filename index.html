@@ -645,13 +645,17 @@
   .row .src-tag{ font-size:0.68rem; color:var(--amber); opacity:0.7; font-family:var(--font-mono); }
   .status-group{ display:flex; gap:0.35rem; flex:none; }
   .status-btn{
-    display:inline-flex; align-items:center; gap:0.3rem;
+    display:inline-flex; align-items:center; justify-content:center; gap:0.35rem;
     border:1.5px solid var(--line-strong); background:transparent; color:var(--ink-muted);
-    padding:0.4rem 0.8rem; border-radius:999px; font-size:0.8rem; font-weight:700; cursor:pointer;
+    min-height:2.75rem; min-width:4.6rem; padding:0.55rem 1rem; border-radius:999px; font-size:0.92rem; font-weight:700; cursor:pointer;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent; user-select:none; -webkit-user-select:none;
     transition:transform .12s, border-color .15s, background .15s;
   }
+  .status-btn > *{ pointer-events:none; }
+  .status-btn:active{ transform:scale(.96); }
   .status-btn:hover{ transform:translateY(-1px); border-color:var(--amber); }
-  .status-btn .status-icon{ width:0.85rem; height:0.85rem; flex:none; }
+  .status-btn .status-icon{ width:1rem; height:1rem; flex:none; }
+  @media (max-width:560px){ .row .status-group{ flex:1 1 100%; } .row .status-btn{ flex:1; } }
   .status-btn[data-s="present"][aria-pressed="true"]{
     background:linear-gradient(135deg, var(--emerald-bright), var(--moss) 70%);
     border-color:var(--moss); color:var(--ink);
@@ -1972,20 +1976,39 @@
 
   document.getElementById("orgRoster").addEventListener("click", async function(e){
     var ev = getEvent(orgEventId); if(!ev) return;
-    var t = e.target;
-    if(t.matches("[data-s]")){
+    // ボタンの中のアイコンや文字を押しても、ボタンとして扱う
+    var sBtn = e.target.closest("[data-s]");
+    var dBtn = e.target.closest("[data-del]");
+    var t = sBtn || dBtn;
+    if(!t) return;
+    if(sBtn){
       var pid = t.getAttribute("data-id");
       var st = t.getAttribute("data-s");
+      if(!ev.attendance) ev.attendance = {};
+      var prev = ev.attendance[pid];
+      if((prev || "pending") === st) return;
+      // 押した瞬間に画面へ反映し、保存は後ろで行う（失敗したら元に戻す）
+      if(st === "pending") delete ev.attendance[pid]; else ev.attendance[pid] = st;
+      renderOrganizer();
+      syncPublicView();
+      var res;
       if(st === "pending"){
-        await sb.from("ennokai_attendance").delete().eq("event_id", ev.id).eq("person_id", pid);
+        res = await sb.from("ennokai_attendance").delete().eq("event_id", ev.id).eq("person_id", pid);
       } else {
-        await sb.from("ennokai_attendance").upsert(
+        res = await sb.from("ennokai_attendance").upsert(
           { event_id: ev.id, person_id: pid, status: st, updated_at: new Date().toISOString() },
           { onConflict: "event_id,person_id" }
         );
       }
-      await refreshFromCloud();
-    } else if(t.matches("[data-del]")){
+      if(res && res.error){
+        if(prev) ev.attendance[pid] = prev; else delete ev.attendance[pid];
+        renderOrganizer();
+        syncPublicView();
+        showToast("保存できませんでした。通信を確認してもう一度押してください");
+        return;
+      }
+      scheduleCloudRefresh();
+    } else if(dBtn){
       var delId = t.getAttribute("data-del");
       var person = getPerson(delId);
       if(!person) return;
