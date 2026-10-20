@@ -723,6 +723,12 @@
   .org-editing-note{ margin-top:.5rem; padding:.45rem .8rem; border-radius:12px; background:rgba(201,161,68,0.14); color:var(--amber); font-size:.84rem; font-weight:800; }
   #orgEventSelect.is-editing{ border-color:var(--amber); box-shadow:0 0 0 2px var(--amber); }
   #confirmMsg{ white-space:pre-line; }
+  .backup-list{ display:flex; flex-direction:column; gap:.5rem; margin-top:.4rem; max-height:26rem; overflow-y:auto; }
+  .backup-row{ display:flex; align-items:center; gap:.7rem; flex-wrap:wrap; padding:.6rem .8rem; border:1px solid var(--line); border-radius:14px; background:var(--bg-panel-2); }
+  .backup-row .when{ font-weight:800; font-variant-numeric:tabular-nums; }
+  .backup-row .why{ flex:1; min-width:9rem; font-size:.86rem; color:var(--ink-soft); }
+  .backup-row .sum{ font-size:.78rem; color:var(--ink-muted); }
+  .backup-row .btn{ flex:none; }
   /* ---------- 一括で出席 ---------- */
   .bulk-row{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.2rem 0 .8rem; }
   .bulk-btn{ flex:1; min-width:12rem; min-height:2.9rem; font-weight:800; }
@@ -1227,6 +1233,14 @@
     <section class="panel">
       <h2>設定 <span class="en">Settings</span></h2>
       <details class="section" open>
+        <summary>バックアップと復元</summary>
+        <div class="section-body">
+          <p class="hint">名簿・男女・出欠・行事・チーム分けを、その時点の状態として保存します。名簿の置き換えや削除など、まとめて変える操作の前には自動で保存されます（毎日1回も自動で保存）。間違えたときは、下の一覧から「この時点に戻す」を押してください。</p>
+          <button type="button" class="btn" id="backupNowBtn">今の状態をバックアップする</button>
+          <div class="backup-list" id="backupList"><div class="empty">読み込み中…</div></div>
+        </div>
+      </details>
+      <details class="section">
         <summary>パスワード・データ管理</summary>
         <div class="section-body">
           <div class="field-group">
@@ -1867,6 +1881,7 @@
       if(!ev) return;
       var ok = await askConfirm("「" + ev.name + "」を削除します。この行事の出欠記録は削除されますが、名簿（全行事共通）はそのまま残ります。よろしいですか？");
       if(!ok) return;
+      await makeBackup("行事「" + ev.name + "」を削除する前");
       await sb.from("ennokai_events").delete().eq("id", id);
       if(orgEventId === id){ orgEventId = null; }
       if(publicEventId === id){ publicEventId = null; }
@@ -2061,6 +2076,7 @@
       if(!person) return;
       var ok = await askConfirm("「" + person.name + "」を名簿から削除します。すべての行事の出欠記録からも削除されます。よろしいですか？");
       if(!ok) return;
+      await makeBackup("「" + person.name + "」を削除する前");
       await sb.from("ennokai_roster").delete().eq("id", delId);
       await refreshFromCloud();
     }
@@ -2073,6 +2089,7 @@
     if(!targets.length){ showToast(onlyPending ? "未入力の人はいません" : "すでに全員が出席です"); return; }
     var ok = await askConfirm((onlyPending ? "未入力の " : "出席以外の ") + targets.length + "名を、まとめて「出席」にします。よろしいですか？");
     if(!ok) return;
+    await makeBackup("まとめて出席にする前");
     var prev = {};
     targets.forEach(function(p){ prev[p.id] = ev.attendance[p.id]; ev.attendance[p.id] = "present"; });
     renderOrganizer(); syncPublicView();
@@ -2151,11 +2168,130 @@
       + "\n・削除：" + remove.length + "名" + (remove.length ? "（" + remove.slice(0, 6).map(function(p){ return p.name; }).join("、") + (remove.length > 6 ? " ほか" : "") + "。この人の出欠記録も消えます）" : "") + "\nよろしいですか？";
     var ok = await askConfirm(msg);
     if(!ok) return;
+    await makeBackup("名簿を合わせる前");
     if(add.length) await sb.from("ennokai_roster").insert(add.map(function(name){ return { name: name, source: "preset" }; }));
     if(remove.length) await sb.from("ennokai_roster").delete().in("id", remove.map(function(p){ return p.id; }));
     await refreshFromCloud();
     fillRosterBulkTextarea();
     showToast("名簿を更新しました（残す " + keep.length + "・追加 " + add.length + "・削除 " + remove.length + "）");
+  });
+
+  /* -------- バックアップと復元（名前で記録するので、名簿の番号が変わっても戻せる） -------- */
+  var BACKUP_KEEP = 40;
+  var backupsAvailable = true;
+  function nameKey(n){ return String(n || "").replace(/[\s　]/g, ""); }
+  async function makeBackup(reason){
+    if(!backupsAvailable) return false;
+    try{
+      var r = await sb.from("ennokai_roster").select("*").order("created_at");
+      var e = await sb.from("ennokai_events").select("*").order("created_at");
+      var a = await sb.from("ennokai_attendance").select("*");
+      var t = await sb.from("ennokai_teams").select("*");
+      if(r.error || e.error || a.error) return false;
+      var nameOf = {}; (r.data || []).forEach(function(p){ nameOf[p.id] = p.name; });
+      var att = {};
+      (a.data || []).forEach(function(x){ if(nameOf[x.person_id]) (att[x.event_id] = att[x.event_id] || {})[nameOf[x.person_id]] = x.status; });
+      var toNames = function(ids){ return (ids || []).map(function(id){ return nameOf[id]; }).filter(Boolean); };
+      var teams = {};
+      (t.error ? [] : (t.data || [])).forEach(function(x){
+        var d = x.data || {};
+        teams[x.event_id] = { team_count: x.team_count, teams: (d.teams || []).map(function(tm){ return { name: tm.name, color: tm.color, members: toNames(tm.members), pinned: toNames(tm.pinned) }; }), pool: toNames(d.pool) };
+      });
+      var data = {
+        v: 1,
+        roster: (r.data || []).map(function(p){ return { name: p.name, gender: p.gender || null, source: p.source || "preset" }; }),
+        events: (e.data || []).map(function(x){ return { id: x.id, name: x.name, date: x.date, location: x.location, time: x.time, schedule: x.schedule, notes: x.notes, checkin_required: x.checkin_required }; }),
+        attendance: att, teams: teams
+      };
+      var attCount = (a.data || []).length;
+      var summary = "名簿 " + data.roster.length + "名・行事 " + data.events.length + "件・出欠 " + attCount + "件";
+      var ins = await sb.from("ennokai_backups").insert({ reason: reason, summary: summary, data: data });
+      if(ins.error){ backupsAvailable = !/ennokai_backups/.test(ins.error.message || ""); return false; }
+      var old = await sb.from("ennokai_backups").select("id").order("created_at", { ascending: false }).range(BACKUP_KEEP, BACKUP_KEEP + 200);
+      if(old.data && old.data.length) await sb.from("ennokai_backups").delete().in("id", old.data.map(function(x){ return x.id; }));
+      return true;
+    }catch(err){ return false; }
+  }
+  async function dailyBackup(){
+    var last = await sb.from("ennokai_backups").select("created_at").order("created_at", { ascending: false }).limit(1);
+    if(last.error){ backupsAvailable = false; renderBackupList(); return; }
+    var t = last.data && last.data[0] ? new Date(last.data[0].created_at).getTime() : 0;
+    if(Date.now() - t > 20 * 3600 * 1000) await makeBackup("自動（毎日）");
+    renderBackupList();
+  }
+  function fmtWhen(iso){
+    var d = new Date(iso), p = function(n){ return String(n).padStart(2, "0"); };
+    return (d.getMonth() + 1) + "/" + d.getDate() + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+  }
+  async function renderBackupList(){
+    var el = document.getElementById("backupList");
+    if(!el) return;
+    var res = await sb.from("ennokai_backups").select("id,created_at,reason,summary").order("created_at", { ascending: false }).limit(BACKUP_KEEP);
+    if(res.error){ el.innerHTML = '<div class="empty">バックアップを使うには、データベースの準備（SQLの実行）が必要です。</div>'; return; }
+    if(!res.data.length){ el.innerHTML = '<div class="empty">まだバックアップはありません。</div>'; return; }
+    el.innerHTML = "";
+    res.data.forEach(function(b){
+      var row = document.createElement("div");
+      row.className = "backup-row";
+      row.innerHTML = '<span class="when"></span><span class="why"></span><span class="sum"></span><button type="button" class="btn btn-sm" data-restore="' + b.id + '">この時点に戻す</button>';
+      row.querySelector(".when").textContent = fmtWhen(b.created_at);
+      row.querySelector(".why").textContent = b.reason || "";
+      row.querySelector(".sum").textContent = b.summary || "";
+      el.appendChild(row);
+    });
+  }
+  async function restoreBackup(id){
+    var res = await sb.from("ennokai_backups").select("*").eq("id", id).single();
+    if(res.error || !res.data){ showToast("バックアップを読み込めませんでした"); return; }
+    var b = res.data, d = b.data || {};
+    var ok = await askConfirm(fmtWhen(b.created_at) + " の状態に戻します。\n（" + (b.summary || "") + "）\n\n・男女・出欠・行事の内容・チーム分けがその時点のものになります\n・その時点の名簿にいて今いない人は、名簿に戻します\n・戻す前の今の状態も、念のためバックアップしておきます\n\nよろしいですか？");
+    if(!ok) return;
+    showToast("戻しています…");
+    await makeBackup("復元する前の状態");
+    try{
+      // 1) 行事
+      if((d.events || []).length) await sb.from("ennokai_events").upsert(d.events, { onConflict: "id" });
+      // 2) 名簿（名前で照らし合わせ、いない人は追加・男女を合わせる）
+      var cur = await sb.from("ennokai_roster").select("id,name,gender");
+      var have = {}; (cur.data || []).forEach(function(p){ have[nameKey(p.name)] = p; });
+      var add = (d.roster || []).filter(function(p){ return !have[nameKey(p.name)]; }).map(function(p){ return { name: p.name, gender: p.gender, source: p.source || "preset" }; });
+      if(add.length) await sb.from("ennokai_roster").insert(add);
+      var byG = {};
+      (d.roster || []).forEach(function(p){ var h = have[nameKey(p.name)]; if(h && (h.gender || null) !== (p.gender || null)) (byG[p.gender || ""] = byG[p.gender || ""] || []).push(h.id); });
+      for(var g in byG){ await sb.from("ennokai_roster").update({ gender: g || null }).in("id", byG[g]); }
+      var now = await sb.from("ennokai_roster").select("id,name");
+      var idOf = {}; (now.data || []).forEach(function(p){ idOf[nameKey(p.name)] = p.id; });
+      // 3) 出欠（その時点の行事ごとに入れ直す）
+      var evIds = (d.events || []).map(function(x){ return x.id; });
+      if(evIds.length) await sb.from("ennokai_attendance").delete().in("event_id", evIds);
+      var rows = [];
+      Object.keys(d.attendance || {}).forEach(function(evId){
+        var m = d.attendance[evId];
+        Object.keys(m).forEach(function(nm){ var pid = idOf[nameKey(nm)]; if(pid) rows.push({ event_id: evId, person_id: pid, status: m[nm], updated_at: new Date().toISOString() }); });
+      });
+      if(rows.length) await sb.from("ennokai_attendance").insert(rows);
+      // 4) チーム分け
+      var toIds = function(names){ return (names || []).map(function(nm){ return idOf[nameKey(nm)]; }).filter(Boolean); };
+      var trows = Object.keys(d.teams || {}).map(function(evId){
+        var t = d.teams[evId];
+        return { event_id: evId, team_count: t.team_count || (t.teams || []).length, data: { teams: (t.teams || []).map(function(tm){ return { name: tm.name, color: tm.color, members: toIds(tm.members), pinned: toIds(tm.pinned) }; }), pool: toIds(t.pool) }, updated_at: new Date().toISOString() };
+      });
+      if(trows.length) await sb.from("ennokai_teams").upsert(trows, { onConflict: "event_id" });
+      await refreshFromCloud();
+      renderBackupList();
+      showToast(fmtWhen(b.created_at) + " の状態に戻しました");
+    }catch(err){
+      showToast("途中で失敗しました。もう一度お試しください");
+    }
+  }
+  document.getElementById("backupNowBtn").addEventListener("click", async function(){
+    var ok = await makeBackup("手動で保存");
+    showToast(ok ? "今の状態をバックアップしました" : "バックアップできませんでした（データベースの準備が必要です）");
+    renderBackupList();
+  });
+  document.getElementById("backupList").addEventListener("click", function(e){
+    var t = e.target.closest("[data-restore]");
+    if(t) restoreBackup(t.getAttribute("data-restore"));
   });
 
   /* -------- settings: password change / reset -------- */
@@ -2172,8 +2308,9 @@
     showToast("パスワードを変更しました");
   });
   document.getElementById("resetAllBtn").addEventListener("click", async function(){
-    var ok = await askConfirm("行事・名簿・出欠状況・パスワードをすべて削除します。この操作は取り消せません。よろしいですか？");
+    var ok = await askConfirm("行事・名簿・出欠状況・パスワードをすべて削除します。（念のため、消す前の状態はバックアップに残します）よろしいですか？");
     if(!ok) return;
+    await makeBackup("全データをリセットする前");
     await sb.from("ennokai_events").delete().neq("id", "00000000-0000-0000-0000-000000000000");
     await sb.from("ennokai_roster").delete().neq("id", "00000000-0000-0000-0000-000000000000");
     await sb.from("ennokai_settings").update({ password_hash: null }).eq("id", 1);
@@ -2253,7 +2390,7 @@
   function switchView(showOrganizer){
     document.getElementById("publicView").hidden = showOrganizer;
     document.getElementById("organizerView").hidden = !showOrganizer;
-    if(showOrganizer){ renderOrganizer(); } else { syncPublicView(); }
+    if(showOrganizer){ renderOrganizer(); dailyBackup(); } else { syncPublicView(); }
   }
   function isAuthed(){
     try{ return sessionStorage.getItem(SESSION_KEY) === "1"; }catch(e){ return false; }
