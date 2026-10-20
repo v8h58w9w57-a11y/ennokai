@@ -242,6 +242,26 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .next .emoji,.hero .emoji{width:96px;height:96px;font-size:0;color:#fff;opacity:.95}
 .ev .ico{color:var(--dot,#FF9A8B);padding:9px}
 .chip .art{display:inline-block;width:13px;height:13px;vertical-align:-2px;stroke-width:4}
+
+.m .pin-btn{all:unset;cursor:pointer;margin-left:auto;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;color:#C9C1CF;flex:none}
+.m em + .pin-btn{margin-left:4px}
+.m .pin-btn .ic{width:17px;height:17px}
+.m .pin-btn:hover{background:#fff;color:var(--muted)}
+.m .pin-btn.on{color:#fff;background:var(--ink)}
+.m.pinned{background:#fff;border-color:rgba(59,50,65,.18)}
+.sel-banner{position:sticky;top:calc(64px + env(safe-area-inset-top));z-index:15;margin-top:14px;padding:10px 14px;border-radius:16px;background:var(--ink);color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sel-banner .btn{background:#fff;color:var(--ink);box-shadow:none}
+.edit-form{display:grid;gap:14px}
+.edit-form textarea{font:inherit;font-size:1rem;font-weight:600;color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;min-height:200px;resize:vertical;line-height:1.7}
+.edit-form textarea:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4px var(--lav-soft)}
+.edit-form .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:620px){.edit-form .two{grid-template-columns:1fr}}
+.edit-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:6px}
+.btn.danger{color:#C94F7E;background:#fff}
+#ef-datepick{color:transparent;width:52px!important;flex:none;cursor:pointer;position:relative}
+#ef-datepick::-webkit-datetime-edit{display:none}
+#ef-datepick::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:auto;height:auto;opacity:.6;cursor:pointer;background-position:center;background-size:22px}
+@media print{.m .pin-btn{display:none}}
 </style>
 </head>
 <body>
@@ -290,7 +310,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (m) { var y = new Date().getFullYear(); return { y: y, m: +m[1], d: +m[2], exact: true }; }
     return null;
   }
-  var ICONS = {home:'<path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/>',calendar:'<rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 7.8V12l2.8 1.8"/>',pin:'<path d="M12 20.5s6-5.3 6-10.3a6 6 0 1 0-12 0c0 5 6 10.3 6 10.3z"/><circle cx="12" cy="10.2" r="2.2"/>',check:'<circle cx="12" cy="12" r="8.2"/><path d="m8.4 12.3 2.4 2.4 4.9-5"/>',lock:'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',unlock:'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 6.8-1.2"/>',users:'<circle cx="9" cy="9" r="3"/><path d="M3.8 19a5.2 5.2 0 0 1 10.4 0"/><circle cx="16.6" cy="9.6" r="2.4"/><path d="M15.4 14.3a4.4 4.4 0 0 1 5 4.7"/>',person:'<circle cx="12" cy="8.5" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',history:'<path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.8v4.1h4.1M12 8.3V12l2.6 1.6"/>',hourglass:'<path d="M7 4h10M7 20h10M8 4c0 4.2 8 4.6 8 8s-8 3.8-8 8M16 4c0 4.2-8 4.6-8 8s8 3.8 8 8"/>',note:'<path d="M6 4.5h9l3 3V19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1z"/><path d="M8.5 11h7M8.5 14.5h7M8.5 8h4"/>',alert:'<path d="M12 4.5 3.5 19h17z"/><path d="M12 10v4M12 16.8h.01"/>',info:'<circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/>',shuffle:'<path d="M4 7h3.5c4 0 5 10 9 10H20M4 17h3.5c1.6 0 2.7-1.6 3.6-3.4M20 7h-3.5c-1.6 0-2.7 1.6-3.6 3.4M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5"/>',print:'<path d="M7.5 9V4.5h9V9M7.5 17H5.5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><rect x="7.5" y="13.5" width="9" height="6" rx="1"/>',save:'<path d="M5 5.5A1.5 1.5 0 0 1 6.5 4h9l3.5 3.5v11a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 18.5z"/><path d="M8.5 4v4.5h6V4M8 20v-5.5h8V20"/>',dice:'<rect x="4.5" y="4.5" width="15" height="15" rx="4"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/><circle cx="9" cy="15" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',hand:'<path d="M8.5 12.5V6.8a1.4 1.4 0 0 1 2.8 0v4.7M11.3 11.2V5.4a1.4 1.4 0 0 1 2.8 0v5.8M14.1 11.2V6.8a1.4 1.4 0 0 1 2.8 0v6.4c0 4-2.4 6.8-6 6.8-2.6 0-4-1.4-5.4-3.4l-1.7-2.6a1.4 1.4 0 0 1 2.3-1.6l2.4 2.1"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',inbox:'<path d="M4 13.5 6.5 6h11l2.5 7.5V18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.5 2h4l1.5-2H20"/>'};
+  var ICONS = {pin2:'<path d="M9 4h6l-1 5 3 3v1.5H7V12l3-3z"/><path d="M12 13.5V20"/>',edit:'<path d="M4.5 19.5h4l10-10-4-4-10 10z"/><path d="M13 7l4 4"/>',plus:'<path d="M12 5v14M5 12h14"/>',trash:'<path d="M5 7h14M10 7V4.5h4V7M7 7l1 12.5h8L17 7"/>',home:'<path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/>',calendar:'<rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 7.8V12l2.8 1.8"/>',pin:'<path d="M12 20.5s6-5.3 6-10.3a6 6 0 1 0-12 0c0 5 6 10.3 6 10.3z"/><circle cx="12" cy="10.2" r="2.2"/>',check:'<circle cx="12" cy="12" r="8.2"/><path d="m8.4 12.3 2.4 2.4 4.9-5"/>',lock:'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',unlock:'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 6.8-1.2"/>',users:'<circle cx="9" cy="9" r="3"/><path d="M3.8 19a5.2 5.2 0 0 1 10.4 0"/><circle cx="16.6" cy="9.6" r="2.4"/><path d="M15.4 14.3a4.4 4.4 0 0 1 5 4.7"/>',person:'<circle cx="12" cy="8.5" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',history:'<path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.8v4.1h4.1M12 8.3V12l2.6 1.6"/>',hourglass:'<path d="M7 4h10M7 20h10M8 4c0 4.2 8 4.6 8 8s-8 3.8-8 8M16 4c0 4.2-8 4.6-8 8s8 3.8 8 8"/>',note:'<path d="M6 4.5h9l3 3V19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1z"/><path d="M8.5 11h7M8.5 14.5h7M8.5 8h4"/>',alert:'<path d="M12 4.5 3.5 19h17z"/><path d="M12 10v4M12 16.8h.01"/>',info:'<circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/>',shuffle:'<path d="M4 7h3.5c4 0 5 10 9 10H20M4 17h3.5c1.6 0 2.7-1.6 3.6-3.4M20 7h-3.5c-1.6 0-2.7 1.6-3.6 3.4M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5"/>',print:'<path d="M7.5 9V4.5h9V9M7.5 17H5.5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><rect x="7.5" y="13.5" width="9" height="6" rx="1"/>',save:'<path d="M5 5.5A1.5 1.5 0 0 1 6.5 4h9l3.5 3.5v11a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 18.5z"/><path d="M8.5 4v4.5h6V4M8 20v-5.5h8V20"/>',dice:'<rect x="4.5" y="4.5" width="15" height="15" rx="4"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/><circle cx="9" cy="15" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',hand:'<path d="M8.5 12.5V6.8a1.4 1.4 0 0 1 2.8 0v4.7M11.3 11.2V5.4a1.4 1.4 0 0 1 2.8 0v5.8M14.1 11.2V6.8a1.4 1.4 0 0 1 2.8 0v6.4c0 4-2.4 6.8-6 6.8-2.6 0-4-1.4-5.4-3.4l-1.7-2.6a1.4 1.4 0 0 1 2.3-1.6l2.4 2.1"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',inbox:'<path d="M4 13.5 6.5 6h11l2.5 7.5V18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.5 2h4l1.5-2H20"/>'};
   function I(n, cls){ return '<svg class="ic' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[n] || '') + '</svg>'; }
   var ART = {sport:'<circle cx="25" cy="25" r="14"/><path d="M16.5 16.5a12 12 0 0 1 12-3.2"/><path d="M35 35l10.5 10.5" stroke-width="7.5"/><circle cx="49" cy="16" r="4.2"/><path d="M40 9.5c1.6-.8 3.3-1.1 5-.9M55.5 22.5c.7 1.5 1 3.1.8 4.8"/>',fest:'<path d="M32 8v5M26 13h12M24 13c-5 4-7 9-7 15s2 11 7 15h16c5-4 7-9 7-15s-2-11-7-15z"/><path d="M17 28h30M26 43v5h12v-5M32 48v6"/>',party:'<path d="M18 12h14l-2 18a5 5 0 0 1-10 0z"/><path d="M25 35v13M19 48h12"/><path d="M38 16l12 4-5 17a5 5 0 0 1-9.5-3z" /><path d="M41 37l-3 12M34 50l9 2.5"/><path d="M33 7l2-3M37 9l3-2"/>',food:'<circle cx="32" cy="34" r="16"/><circle cx="32" cy="34" r="9"/><path d="M10 12v12a4 4 0 0 0 8 0V12M14 12v40M53 12c-4 2-5 8-5 14h5v26"/>',trip:'<rect x="12" y="14" width="40" height="30" rx="7"/><path d="M12 32h40M24 14v18M40 14v18"/><circle cx="21" cy="47" r="4"/><circle cx="43" cy="47" r="4"/>',flower:'<circle cx="32" cy="30" r="5"/><path d="M32 25c-6-10 6-14 6-6M37 29c11-3 11 9 4 7M35 35c3 10-9 11-6 3M29 35c-8 7-14-4-6-6M27 29c-10-3-5-14 3-7"/><path d="M32 41v14M32 49c4-4 9-4 11-2"/>',tree:'<path d="M32 8 20 26h7L16 42h11l-7 10h24l-7-10h11L37 26h7z"/><path d="M32 52v6"/>',spark:'<path d="M32 10l4.5 13.5L50 28l-13.5 4.5L32 46l-4.5-13.5L14 28l13.5-4.5z"/><path d="M49 44l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>'};
   function A(n){ return '<svg class="art" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ART[n] + '</svg>'; }
@@ -389,7 +409,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     } else {
       h += '<div class="card empty">予定されている行事はまだありません</div>';
     }
-    h += '<div class="section-title">' + I('calendar') + ' これからの行事</div>';
+    h += '<div class="section-title">' + I('calendar') + ' これからの行事' + (isAdmin() ? '<a class="btn sm" href="#/edit/new" style="margin-left:auto">' + I('plus') + ' 行事を追加</a>' : '') + '</div>';
     h += ups.length > 1 ? '<div class="list">' + ups.slice(1).map(evCard).join("") + '</div>' : '<div class="card empty">ほかの予定はまだありません</div>';
     var past = sortedEvents().filter(function(ev){ return ups.indexOf(ev) < 0; }).reverse();
     if (past.length) h += '<div class="section-title">' + I('history') + ' これまでの行事</div><div class="list">' + past.map(evCard).join("") + '</div>';
@@ -454,10 +474,37 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     h += '<div><div class="card box"><h3>' + I('check') + ' 出欠状況</h3><div class="att"><div class="p"><b>' + c.present + '</b>出席</div><div class="a"><b>' + c.absent + '</b>欠席</div><div class="w"><b>' + c.pending + '</b>未入力</div></div>'
       + '<div class="bar"><i style="width:' + pct(c.present) + '%;background:var(--mint)"></i><i style="width:' + pct(c.absent) + '%;background:var(--rose)"></i></div>'
       + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn primary" data-checkin="' + ev.id + '">' + I('check') + ' 出欠を入力する</button></div></div>';
+    if (isAdmin()) h += '<div class="card box" style="margin-top:16px"><h3>' + I('edit') + ' 行事の内容</h3><p class="sub" style="margin:0 0 10px">行事名・日付・時間・場所・当日の流れ・メモを直せます</p><a class="btn" href="#/edit/' + ev.id + '">' + I('edit') + ' 内容を編集</a></div>';
     if (isAdmin()) h += '<div class="card box" style="margin-top:16px"><h3>' + I('users') + ' チーム分け</h3><p class="sub" style="margin:0 0 10px">出席者 ' + c.present + '名をチームに分けます</p><a class="btn" href="#/teams/' + ev.id + '">チーム分けを開く</a></div>';
     return h + '</div></div></div>';
   }
 
+  function viewEdit(id){
+    if (!isAdmin()) return viewGate("#/edit/" + (id || "new"));
+    var isNew = !id || id === "new";
+    var ev = isNew ? { name: "", date: "", time: "", location: "", schedule: "", notes: "" } : S.events.find(function(e){ return e.id === id; });
+    if (!ev) return '<div class="view card empty">行事が見つかりませんでした</div>';
+    var f = function(label, key, ph){ return '<label class="field">' + label + '<input type="text" id="ef-' + key + '" value="' + esc(ev[key]) + '" placeholder="' + esc(ph || '') + '"></label>'; };
+    return '<div class="view"><a class="back" href="' + (isNew ? '#/' : '#/event/' + ev.id) + '">‹ もどる</a><h1 class="page">' + (isNew ? '新しい行事を追加' : '行事の内容を編集') + '</h1><p class="sub">ここで直した内容は、出欠アプリ（宴の会）にもそのまま反映されます</p>'
+      + '<div class="card panel edit-form" data-edit="' + (isNew ? 'new' : ev.id) + '">'
+      + f('行事名', 'name', '例：秋のスポーツ大会')
+      + '<div class="two"><label class="field">日付<span style="display:flex;gap:8px"><input type="text" id="ef-date" value="' + esc(ev.date) + '" placeholder="例：2026年10月31日" style="flex:1;min-width:0"><input type="date" id="ef-datepick" aria-label="カレンダーから選ぶ" style="width:52px;padding:10px 6px"></span></label>' + f('時間', 'time', '例：10:00〜') + '</div>'
+      + f('場所', 'location', '例：岩見沢総合体育館')
+      + '<label class="field">当日の流れ（1行に1つ。「9:00〜10:00 準備」のように時刻を先頭に書くと、流れの表になります）<textarea id="ef-schedule" placeholder="9:00〜10:00 準備・会場設営&#10;10:00 集合・受付">' + esc(ev.schedule) + '</textarea></label>'
+      + '<label class="field">メモ<textarea id="ef-notes" style="min-height:110px">' + esc(ev.notes) + '</textarea></label>'
+      + '<div class="edit-actions">' + (isNew ? '<span></span>' : '<button class="btn danger" data-delev="' + ev.id + '">' + I('trash') + ' この行事を削除</button>') + '<button class="btn primary" data-saveev>' + I('save') + ' 保存する</button></div></div></div>';
+  }
+  async function saveEvent(){
+    var box = document.querySelector("[data-edit]"), id = box.dataset.edit;
+    var g = function(k){ return document.getElementById("ef-" + k).value.trim(); };
+    var payload = { name: g("name"), date: g("date"), time: g("time"), location: g("location"), schedule: document.getElementById("ef-schedule").value.replace(/\s+$/, ""), notes: document.getElementById("ef-notes").value.replace(/\s+$/, "") };
+    if (!payload.name) { toast("行事名を入れてください"); return; }
+    var res = id === "new" ? await sb.from("ennokai_events").insert(Object.assign({ checkin_required: true }, payload)).select().single() : await sb.from("ennokai_events").update(payload).eq("id", id).select().single();
+    if (res.error) { toast("保存できませんでした"); return; }
+    toast("保存しました");
+    await load();
+    location.hash = "#/event/" + res.data.id;
+  }
   function viewCheckin(){
     return '<div class="view"><h1 class="page">出欠受付</h1><p class="sub">いつもの出欠アプリ（宴の会）をそのまま使えます</p><iframe class="full-embed" src="' + ENNOKAI_URL + '" title="出欠受付"></iframe></div>';
   }
@@ -493,8 +540,14 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   function present(evId){ var a = S.att[evId] || {}; return S.roster.filter(function(r){ return a[r.id] === "present"; }); }
   function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   // 男女それぞれ均等に、人数も揃うように配る
-  function autoTeams(people, n){
-    var teams = []; for (var i = 0; i < n; i++) teams.push({ name: TEAM_NAMES[i % TEAM_NAMES.length], color: TEAM_COLORS[i % TEAM_COLORS.length], members: [] });
+  // base: 固定（📌）した人を残したチーム。固定していない人だけを、人数と男女比がそろうように配り直す
+  function autoTeams(people, n, base){
+    var teams = []; for (var i = 0; i < n; i++) {
+      var b0 = base && base[i];
+      teams.push({ name: b0 ? b0.name : TEAM_NAMES[i % TEAM_NAMES.length], color: b0 ? b0.color : TEAM_COLORS[i % TEAM_COLORS.length], members: b0 ? (b0.pinned || []).slice() : [], pinned: b0 ? (b0.pinned || []).slice() : [] });
+    }
+    var pinnedAll = {}; teams.forEach(function(t){ t.pinned.forEach(function(id){ pinnedAll[id] = 1; }); });
+    people = people.filter(function(p){ return !pinnedAll[p.id]; });
     var by = { 女: [], 男: [], "": [] };
     shuffle(people).forEach(function(p){ by[p.gender === "女" || p.gender === "男" ? p.gender : ""].push(p); });
     var gcount = function(t, g){ return t.members.filter(function(id){ var p = S.roster.find(function(r){ return r.id === id; }); return p && (p.gender || "") === g; }).length; };
@@ -507,7 +560,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     return { teams: teams, pool: [] };
   }
   function emptyTeams(people, n){
-    var teams = []; for (var i = 0; i < n; i++) teams.push({ name: TEAM_NAMES[i % TEAM_NAMES.length], color: TEAM_COLORS[i % TEAM_COLORS.length], members: [] });
+    var teams = []; for (var i = 0; i < n; i++) teams.push({ name: TEAM_NAMES[i % TEAM_NAMES.length], color: TEAM_COLORS[i % TEAM_COLORS.length], members: [], pinned: [] });
     return { teams: teams, pool: people.map(function(p){ return p.id; }) };
   }
   function person(id){ return S.roster.find(function(r){ return r.id === id; }); }
@@ -516,7 +569,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var g = p && p.gender === "男" ? "boy" : p && p.gender === "女" ? "girl" : "";
     var cls = "m" + (g ? " " + g : "") + (selected === id ? " sel" : "") + (st === "absent" ? " gone" : "") + (st === "pending" && !inTeam ? " pend" : "");
     var tag = st === "absent" ? "<em>欠席</em>" : st === "pending" ? "<em>未入力</em>" : "";
-    return '<div class="' + cls + '" draggable="true" data-pid="' + id + '"><i>' + (g === "boy" ? "♂" : g === "girl" ? "♀" : "") + '</i><span>' + esc(p ? p.name : "（名簿から削除）") + '</span>' + (inTeam ? tag : "") + '</div>';
+    var pinned = inTeam && draft.teams.some(function(t){ return (t.pinned || []).indexOf(id) >= 0; });
+    return '<div class="' + cls + (pinned ? ' pinned' : '') + '" draggable="true" data-pid="' + id + '"><i>' + (g === "boy" ? "♂" : g === "girl" ? "♀" : "") + '</i><span>' + esc(p ? p.name : "（名簿から削除）") + '</span>' + (inTeam ? tag + '<button type="button" class="pin-btn' + (pinned ? ' on' : '') + '" data-pin="' + id + '" title="' + (pinned ? '固定を外す' : 'このチームに固定（シャッフルしても動かない）') + '" aria-label="固定">' + I('pin2') + '</button>' : "") + '</div>';
   }
   function teamStats(t){
     var b = 0, g = 0; t.members.forEach(function(id){ var p = person(id); if (p && p.gender === "男") b++; else if (p && p.gender === "女") g++; });
@@ -545,11 +599,12 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       + '<div class="stats"><span class="stat">出席 ' + ppl.length + '名</span><span class="stat b">♂ 男性 ' + b + '名</span><span class="stat g">♀ 女性 ' + g + '名</span>' + (u ? '<span class="stat u">未設定 ' + u + '名</span>' : '') + '</div>'
       + (u ? '<div class="warn">男女が未設定の人が ' + u + '名います。「名簿の男女」で設定すると、男女比もそろえて分けられます。</div>' : '') + '</div>';
     if (!draft.teams.length) return h + '<div class="card empty" style="margin-top:14px">「自動で分ける」でランダムに作るか、「手動で分ける」で空のチームから自分で振り分けられます。</div></div>';
-    h += '<div class="row-flex no-print" style="margin-top:16px;justify-content:space-between"><span class="hint" style="margin:0">' + I('info') + ' 名前を押してから、移したいチーム（または「未割り当て」）を押すと移動できます。パソコンはドラッグでも動かせます。</span>'
+    h += '<div class="row-flex no-print" style="margin-top:16px;justify-content:space-between"><span class="hint" style="margin:0">' + I('info') + ' 名前を押してから<b>別の人の名前</b>を押すと入れ替え（同じチーム内なら順番の入れ替え）、<b>チームの空いた所</b>を押すと移動。' + I('pin2') + 'で固定すると、シャッフルしても動きません。パソコンはドラッグでも動かせます。</span>'
       + '<span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" id="reshuffleBtn">' + I('shuffle') + ' もう一度シャッフル</button><button class="btn sm" id="printBtn">' + I('print') + ' 印刷</button><button class="btn sm primary" id="saveBtn">' + I('save') + ' ' + (draft.dirty ? '保存する' : '保存済み') + '</button></span></div>';
     var inTeam = {}; draft.teams.forEach(function(t){ t.members.forEach(function(id){ inTeam[id] = 1; }); });
     var att = S.att[ev.id] || {};
     var pend = S.roster.filter(function(p){ return !att[p.id] && !inTeam[p.id] && draft.pool.indexOf(p.id) < 0; });
+    if (selected) { var sp = person(selected); h += '<div class="sel-banner no-print">「' + esc(sp ? sp.name : '') + '」を選択中 — 入れ替えたい人の名前、または移動先のチームを押してください <button class="btn sm" data-unsel>やめる</button></div>'; }
     h += '<div class="board">' + draft.teams.map(function(t, i){
       return '<div class="team' + (selected ? ' target' : '') + '" data-team="' + i + '" style="--tc:' + t.color + '"><div class="team-head"><span class="team-name"><span class="team-dot">' + (i + 1) + '</span>' + esc(t.name) + '</span><span class="team-count">' + teamStats(t) + '</span></div><div class="members">' + (t.members.length ? t.members.map(function(id){ return chipHtml(id, ev.id, true); }).join("") : '<span class="hint" style="margin:0">ここに名前を入れてください</span>') + '</div></div>';
     }).join("") + '</div>';
@@ -581,7 +636,31 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       + (pend.length ? '<div class="ps-pend"><b>出欠未入力（参加が決まったら空いている欄に書き足し）</b>：' + pend.map(function(p){ return esc(p.name); }).join("、") + '</div>' : '')
       + '<div class="ps-foot">作成 ' + d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate() + '　親睦会ポータル</div></section>';
   }
+  function where(pid){
+    for (var i = 0; i < draft.teams.length; i++) { var k = draft.teams[i].members.indexOf(pid); if (k >= 0) return { list: draft.teams[i].members, i: k, team: i }; }
+    var j = draft.pool.indexOf(pid); if (j >= 0) return { list: draft.pool, i: j, team: "pool" };
+    return null; // 出欠未入力の枠
+  }
+  function unpin(pid){ draft.teams.forEach(function(t){ t.pinned = (t.pinned || []).filter(function(x){ return x !== pid; }); }); }
+  // 2人の場所を入れ替える（同じチーム内なら順番の入れ替えになる）
+  function swap(a, b){
+    var wa = where(a), wb = where(b);
+    if (!wa && !wb) { selected = b; render(); return; }
+    if (wa && wb) { wa.list[wa.i] = b; wb.list[wb.i] = a; if (wa.team !== wb.team) { unpin(a); unpin(b); } }
+    else if (wa) { wa.list[wa.i] = b; unpin(a); }
+    else { wb.list[wb.i] = a; unpin(b); }
+    draft.dirty = true; selected = null; render();
+  }
+  // b の前に a を差し込む（ドラッグ用）
+  function insertBefore(a, b){
+    if (a === b) return;
+    var wb0 = where(b); if (!wb0) { moveTo(a, "pending"); return; }
+    var wa = where(a); if (wa) { wa.list.splice(wa.i, 1); if (wa.team !== wb0.team) unpin(a); }
+    var wb = where(b); wb.list.splice(wb.i, 0, a);
+    draft.dirty = true; selected = null; render();
+  }
   function moveTo(pid, target){
+    var w0 = where(pid); if (!w0 || w0.team !== (target === "pool" || target === "pending" ? target : +target)) unpin(pid);
     draft.teams.forEach(function(t){ t.members = t.members.filter(function(x){ return x !== pid; }); });
     draft.pool = draft.pool.filter(function(x){ return x !== pid; });
     if (target === "pool") draft.pool.push(pid); else if (target !== "pending") draft.teams[+target].members.push(pid);
@@ -602,11 +681,12 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   function render(){
     if (!S.loaded) { app.innerHTML = '<div class="empty">読み込み中…</div>'; return; }
     var r = route(), tab = r[0] || "home";
-    setTab(tab === "event" ? "home" : tab);
+    setTab(tab === "event" || tab === "edit" ? "home" : tab);
     if (tab === "calendar") app.innerHTML = viewCalendar();
     else if (tab === "event") app.innerHTML = viewEvent(r[1]);
     else if (tab === "checkin") { if (!app.querySelector(".full-embed")) app.innerHTML = viewCheckin(); }
     else if (tab === "teams") app.innerHTML = viewTeams(r[1]);
+    else if (tab === "edit") app.innerHTML = viewEdit(r[1]);
     else if (tab === "admin") app.innerHTML = viewGate("#/teams");
     else app.innerHTML = viewHome();
   }
@@ -641,17 +721,38 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       var n = Math.max(2, Math.min(12, +document.getElementById("teamN").value || 2));
       var ppl = present(draft.evId);
       if (ppl.length < n) { toast("出席者よりチーム数が多いです"); return; }
-      var r = e.target.closest("#manualBtn") ? emptyTeams(ppl, n) : autoTeams(ppl, n);
+      var keepPins = !e.target.closest("#manualBtn") && draft.teams.length === n && draft.teams.some(function(t){ return (t.pinned || []).length; });
+      var r = e.target.closest("#manualBtn") ? emptyTeams(ppl, n) : autoTeams(ppl, n, keepPins ? draft.teams : null);
       draft.teams = r.teams; draft.pool = r.pool; draft.dirty = true; selected = null; render();
-      toast(e.target.closest("#manualBtn") ? n + "チームの枠を作りました。名前を押して振り分けてください" : n + "チームに分けました（保存を押すと確定します）");
+      toast(e.target.closest("#manualBtn") ? n + "チームの枠を作りました。名前を押して振り分けてください" : keepPins ? "固定した人はそのままで、ほかの人をシャッフルしました" : n + "チームに分けました（保存を押すと確定します）");
       return;
+    }
+    if (e.target.closest("[data-unsel]")) { selected = null; render(); return; }
+    if (e.target.closest("[data-saveev]")) { saveEvent(); return; }
+    if ((t = e.target.closest("[data-delev]"))) {
+      var dv = S.events.find(function(x){ return x.id === t.dataset.delev; });
+      if (!dv || !window.confirm("「" + dv.name + "」を削除します。この行事の出欠記録とチーム分けも消えます。よろしいですか？")) return;
+      var dr = await sb.from("ennokai_events").delete().eq("id", dv.id);
+      if (dr.error) { toast("削除できませんでした"); return; }
+      toast("削除しました"); await load(); location.hash = "#/"; return;
     }
     if (e.target.closest("#saveBtn")) { saveTeams(); return; }
     if (e.target.closest("#printBtn")) { window.print(); return; }
-    if ((t = e.target.closest(".m[data-pid]"))) { selected = selected === t.dataset.pid ? null : t.dataset.pid; render(); return; }
+    if ((t = e.target.closest("[data-pin]"))) {
+      var pid0 = t.dataset.pin, w = where(pid0); if (!w || w.team === "pool") return;
+      var tm = draft.teams[w.team]; tm.pinned = tm.pinned || [];
+      if (tm.pinned.indexOf(pid0) >= 0) tm.pinned = tm.pinned.filter(function(x){ return x !== pid0; }); else tm.pinned.push(pid0);
+      draft.dirty = true; render(); return;
+    }
+    if ((t = e.target.closest(".m[data-pid]"))) {
+      var pid = t.dataset.pid;
+      if (selected && selected !== pid) { swap(selected, pid); return; }
+      selected = selected === pid ? null : pid; render(); return;
+    }
     if ((t = e.target.closest("[data-team]")) && selected) { moveTo(selected, t.dataset.team); return; }
   });
   document.addEventListener("change", function(e){
+    if (e.target.id === "ef-datepick" && e.target.value) { var dp = e.target.value.split("-"); document.getElementById("ef-date").value = (+dp[0]) + "年" + (+dp[1]) + "月" + (+dp[2]) + "日"; }
     if (e.target.id === "teamEv") { draft = null; selected = null; location.hash = "#/teams/" + e.target.value; }
   });
   document.addEventListener("keydown", function(e){ if (e.key === "Enter" && e.target.id === "gatePw") tryLogin(document.getElementById("gateGo").dataset.next); });
@@ -659,7 +760,12 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   document.addEventListener("dragstart", function(e){ var m = e.target.closest && e.target.closest(".m[data-pid]"); if (m) { e.dataTransfer.setData("text/plain", m.dataset.pid); e.dataTransfer.effectAllowed = "move"; } });
   document.addEventListener("dragover", function(e){ var z = e.target.closest && e.target.closest("[data-team]"); if (z) { e.preventDefault(); z.classList.add("drop"); } });
   document.addEventListener("dragleave", function(e){ var z = e.target.closest && e.target.closest("[data-team]"); if (z) z.classList.remove("drop"); });
-  document.addEventListener("drop", function(e){ var z = e.target.closest && e.target.closest("[data-team]"); if (!z) return; e.preventDefault(); var pid = e.dataTransfer.getData("text/plain"); if (pid) moveTo(pid, z.dataset.team); });
+  document.addEventListener("drop", function(e){
+    var z = e.target.closest && e.target.closest("[data-team]"); if (!z) return; e.preventDefault();
+    var pid = e.dataTransfer.getData("text/plain"); if (!pid) return;
+    var onChip = e.target.closest(".m[data-pid]");
+    if (onChip && onChip.dataset.pid !== pid && z.dataset.team !== "pending") insertBefore(pid, onChip.dataset.pid); else moveTo(pid, z.dataset.team);
+  });
   window.addEventListener("beforeunload", function(e){ if (draft && draft.dirty) { e.preventDefault(); e.returnValue = ""; } });
 
   document.querySelectorAll('[data-ic]').forEach(function(el){ el.innerHTML = I(el.dataset.ic); });
