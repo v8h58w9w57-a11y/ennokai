@@ -709,6 +709,23 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .wn-name b i{background-size:100% 220%!important;animation:wnCh .55s cubic-bezier(.2,1.5,.35,1) forwards,wnGold 2.4s ease-in-out infinite!important;animation-delay:calc(.75s + var(--i) * .13s),calc(1.8s + var(--i) * .08s)!important}
 @keyframes wnGold{0%,100%{background-position:0 0}50%{background-position:0 100%}}
 .wn-name b{filter:drop-shadow(0 0 28px rgba(255,200,90,.45))}
+
+/* ===== ビンゴマシン（洋風） ===== */
+.bg-stage .gp-svg{filter:drop-shadow(0 14px 18px rgba(0,0,0,.35))}
+.bg-stage .bg-front{filter:none}
+.bg-balls{position:absolute;left:50%;top:43.75%;width:58%;height:58%;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;pointer-events:none}
+.bg-balls .gp-b{width:15%;margin:-7.5% 0 0 -7.5%;background:radial-gradient(circle at 50% 50%,#fff 0 22%,transparent 23%),radial-gradient(circle at 35% 30%,rgba(255,255,255,.85) 0 8%,var(--c) 40%,rgba(0,0,0,.35) 100%);box-shadow:0 2px 4px rgba(0,0,0,.4)}
+.rl-stage.spinning .bg-balls .gp-b{animation:bgTumble .32s ease-in-out infinite alternate;animation-delay:var(--d)}
+@keyframes bgTumble{0%{transform:translate(-14px,10px) rotate(0)}50%{transform:translate(10px,-16px) rotate(160deg)}100%{transform:translate(16px,8px) rotate(320deg)}}
+.bg-stage .bg-balls{animation:none}
+.rl-stage.spinning .bg-balls{animation:bgSwirl 1.1s linear infinite}
+@keyframes bgSwirl{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.bg-stage #gpDrum,.bg-stage #gpHandle{transform-box:view-box;transform-origin:200px 175px}
+.bg-stage .gp-out{left:63%;top:66%}
+.bg-stage .gp-out.go{animation:bgOut 1.4s cubic-bezier(.35,0,.25,1) forwards}
+@keyframes bgOut{0%{opacity:1;left:63%;top:66%}35%{left:72%;top:76.5%}50%{left:76%;top:75%}65%{left:80%;top:77%}100%{opacity:1;left:84%;top:77%}}
+.bg-stage .gp-ball{background:radial-gradient(circle at 50% 50%,#fff 0 24%,transparent 25%),radial-gradient(circle at 35% 30%,#fff 0 10%,var(--c) 45%,rgba(0,0,0,.35) 100%)!important}
+.rl-stage:not(.spinning) .bg-balls .gp-b{animation:none}
 </style>
 </head>
 <body>
@@ -1134,7 +1151,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       + '<div class="th-beam b1"></div><div class="th-beam b2"></div><div class="th-floor"></div>'
       + '<div class="th-curtain l"></div><div class="th-curtain r"></div><div class="th-valance"></div>'
       + stageHTML(items) + '</div>')
-      + '<div class="card rl-side"><div class="field" style="margin-bottom:12px">演出<div class="seg rl-seg rl-style">' + [["wheel", "ルーレット"], ["garapon", "ガラガラ抽選"], ["slot", "スロット"]].map(function(x){ return '<button data-rl-style="' + x[0] + '" class="' + (rl.style === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") + '</div></div>'
+      + '<div class="card rl-side"><div class="field" style="margin-bottom:12px">演出<div class="seg rl-seg rl-style">' + [["wheel", "ルーレット"], ["garapon", "ビンゴマシン"], ["slot", "スロット"]].map(function(x){ return '<button data-rl-style="' + x[0] + '" class="' + (rl.style === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") + '</div></div>'
       + '<div class="field">候補</div><div class="seg rl-seg"><button data-rl-mode="present" class="' + (rl.mode === "present" ? "on" : "") + '">出席者</button><button data-rl-mode="teams" class="' + (rl.mode === "teams" ? "on" : "") + '">チーム</button><button data-rl-mode="custom" class="' + (rl.mode === "custom" ? "on" : "") + '">自由に入力</button></div>'
       + (rl.mode !== "custom" ? '<label class="field" style="margin-top:14px">行事<select data-rl-ev>' + evs.map(function(e){ return '<option value="' + e.id + '"' + (e.id === rl.evId ? ' selected' : '') + '>' + esc(e.name) + '</option>'; }).join("") + '</select></label>' : '<label class="field" style="margin-top:14px">候補（1行に1つ）<textarea data-rl-custom style="min-height:170px">' + esc(rl.custom) + '</textarea></label>')
       + '<label class="rl-check"><input type="checkbox" data-rl-remove' + (rl.removeWinner ? ' checked' : '') + '> 当たったら次から外す（重ならない）</label>'
@@ -1244,27 +1261,34 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var goBtn = document.querySelector("[data-rl-spin]"); if (goBtn) goBtn.disabled = true;
     countdown(function(){ runSpin(items); });
   }
-  var GP_COLORS = ["#C8102E", "#E8B923", "#F4F1EA", "#1F5FA8", "#2E7D4F", "#7A3E9D"];
+  var GP_COLORS = ["#1E5BC6", "#D7262E", "#F2F0EA", "#1F8A4C", "#F2B705", "#E86A1C"];
   function stageHTML(items){
     var dis = items.length < 2 ? ' disabled' : '';
     if (rl.style === "garapon") {
-      var oct = function(r){ var pts = []; for (var k = 0; k < 8; k++) { var t = (k * 45 + 22.5) * Math.PI / 180; pts.push((200 + r * Math.cos(t)).toFixed(1) + "," + (175 + r * Math.sin(t)).toFixed(1)); } return pts.join(" "); };
-      var grain = ''; for (var g = -100; g <= 100; g += 14) grain += '<path d="M' + (200 + g) + ' 60 C' + (206 + g) + ' 120 ' + (194 + g) + ' 220 ' + (200 + g) + ' 290" stroke="#7A4A22" stroke-width="1.2" opacity=".28" fill="none"/>';
-      return '<div class="rl-stage gp-stage"><svg class="gp-svg" viewBox="0 0 400 400" aria-hidden="true">'
-        + '<defs><linearGradient id="gpWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C98A4E"/><stop offset="1" stop-color="#9C6231"/></linearGradient>'
-        + '<linearGradient id="gpLeg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7A4A22"/><stop offset=".5" stop-color="#A86F3B"/><stop offset="1" stop-color="#6B3F1C"/></linearGradient>'
-        + '<radialGradient id="gpCap" cx=".35" cy=".3"><stop offset="0" stop-color="#FFF4C8"/><stop offset=".55" stop-color="#C9973A"/><stop offset="1" stop-color="#7A5216"/></radialGradient>'
-        + '<clipPath id="gpClip"><polygon points="' + oct(112) + '"/></clipPath></defs>'
-        + '<ellipse cx="200" cy="372" rx="150" ry="12" fill="#000" opacity=".12"/>'
-        + '<rect x="70" y="340" width="260" height="22" rx="4" fill="url(#gpLeg)"/>'
-        + '<path d="M120 342 L182 178 L196 178 L142 342Z" fill="url(#gpLeg)"/><path d="M280 342 L218 178 L204 178 L258 342Z" fill="url(#gpLeg)"/>'
-        + '<g id="gpDrum"><polygon points="' + oct(118) + '" fill="#5A3417"/><polygon points="' + oct(112) + '" fill="url(#gpWood)"/><g clip-path="url(#gpClip)">' + grain + '</g>'
-        + '<polygon points="' + oct(82) + '" fill="none" stroke="#6B3F1C" stroke-width="3" opacity=".55"/>'
-        + '<text x="200" y="196" text-anchor="middle" font-size="48" font-weight="900" fill="#5A3417" opacity=".8" font-family="Zen Maru Gothic, serif">福引</text>'
-        + '<circle cx="200" cy="268" r="9" fill="#2B1D14"/></g>'
-        + '<g id="gpHandle"><rect x="196" y="171" width="128" height="8" rx="4" fill="#2B2B2B"/><rect x="318" y="160" width="12" height="30" rx="6" fill="#7A1F1F"/></g>'
-        + '<circle cx="200" cy="175" r="15" fill="url(#gpCap)" stroke="#5A3D12" stroke-width="1.5"/>'
-        + '<path d="M238 300 h108 a10 10 0 0 1 10 10 v14 h-128 v-14 a10 10 0 0 1 10 -10z" fill="#5A3417"/><rect x="236" y="304" width="114" height="14" rx="6" fill="#2F5B3A"/>'
+      // 洋風のビンゴケージ: 真鍮のワイヤーの籠・クランク・マホガニーの台
+      var spokes = ''; for (var k = 0; k < 12; k++) { var t = k * 30 * Math.PI / 180; spokes += '<line x1="200" y1="175" x2="' + (200 + 116 * Math.cos(t)).toFixed(1) + '" y2="' + (175 + 116 * Math.sin(t)).toFixed(1) + '"/>'; }
+      var rings = '<circle cx="200" cy="175" r="84"/><circle cx="200" cy="175" r="52"/>';
+      var balls = ''; for (var i = 0; i < 14; i++) { var bx = 26 + (i % 7) * 8 + Math.random() * 4, by = 80 - Math.floor(i / 7) * 13 - Math.abs(bx - 50) * .35 + Math.random() * 3; balls += '<i class="gp-b" style="--x:' + bx.toFixed(1) + '%;--y:' + by.toFixed(1) + '%;--c:' + GP_COLORS[i % GP_COLORS.length] + ';--d:' + (Math.random() * -.6).toFixed(2) + 's"></i>'; }
+      return '<div class="rl-stage gp-stage bg-stage"><svg class="gp-svg" viewBox="0 0 400 400" aria-hidden="true">'
+        + '<defs><linearGradient id="bgBrass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCE7A6"/><stop offset=".45" stop-color="#C08A2E"/><stop offset=".6" stop-color="#F0CF73"/><stop offset="1" stop-color="#8A5E1A"/></linearGradient>'
+        + '<linearGradient id="bgWood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A2E1C"/><stop offset="1" stop-color="#3E140C"/></linearGradient>'
+        + '<radialGradient id="bgCap" cx=".35" cy=".3"><stop offset="0" stop-color="#FFF6D2"/><stop offset=".55" stop-color="#C9973A"/><stop offset="1" stop-color="#6E4A12"/></radialGradient>'
+        + '<radialGradient id="bgInside" cx=".5" cy=".45" r=".55"><stop offset="0" stop-color="#fff" stop-opacity=".10"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></radialGradient></defs>'
+        + '<ellipse cx="200" cy="374" rx="150" ry="11" fill="#000" opacity=".25"/>'
+        + '<path d="M118 344 L186 182 L198 182 L140 344Z M282 344 L214 182 L202 182 L260 344Z" fill="url(#bgBrass)"/>'
+        + '<rect x="66" y="338" width="268" height="26" rx="6" fill="url(#bgWood)"/><rect x="66" y="338" width="268" height="5" rx="2" fill="url(#bgBrass)"/>'
+        + '<rect x="160" y="345" width="80" height="14" rx="3" fill="url(#bgBrass)"/><text x="200" y="356" text-anchor="middle" font-size="10" font-weight="900" letter-spacing="3" fill="#4A2E0A" font-family="Georgia, serif">BINGO</text>'
+        + '<circle cx="200" cy="175" r="122" fill="url(#bgInside)"/>'
+        + '</svg><div class="bg-balls">' + balls + '</div>'
+        + '<svg class="gp-svg bg-front" viewBox="0 0 400 400" aria-hidden="true">'
+        + '<g id="gpDrum" class="bg-cage" fill="none" stroke="url(#bgBrass)">'
+        + '<g stroke-width="2.4">' + spokes + '</g><g stroke-width="1.6" opacity=".8">' + rings + '</g>'
+        + '<circle cx="200" cy="175" r="118" stroke-width="9"/><circle cx="200" cy="175" r="118" stroke="#6E4A12" stroke-width="1" opacity=".6"/>'
+        + '<rect x="186" y="51" width="28" height="14" rx="3" fill="url(#bgBrass)" stroke="none"/></g>'
+        + '<path d="M262 268 q22 18 34 40" stroke="url(#bgBrass)" stroke-width="12" fill="none" stroke-linecap="round"/>'
+        + '<rect x="262" y="300" width="96" height="26" rx="6" fill="url(#bgWood)" stroke="url(#bgBrass)" stroke-width="3"/><rect x="268" y="305" width="84" height="12" rx="4" fill="#1F4A33"/>'
+        + '<g id="gpHandle"><rect x="196" y="171" width="136" height="8" rx="4" fill="url(#bgBrass)"/><rect x="326" y="158" width="14" height="34" rx="7" fill="#3E140C"/></g>'
+        + '<circle cx="200" cy="175" r="16" fill="url(#bgCap)" stroke="#6E4A12" stroke-width="1.5"/>'
         + '</svg><div class="gp-out" id="gpOut"></div>'
         + '<button class="rl-go gp-go" data-rl-spin' + dis + '>まわす</button></div>';
     }
