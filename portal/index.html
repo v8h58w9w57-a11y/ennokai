@@ -726,6 +726,52 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 @keyframes bgOut{0%{opacity:1;left:63%;top:66%}35%{left:72%;top:76.5%}50%{left:76%;top:75%}65%{left:80%;top:77%}100%{opacity:1;left:84%;top:77%}}
 .bg-stage .gp-ball{background:radial-gradient(circle at 50% 50%,#fff 0 24%,transparent 25%),radial-gradient(circle at 35% 30%,#fff 0 10%,var(--c) 45%,rgba(0,0,0,.35) 100%)!important}
 .rl-stage:not(.spinning) .bg-balls .gp-b{animation:none}
+
+/* ===== トランプ ===== */
+.cd-stage{aspect-ratio:auto!important;min-height:min(70vh,560px)}
+.cd-table{position:relative;border-radius:26px;padding:22px 18px 46px;background:radial-gradient(ellipse at 50% 35%,#2F7A52,#1B4D33 75%);box-shadow:inset 0 0 0 10px #5B2A1A,inset 0 0 0 13px #C9973A,inset 0 0 50px rgba(0,0,0,.45),0 18px 30px -16px rgba(0,0,0,.6)}
+.cd-grid{display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:clamp(5px,1vw,10px);perspective:900px}
+.cd{all:unset;cursor:pointer;aspect-ratio:5/7;position:relative;display:block}
+.cd:disabled{cursor:default}
+.cd-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.cd.open .cd-in{transform:rotateY(180deg) scale(1.06)}
+.cd-back,.cd-face{position:absolute;inset:0;border-radius:9%/6.5%;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 3px 6px rgba(0,0,0,.35)}
+.cd-back{background:#fff;padding:7%}
+.cd-back::before{content:"";position:absolute;inset:7%;border-radius:6%/4.5%;background:repeating-linear-gradient(45deg,#1F3C78 0 4px,#2A52A0 4px 8px),#1F3C78;box-shadow:inset 0 0 0 2px #fff,inset 0 0 0 4px #1F3C78}
+.cd-back::after{content:"";position:absolute;left:50%;top:50%;width:34%;aspect-ratio:1;transform:translate(-50%,-50%) rotate(45deg);border:2px solid #E8C468;background:#1F3C78}
+.cd-stage.cd-pick .cd:not(:disabled):hover .cd-in{transform:translateY(-8px)}
+.cd-stage.cd-pick .cd:not(:disabled) .cd-back{animation:cdWait 1.8s ease-in-out infinite;animation-delay:calc(var(--k,0) * -.1s)}
+@keyframes cdWait{0%,100%{box-shadow:0 3px 6px rgba(0,0,0,.35)}50%{box-shadow:0 0 0 2px rgba(242,211,122,.8),0 6px 14px rgba(0,0,0,.4)}}
+.cd-face{transform:rotateY(180deg);background:#FFFDF6;display:flex;align-items:center;justify-content:center;color:var(--sc,#1C1C24);border:1px solid #ddd}
+.cd-face b{font-family:var(--font-title);font-weight:900;font-size:clamp(.62rem,1.5vw,1rem);line-height:1.15;text-align:center;padding:0 8%;word-break:keep-all}
+.cd-face em{position:absolute;left:8%;top:5%;font-style:normal;font-size:clamp(.6rem,1.4vw,.95rem);font-weight:900}
+.cd-face em.r{left:auto;top:auto;right:8%;bottom:5%;transform:rotate(180deg)}
+.cd.open{z-index:2}
+.cd.open .cd-face{box-shadow:0 0 0 3px #F2D37A,0 0 24px 6px rgba(242,211,122,.7)}
+.cd.dim{opacity:.35;filter:grayscale(.4);transition:opacity .5s}
+.cd-msg{position:absolute;left:0;right:0;bottom:12px;text-align:center;color:#F4E9C9;font-weight:800;font-size:.9rem}
+.cd-msg b{color:#F2D37A;font-size:1.1rem}
+.cd-go{left:50%!important;top:auto!important;bottom:-34px;transform:translate(-50%,0)!important;width:auto!important;aspect-ratio:auto!important;border-radius:999px!important;padding:10px 26px}
+.cd-go::after{border-radius:999px!important}
+.wn-list{display:flex;flex-direction:column;align-items:center;gap:1vh}
+.wn-row{display:flex;align-items:center;gap:14px;opacity:0;animation:wnUp .5s cubic-bezier(.2,1.4,.4,1) forwards;animation-delay:calc(.6s + var(--i) * .28s)}
+.wn-row i{font-style:normal;width:1.8em;height:1.8em;border-radius:50%;background:#D8322A;color:#fff;display:grid;place-items:center;font-weight:900;font-size:clamp(.9rem,2.4vh,1.4rem)}
+.wn-row b{font-family:var(--font-title);font-weight:900;font-size:clamp(1.8rem,7vh,4.4rem);background:linear-gradient(180deg,#FFFBEA,#FFE08A 30%,#F2B930 55%,#B9781B 75%,#FFE9A8);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #6B3B0C)}
+/* ===== ライト ===== */
+.lt-board{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#2A1C30 0 55%,#170E1A 100%);box-shadow:inset 0 0 0 8px #C9973A,inset 0 0 0 11px #5B2A1A,inset 0 0 60px rgba(0,0,0,.6),0 18px 30px -16px rgba(0,0,0,.6)}
+.lt{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font-weight:900;font-size:var(--fs);color:#8E7FA0;padding:.35em .6em;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);transition:color .25s,background .25s,box-shadow .25s,transform .25s}
+.lt.t2{color:#C9A9D8;background:rgba(255,210,120,.08)}
+.lt.t1{color:#FFE3A0;background:rgba(255,210,120,.18);box-shadow:0 0 12px rgba(255,200,100,.35)}
+.lt.on{color:#3A1E00;background:#FFD866;box-shadow:0 0 0 2px #fff,0 0 26px 8px rgba(255,210,100,.85);transform:translate(-50%,-50%) scale(1.18);transition:none;z-index:2}
+.lt.win{animation:ltWin .4s ease-in-out 6 alternate}
+@keyframes ltWin{to{background:#fff;box-shadow:0 0 0 3px #FFD866,0 0 40px 14px rgba(255,220,120,1)}}
+.lt-core{position:absolute;left:50%;top:50%;width:46%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%,#3D2846,#1E1222);box-shadow:inset 0 0 0 4px #C9973A,0 0 30px rgba(0,0,0,.5)}
+.lt-core small{color:#C9973A;font-weight:900;letter-spacing:.4em;font-size:.72rem}
+.lt-core b{color:#FFE9A8;font-family:var(--font-title);font-weight:900;font-size:clamp(1rem,3.2vh,1.9rem);margin-top:4px;text-align:center;padding:0 10%;line-height:1.2;text-shadow:0 0 14px rgba(255,210,120,.6)}
+.lt-go{top:auto!important;bottom:-4%!important;transform:translate(-50%,0)!important;width:20%!important}
+.rl-theater:has(.cd-stage) .th-curtain.l,.rl-theater:has(.lt-stage) .th-curtain.l{transform:translateX(-66%)!important}
+.rl-theater:has(.cd-stage) .th-curtain.r,.rl-theater:has(.lt-stage) .th-curtain.r{transform:scaleX(-1) translateX(-66%)!important}
+.rl-theater:has(.cd-stage){padding-left:5%;padding-right:5%}
 </style>
 </head>
 <body>
@@ -1103,8 +1149,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   }
   /* ---------- ルーレット ---------- */
   var RL_COLORS = ["#FF8A80", "#FFB74D", "#F6C453", "#9CCC65", "#5CC9A7", "#4FC3C7", "#6BB8F0", "#8C9EFF", "#A08CF0", "#F27BA5"];
-  var rl = { style: "wheel", mode: "present", evId: null, custom: "", removed: {}, rot: 0, spinning: false, winner: null, removeWinner: true };
-  try { rl.style = localStorage.getItem("portal_roulette_style") || "wheel"; } catch (e) {}
+  var rl = { draw: 1, style: "wheel", mode: "present", evId: null, custom: "", removed: {}, rot: 0, spinning: false, winner: null, removeWinner: true };
+  try { rl.style = localStorage.getItem("portal_roulette_style") || "wheel"; rl.draw = +localStorage.getItem("portal_roulette_draw") || 1; } catch (e) {}
   try { rl.custom = localStorage.getItem("portal_roulette_custom") || "景品A\n景品B\n景品C\nハズレ\nもう一回！"; } catch (e) { rl.custom = "景品A\n景品B\n景品C"; }
   function rlItems(){
     var items = [];
@@ -1151,9 +1197,10 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       + '<div class="th-beam b1"></div><div class="th-beam b2"></div><div class="th-floor"></div>'
       + '<div class="th-curtain l"></div><div class="th-curtain r"></div><div class="th-valance"></div>'
       + stageHTML(items) + '</div>')
-      + '<div class="card rl-side"><div class="field" style="margin-bottom:12px">演出<div class="seg rl-seg rl-style">' + [["wheel", "ルーレット"], ["garapon", "ビンゴマシン"], ["slot", "スロット"]].map(function(x){ return '<button data-rl-style="' + x[0] + '" class="' + (rl.style === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") + '</div></div>'
+      + '<div class="card rl-side"><div class="field" style="margin-bottom:12px">演出<div class="seg rl-seg rl-style">' + [["wheel", "ルーレット"], ["garapon", "ビンゴ"], ["slot", "スロット"], ["cards", "トランプ"], ["lights", "ライト"]].map(function(x){ return '<button data-rl-style="' + x[0] + '" class="' + (rl.style === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") + '</div></div>'
       + '<div class="field">候補</div><div class="seg rl-seg"><button data-rl-mode="present" class="' + (rl.mode === "present" ? "on" : "") + '">出席者</button><button data-rl-mode="teams" class="' + (rl.mode === "teams" ? "on" : "") + '">チーム</button><button data-rl-mode="custom" class="' + (rl.mode === "custom" ? "on" : "") + '">自由に入力</button></div>'
       + (rl.mode !== "custom" ? '<label class="field" style="margin-top:14px">行事<select data-rl-ev>' + evs.map(function(e){ return '<option value="' + e.id + '"' + (e.id === rl.evId ? ' selected' : '') + '>' + esc(e.name) + '</option>'; }).join("") + '</select></label>' : '<label class="field" style="margin-top:14px">候補（1行に1つ）<textarea data-rl-custom style="min-height:170px">' + esc(rl.custom) + '</textarea></label>')
+      + (rl.style === "cards" ? '<label class="field" style="margin-top:14px">引く枚数<select data-rl-draw>' + [1,2,3,4,5,6,7,8,9,10].map(function(n){ return '<option value="' + n + '"' + (n === rl.draw ? ' selected' : '') + '>' + n + '枚</option>'; }).join("") + '</select></label>' : '')
       + '<label class="rl-check"><input type="checkbox" data-rl-remove' + (rl.removeWinner ? ' checked' : '') + '> 当たったら次から外す（重ならない）</label>'
       + '<div class="rl-count">候補 <b>' + items.length + '</b>' + (removedCount ? '　｜　外した ' + removedCount + ' <button class="link-btn" data-rl-reset>元に戻す</button>' : '') + '</div>'
       + (rl.mode === "teams" && !items.length && !removedCount ? '<p class="hint">この行事はまだチームが保存されていません</p>' : '')
@@ -1292,6 +1339,19 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
         + '</svg><div class="gp-out" id="gpOut"></div>'
         + '<button class="rl-go gp-go" data-rl-spin' + dis + '>まわす</button></div>';
     }
+    if (rl.style === "cards") {
+      var nC = items.length, cols = Math.max(3, Math.ceil(Math.sqrt(nC * 1.35)));
+      return '<div class="rl-stage cd-stage"><div class="cd-table"><div class="cd-grid" id="cdGrid" style="--cols:' + cols + '">'
+        + items.map(function(_, i){ return '<button class="cd" data-card="' + i + '" disabled><span class="cd-in"><span class="cd-back"></span><span class="cd-face"><em></em><b></b><em class="r"></em></span></span></button>'; }).join("")
+        + '</div><div class="cd-msg" id="cdMsg">' + (nC >= 2 ? '「シャッフル」を押してから、好きなカードを ' + Math.min(rl.draw, nC) + '枚 選んでください' : '') + '</div></div>'
+        + '<button class="rl-go cd-go" data-rl-spin' + dis + '>シャッフル</button></div>';
+    }
+    if (rl.style === "lights") {
+      var nL = items.length, rx = 44, ry = 42;
+      var tiles = items.map(function(it, i){ var t = (i / nL) * Math.PI * 2 - Math.PI / 2; var lb = it.label.length > 6 ? it.label.slice(0, 5) + '…' : it.label; return '<span class="lt" data-lt="' + i + '" style="left:' + (50 + rx * Math.cos(t)).toFixed(2) + '%;top:' + (50 + ry * Math.sin(t)).toFixed(2) + '%;--fs:' + (nL > 28 ? .62 : nL > 18 ? .74 : .88) + 'rem">' + esc(lb) + '</span>'; }).join("");
+      return '<div class="rl-stage lt-stage"><div class="lt-board"><div class="lt-core"><small>LUCKY</small><b id="ltNow">？</b></div>' + tiles + '</div>'
+        + '<button class="rl-go lt-go" data-rl-spin' + dis + '>スタート</button></div>';
+    }
     if (rl.style === "slot") {
       var bulbs = ''; for (var q = 0; q < 11; q++) bulbs += '<circle class="bulb" style="--k:' + q + '" cx="' + (108 + q * 18.4) + '" cy="40" r="4.2"/>';
       return '<div class="rl-stage sl-stage"><svg class="sl-svg" viewBox="0 0 400 400" aria-hidden="true">'
@@ -1353,6 +1413,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var win = Math.floor(Math.random() * items.length);
     if (rl.style === "garapon") return runGarapon(items, win);
     if (rl.style === "slot") return runSlot(items, win);
+    if (rl.style === "cards") return runCards(items);
+    if (rl.style === "lights") return runLights(items, win);
     return runWheel(items, win);
   }
   // ガラガラ抽選機: 回して、最後に玉がころんと出てくる
@@ -1423,6 +1485,106 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
         celebrate(items, win, { delay: 900 });
       }
     })(t0);
+  }
+  // ===== トランプ: シャッフルして並べ、好きなカードをめくる =====
+  var SUITS = [["♠", "#1C1C24"], ["♥", "#C8102E"], ["♦", "#C8102E"], ["♣", "#1C1C24"]];
+  var cardState = null;
+  function runCards(items){
+    var grid = document.getElementById("cdGrid"), msg = document.getElementById("cdMsg");
+    var cards = grid ? Array.from(grid.querySelectorAll(".cd")) : [];
+    var order = items.map(function(_, i){ return i; });
+    for (var i = order.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    var gr = grid.getBoundingClientRect(), cx = gr.left + gr.width / 2, cy = gr.top + gr.height / 2;
+    beginSpinUI(); drumStop();
+    // 中央に集めて、切って、配り直す
+    cards.forEach(function(c, k){
+      var r = c.getBoundingClientRect(), dx = cx - (r.left + r.width / 2), dy = cy - (r.top + r.height / 2);
+      c.animate([
+        { transform: "none" },
+        { transform: "translate(" + dx + "px," + dy + "px) rotate(" + (Math.random() * 30 - 15) + "deg)", offset: .32 },
+        { transform: "translate(" + (dx + (k % 2 ? 40 : -40)) + "px," + dy + "px) rotate(" + (k % 2 ? 8 : -8) + "deg)", offset: .5 },
+        { transform: "translate(" + dx + "px," + dy + "px) rotate(0deg)", offset: .66 },
+        { transform: "none" }
+      ], { duration: 2600, delay: k * 12, easing: "cubic-bezier(.4,0,.2,1)", fill: "both" });
+    });
+    var flips = 0; var sh = setInterval(function(){ rattle(); if (++flips > 16) clearInterval(sh); }, 90);
+    setTimeout(function(){ for (var q = 0; q < Math.min(cards.length, 18); q++) setTimeout(tick, q * 45); }, 1750);
+    var want = Math.min(rl.draw, items.length);
+    cardState = { items: items, order: order, want: want, picked: [] };
+    setTimeout(function(){
+      var view = document.querySelector(".rl-view"); if (view) view.classList.remove("is-spinning");
+      var stg = document.querySelector(".rl-stage"); if (stg) { stg.classList.remove("spinning"); stg.classList.add("cd-pick"); }
+      cards.forEach(function(c){ c.disabled = false; });
+      if (msg) msg.innerHTML = 'カードを <b>' + want + '枚</b> 選んでください';
+      var tk = document.getElementById("rlTicker"); if (tk) tk.innerHTML = '<span class="tk">好きなカードを選んでね</span>';
+    }, 2700 + cards.length * 12);
+  }
+  function pickCard(btn){
+    if (!cardState || btn.classList.contains("open")) return;
+    var cs = cardState, i = +btn.dataset.card, it = cs.items[cs.order[i]], suit = SUITS[cs.picked.length % 4];
+    cs.picked.push(it);
+    var face = btn.querySelector(".cd-face"); face.style.setProperty("--sc", suit[1]);
+    face.querySelector("b").textContent = it.label; face.querySelectorAll("em").forEach(function(e){ e.textContent = suit[0]; });
+    btn.classList.add("open"); btn.disabled = true;
+    beep(880, .1); setTimeout(function(){ beep(1320, .14); }, 120);
+    var r = btn.getBoundingClientRect(); var host = fxHost();
+    for (var k = 0; k < 14; k++) { var sp = document.createElement("i"); sp.className = "rl-spark"; sp.style.left = (r.left + r.width / 2) + "px"; sp.style.top = (r.top + r.height / 2) + "px"; var a = Math.random() * Math.PI * 2, d = 60 + Math.random() * 80; sp.style.setProperty("--dx", Math.cos(a) * d + "px"); sp.style.setProperty("--dy", Math.sin(a) * d + "px"); sp.style.setProperty("--c", RL_COLORS[k % RL_COLORS.length]); host.appendChild(sp); setTimeout(function(x){ return function(){ x.remove(); }; }(sp), 1400); }
+    var left = cs.want - cs.picked.length, msg = document.getElementById("cdMsg");
+    if (left > 0) { if (msg) msg.innerHTML = 'あと <b>' + left + '枚</b>'; return; }
+    document.querySelectorAll(".cd:not(.open)").forEach(function(c){ c.disabled = true; c.classList.add("dim"); });
+    if (msg) msg.innerHTML = '';
+    var stg = document.querySelector(".rl-stage"); if (stg) stg.classList.remove("cd-pick");
+    setTimeout(function(){ finishCards(cs.picked); }, 900);
+  }
+  function finishCards(picked){
+    cardState = null; rl.spinning = false;
+    rl.history = (rl.history || []).concat(picked.map(function(p){ return p.label; }));
+    crash(); fanfare(); sparkles();
+    var fl = document.querySelector(".rl-flash"); if (fl) { fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go"); }
+    setTimeout(function(){ confetti(!!document.fullscreenElement); if (picked.length === 1) showWinner(picked[0]); else showWinners(picked); }, 600);
+    setTimeout(fireworks, 900);
+  }
+  function showWinners(list){
+    var m = document.createElement("div"); m.className = "rl-win wn multi";
+    m.innerHTML = '<div class="wn-bg"></div><div class="wn-burst"></div><div class="wn-ring"></div>'
+      + '<div class="wn-content"><div class="wn-ribbon"><span>当　選</span></div><div class="wn-list">'
+      + list.map(function(w, k){ return '<div class="wn-row" style="--i:' + k + '"><i>' + (k + 1) + '</i><b>' + esc(w.label) + '</b></div>'; }).join("")
+      + '</div><div class="wn-sub">おめでとうございます！</div><div class="rl-btns wn-btns"><button class="btn primary" data-rl-again>もう一回</button><button class="btn" data-rl-close>閉じる</button></div></div>';
+    var fs = !!document.fullscreenElement;
+    if (fs) { m.classList.add("fs"); m.querySelector(".rl-btns").innerHTML = '<span class="rl-auto">タップで閉じる</span>'; }
+    fxHost().appendChild(m);
+    var closed = false;
+    var close = function(again){ if (closed) return; closed = true; m.classList.add("out"); setTimeout(function(){ m.remove(); if (rl.removeWinner) list.forEach(function(w){ rl.removed[w.key] = 1; }); render(); if (again) setTimeout(spin, 350); }, 380); };
+    if (fs) setTimeout(function(){ close(false); }, 10000);
+    m.addEventListener("click", function(e){ if (e.target.closest("[data-rl-again]")) close(true); else if (fs || e.target.closest("[data-rl-close]") || !e.target.closest(".wn-content")) close(false); });
+  }
+  // ===== ライト: 光が名前の輪を高速で回って、だんだん止まる =====
+  function runLights(items, win){
+    var tiles = Array.from(document.querySelectorAll(".lt")), now = document.getElementById("ltNow"), n = tiles.length;
+    if (!n) return;
+    beginSpinUI();
+    var laps = 7 + Math.floor(Math.random() * 2), start = Math.floor(Math.random() * n), total = laps * n + ((win - start) % n + n) % n;
+    var step = 0, pos = start;
+    var light = function(p){
+      tiles.forEach(function(t){ t.classList.remove("on", "t1", "t2"); });
+      tiles[p].classList.add("on"); tiles[(p - 1 + n) % n].classList.add("t1"); tiles[(p - 2 + n) % n].classList.add("t2");
+      if (now) now.textContent = items[p].label;
+    };
+    light(pos);
+    (function next(){
+      step++; pos = (pos + 1) % n; light(pos); tick();
+      var prog = step / total;
+      tickerUpdate(prog, items[pos].label);
+      if (step >= total) {
+        tiles[pos].classList.add("win");
+        var stg = document.querySelector(".rl-stage"); if (stg) stg.classList.add("lt-done");
+        setTimeout(function(){ if (stg) stg.classList.remove("lt-done"); celebrate(items, win, { delay: 500 }); }, 500);
+        return;
+      }
+      var remain = total - step, d = remain > n * 2 ? 26 : remain > n ? 26 + (n * 2 - remain) * (40 / n) : 70 + Math.pow((n - remain) / n, 2.2) * 520;
+      if (remain <= 3) d += (4 - remain) * 160;
+      setTimeout(next, d);
+    })();
   }
   function runWheel(items, win){
     var n = items.length, seg = 360 / n;
@@ -1751,6 +1913,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       toast(e.target.closest("#manualBtn") ? n + "チームの枠を作りました。名前を押して振り分けてください" : keepPins ? "固定した人はそのままで、ほかの人をシャッフルしました" : n + "チームに分けました（保存を押すと確定します）");
       return;
     }
+    if ((t = e.target.closest("[data-card]"))) { pickCard(t); return; }
     if (e.target.closest("[data-rl-spin]")) { spin(); return; }
     if ((t = e.target.closest("[data-rl-style]"))) { if (rl.spinning) return; rl.style = t.dataset.rlStyle; try { localStorage.setItem("portal_roulette_style", rl.style); } catch (x) {} render(); return; }
     if ((t = e.target.closest("[data-rl-mode]"))) { rl.mode = t.dataset.rlMode; rl.removed = {}; rl.history = []; render(); return; }
@@ -1800,6 +1963,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   document.addEventListener("change", function(e){
     if (e.target.matches && e.target.matches("[data-rl-ev]")) { rl.evId = e.target.value; rl.removed = {}; rl.history = []; render(); }
     if (e.target.matches && e.target.matches("[data-rl-remove]")) { rl.removeWinner = e.target.checked; }
+    if (e.target.matches && e.target.matches("[data-rl-draw]")) { rl.draw = +e.target.value; try { localStorage.setItem("portal_roulette_draw", rl.draw); } catch (x) {} if (!rl.spinning) render(); }
     if (e.target.id === "ef-datepick" && e.target.value) { var dp = e.target.value.split("-"); document.getElementById("ef-date").value = (+dp[0]) + "年" + (+dp[1]) + "月" + (+dp[2]) + "日"; }
     if (e.target.id === "teamEv") { draft = null; selected = null; location.hash = "#/teams/" + e.target.value; }
   });
