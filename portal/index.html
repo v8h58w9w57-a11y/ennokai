@@ -774,6 +774,26 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .rl-theater:has(.cd-stage){padding-left:5%;padding-right:5%}
 .rl-go.is-stop{background:#1E5BC6!important;border-color:#fff!important;animation:stopPulse .6s ease-in-out infinite!important}
 @keyframes stopPulse{0%,100%{transform:translate(-50%,0) scale(1)}50%{transform:translate(-50%,0) scale(1.08)}}
+
+/* チーム分け: 全チームを1画面に並べる */
+.board.fit{grid-template-columns:repeat(var(--cl),minmax(0,1fr));gap:12px}
+@media (max-width:1000px){.board.fit{grid-template-columns:repeat(var(--cm),minmax(0,1fr))}}
+@media (max-width:640px){.board.fit{grid-template-columns:repeat(var(--cs),minmax(0,1fr));gap:8px}}
+.board.fit .team{padding:12px 10px 10px;min-height:0;border-radius:18px}
+.board.fit .team-head{margin:2px 0 8px;flex-wrap:wrap;gap:4px}
+.board.fit .team-name{font-size:1.02rem;gap:7px}
+.board.fit .team-dot{width:24px;height:24px;border-radius:8px;font-size:.8rem}
+.board.fit .team-count{font-size:.72rem;padding:2px 8px}
+.board.fit .members{gap:5px}
+.board.fit .m{min-height:38px;padding:6px 8px;gap:7px;font-size:.93rem;border-radius:12px}
+.board.fit .m span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.board.fit .m i{width:18px;height:18px;font-size:.62rem}
+.board.fit .m .pin-btn{width:26px;height:26px}
+.board.fit .m em{font-size:.62rem;padding:1px 6px}
+@media (max-width:640px){.board.fit .m{font-size:.84rem;min-height:36px;padding:5px 6px}.board.fit .m .pin-btn{width:22px;height:22px}}
+.dock{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.dock .pool,.dock .pend-box{margin-top:0}
+@media (max-width:760px){.dock{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1787,11 +1807,14 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var att = S.att[ev.id] || {};
     var pend = S.roster.filter(function(p){ return !att[p.id] && !inTeam[p.id] && draft.pool.indexOf(p.id) < 0; });
     if (selected) { var sp = person(selected); h += '<div class="sel-banner no-print">「' + esc(sp ? sp.name : '') + '」を選択中 — 入れ替えたい人の名前、または移動先のチームを押してください <button class="btn sm" data-unsel>やめる</button></div>'; }
-    h += '<div class="board">' + draft.teams.map(function(t, i){
+    var nT = draft.teams.length;
+    h += '<div class="board fit" style="--cl:' + Math.min(nT, nT > 6 ? Math.ceil(nT / 2) : nT) + ';--cm:' + (nT <= 4 ? nT : Math.ceil(nT / 2)) + ';--cs:' + (nT === 3 ? 3 : Math.min(nT, 2)) + '">' + draft.teams.map(function(t, i){
       return '<div class="team' + (selected ? ' target' : '') + '" data-team="' + i + '" style="--tc:' + t.color + '"><div class="team-head"><span class="team-name"><span class="team-dot">' + (i + 1) + '</span>' + esc(t.name) + '</span><span class="team-count">' + teamStats(t) + '</span></div><div class="members">' + (t.members.length ? t.members.map(function(id){ return chipHtml(id, ev.id, true); }).join("") : '<span class="hint" style="margin:0">ここに名前を入れてください</span>') + '</div></div>';
     }).join("") + '</div>';
+    h += '<div class="dock">';
     h += '<div class="pool' + (selected ? ' target' : '') + '" data-team="pool"><div class="box-head"><span><b>未割り当て</b><small>出席だけど、まだチームに入っていない人</small></span><span class="team-count">' + draft.pool.length + '名</span></div><div class="members">' + (draft.pool.length ? draft.pool.map(function(id){ return chipHtml(id, ev.id); }).join("") : '<span class="hint" style="margin:0">全員チームに入っています</span>') + '</div></div>';
     h += '<div class="pend-box' + (selected ? ' target' : '') + '" data-team="pending"><div class="box-head"><span><b>出欠が未入力の人</b><small>あとから参加するかもしれない人。参加が決まったら、名前を押してチームへ入れられます</small></span><span class="team-count">' + pend.length + '名</span></div><div class="members">' + (pend.length ? pend.map(function(p){ return chipHtml(p.id, ev.id); }).join("") : '<span class="hint" style="margin:0">未入力の人はいません</span>') + '</div></div>';
+    h += '</div>';
     h += printSheet(ev, pend);
     return h + '</div>';
   }
