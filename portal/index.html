@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#FFF7F2; --card:#FFFFFF; --ink:#3B3241; --muted:#8E8494; --line:rgba(59,50,65,.09);
@@ -540,11 +540,84 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .sl-machine.jackpot{animation:jp .6s ease-in-out 3}
 @keyframes jp{0%,100%{box-shadow:0 30px 60px -24px rgba(120,20,70,.6),inset 0 0 0 8px rgba(255,255,255,.15)}50%{box-shadow:0 0 0 10px rgba(255,213,79,.6),0 0 70px 20px rgba(255,213,79,.7),inset 0 0 0 8px rgba(255,255,255,.4)}}
 .sl-machine.jackpot .sl-lights i{animation-duration:.15s}
+
+/* =====================================================================
+   落ち着いた見た目（グラデーション・光・英語の飾り文字をやめ、紙の掲示板のような質感に）
+   ===================================================================== */
+:root{
+  --bg:#F5F0E6; --card:#FFFDF8; --ink:#2B2622; --muted:#7D746A; --line:#E3DACB;
+  --peach:#D2603A; --peach-soft:#F7E3D9; --rose:#BE5B78; --rose-soft:#F4E0E6; --lav:#5E4F8C; --lav-soft:#E6E2F0;
+  --mint:#3E8A68; --mint-soft:#DDEBE3; --sky:#2E6E8E; --sky-soft:#DCE9EF; --lemon:#C58A1E; --lemon-soft:#F5E9CF;
+  --boy:#2E6E8E; --girl:#BE5B78; --accent:#D2603A;
+  --shadow:0 1px 0 rgba(43,38,34,.04), 0 6px 18px -14px rgba(43,38,34,.35);
+  --font:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+  --font-title:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Zen Kaku Gothic New",sans-serif;
+}
+body{background:var(--bg)!important}
+.top{background:rgba(245,240,230,.92)!important;border-bottom:1px solid var(--line)}
+.logo-mark{background:var(--ink)!important;box-shadow:none!important;border-radius:10px!important}
+.logo small{letter-spacing:.12em}
+.card,.team,.att-sec,.st-card,.sc-card,.meet,.pool,.pend-box,.g-row{box-shadow:var(--shadow)!important;border-color:var(--line)!important}
+.card{border-radius:14px!important}
+.btn{box-shadow:none!important;border:1px solid var(--line)!important;background:var(--card)}
+.btn.primary{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important}
+.btn.ghost{border:1px solid var(--line)!important}
+.tabbar{background:var(--card)!important;box-shadow:0 8px 24px -16px rgba(43,38,34,.5)!important;border:1px solid var(--line)!important;border-radius:18px!important}
+.tabbar a.on{background:var(--ink)!important;color:#fff!important}
+.seg button.on{background:var(--ink)}
+/* 大きな見出しカード: 1色の面＋細い罫線 */
+.next,.hero,.att-hero,.meet-head{background:var(--c1)!important;border-radius:16px!important}
+.next::after,.hero::before,.att-hero::after{display:none!important}
+.next .emoji,.hero .emoji{animation:none!important;opacity:.35!important;filter:none!important}
+.next .tag,.att-info .tag,.meet-head .tag{background:transparent!important;border:1px solid rgba(255,255,255,.6);letter-spacing:.08em!important}
+.next .actions .btn{border-color:#fff!important}
+.next .actions .btn.glass,.att-actions .btn.glass{background:transparent!important;border:1px solid rgba(255,255,255,.55)!important}
+.fact{background:transparent!important;border:1px solid rgba(255,255,255,.5)}
+.fact small{letter-spacing:.04em}
+/* 文字のグラデーションをやめる */
+.flow-kw,.tile-idx,.st-tag b,.jr-step.is-peak .jr-date,.rl-card b,.vw-count b,.vw-list li.on .vw-num,.shift-box.is-to .shift-text,.att-ring-c b{background:none!important;-webkit-text-fill-color:currentColor!important}
+.rl-card b{color:var(--accent)!important}
+/* 予定の中の色: 落ち着いた色に */
+.ev .ico{background:var(--soft)!important}
+.pill{background:var(--mint-soft);color:var(--mint)}
+.pill.wait{background:var(--lemon-soft);color:var(--lemon)}
+.meet-date{background:var(--ink)!important}
+.meet.next-meet{box-shadow:0 0 0 2px var(--accent)!important;border-color:var(--accent)!important}
+.meet-badge{background:var(--accent)}
+.att .p{background:var(--mint-soft);color:var(--mint)}.att .a{background:var(--rose-soft);color:var(--rose)}
+.bar i:first-child{background:var(--mint)!important}.bar i:nth-child(2){background:var(--rose)!important}
+.sel-banner{background:var(--ink)}
+.toast{background:var(--ink)}
+/* チーム・出欠 */
+.team::before{height:5px!important}
+.team-dot{box-shadow:none!important;border-radius:8px!important}
+.m{background:#F7F2E9!important}
+.m.pend,.att-sec.is-w .nchip{background:var(--card)!important;border-color:#E2CFA2!important}
+.pend-box{background:#FBF6EA!important;border-color:#E2CFA2!important}
+.att-sec.is-p{--sc:var(--mint);--ss:var(--mint-soft)}.att-sec.is-a{--sc:var(--rose);--ss:var(--rose-soft)}.att-sec.is-w{--sc:var(--lemon);--ss:var(--lemon-soft);background:var(--card)!important}
+.sc-ico{box-shadow:0 0 0 5px var(--card)!important}
+/* ルーレット: 虹色の光をやめ、落ち着いた盤に */
+.rl-glow{display:none!important}
+.rl-wheel{filter:drop-shadow(0 14px 22px rgba(43,38,34,.25))!important}
+.rl-go{background:var(--accent)!important;animation:none!important;box-shadow:0 8px 18px -8px rgba(210,96,58,.7)!important}
+.rl-go:not(:disabled):hover{filter:brightness(1.05)}
+.rl-ticker .tk{box-shadow:var(--shadow)!important;border:1px solid var(--line)}
+.rl-ticker .tk.win{background:var(--accent)!important}
+.dokidoki{color:var(--accent)!important}
+.rl-card{border-radius:18px!important}
+.rl-rays{opacity:.5}
+.rl-card small{color:var(--accent)!important;letter-spacing:.08em!important}
+.sl-machine{background:#8E2F3C!important}
+.sl-top{background:#E2B04A!important;color:#5A1C26!important;letter-spacing:.12em!important}
+.rl-count3 b{-webkit-text-stroke:5px var(--accent)!important}
+#app:fullscreen{background:#2A2420!important}
+#app:fullscreen .rl-view::before{display:none}
+.ps-head{background:var(--accent)!important}
 </style>
 </head>
 <body>
 <header class="top">
-  <a class="logo" href="#/"><span class="logo-mark"><svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12.5" cy="14" r="6"/><circle cx="19.5" cy="14" r="6"/><path d="M16 22v4"/></svg></span><span><b>親睦会</b><small>FRIENDSHIP CLUB</small></span></a>
+  <a class="logo" href="#/"><span class="logo-mark"><svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12.5" cy="14" r="6"/><circle cx="19.5" cy="14" r="6"/><path d="M16 22v4"/></svg></span><span><b>親睦会</b><small>横山加工所</small></span></a>
   <button class="top-admin" id="adminBtn" type="button">主催者</button>
 </header>
 <main id="app"></main>
@@ -594,18 +667,18 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   var ART = {sport:'<circle cx="25" cy="25" r="14"/><path d="M16.5 16.5a12 12 0 0 1 12-3.2"/><path d="M35 35l10.5 10.5" stroke-width="7.5"/><circle cx="49" cy="16" r="4.2"/><path d="M40 9.5c1.6-.8 3.3-1.1 5-.9M55.5 22.5c.7 1.5 1 3.1.8 4.8"/>',fest:'<path d="M32 8v5M26 13h12M24 13c-5 4-7 9-7 15s2 11 7 15h16c5-4 7-9 7-15s-2-11-7-15z"/><path d="M17 28h30M26 43v5h12v-5M32 48v6"/>',party:'<path d="M18 12h14l-2 18a5 5 0 0 1-10 0z"/><path d="M25 35v13M19 48h12"/><path d="M38 16l12 4-5 17a5 5 0 0 1-9.5-3z" /><path d="M41 37l-3 12M34 50l9 2.5"/><path d="M33 7l2-3M37 9l3-2"/>',food:'<circle cx="32" cy="34" r="16"/><circle cx="32" cy="34" r="9"/><path d="M10 12v12a4 4 0 0 0 8 0V12M14 12v40M53 12c-4 2-5 8-5 14h5v26"/>',trip:'<rect x="12" y="14" width="40" height="30" rx="7"/><path d="M12 32h40M24 14v18M40 14v18"/><circle cx="21" cy="47" r="4"/><circle cx="43" cy="47" r="4"/>',flower:'<circle cx="32" cy="30" r="5"/><path d="M32 25c-6-10 6-14 6-6M37 29c11-3 11 9 4 7M35 35c3 10-9 11-6 3M29 35c-8 7-14-4-6-6M27 29c-10-3-5-14 3-7"/><path d="M32 41v14M32 49c4-4 9-4 11-2"/>',tree:'<path d="M32 8 20 26h7L16 42h11l-7 10h24l-7-10h11L37 26h7z"/><path d="M32 52v6"/>',spark:'<path d="M32 10l4.5 13.5L50 28l-13.5 4.5L32 46l-4.5-13.5L14 28l13.5-4.5z"/><path d="M49 44l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>'};
   function A(n){ return '<svg class="art" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ART[n] + '</svg>'; }
   var THEMES = [
-    { k: /スポーツ|運動|卓球|バスケ|ボウリング|ボーリング|ゴルフ|体育/, art: "sport", c1: "#FF9A8B", c2: "#F6C453", soft: "#FFE3DD", dot: "#FF9A8B" },
-    { k: /祭り|まつり|祭/, art: "fest", c1: "#FF8A80", c2: "#FFB86B", soft: "#FFE6D6", dot: "#FF8A80" },
-    { k: /忘年|新年|飲み|宴|懇親|歓迎|送別/, art: "party", c1: "#A08CF0", c2: "#F27BA5", soft: "#ECE7FF", dot: "#A08CF0" },
-    { k: /BBQ|バーベキュー|焼肉|食事|ランチ|昼食/i, art: "food", c1: "#F6A04D", c2: "#F27BA5", soft: "#FFEBD6", dot: "#F6A04D" },
-    { k: /旅行|研修|見学|バス/, art: "trip", c1: "#6BB8F0", c2: "#5CC9A7", soft: "#E0F0FC", dot: "#6BB8F0" },
-    { k: /花見|桜/, art: "flower", c1: "#F7A1C4", c2: "#C9A6F5", soft: "#FFE1EC", dot: "#F7A1C4" },
-    { k: /クリスマス|X'?mas/i, art: "tree", c1: "#5CC9A7", c2: "#F27BA5", soft: "#DDF5EC", dot: "#5CC9A7" },
+    { k: /スポーツ|運動|卓球|バスケ|ボウリング|ボーリング|ゴルフ|体育/, art: "sport", c1: "#D2603A", c2: "#D2603A", soft: "#F7E3D9", dot: "#D2603A" },
+    { k: /祭り|まつり|祭/, art: "fest", c1: "#BF4A3A", c2: "#BF4A3A", soft: "#F5DEDA", dot: "#BF4A3A" },
+    { k: /忘年|新年|飲み|宴|懇親|歓迎|送別/, art: "party", c1: "#5E4F8C", c2: "#5E4F8C", soft: "#E6E2F0", dot: "#5E4F8C" },
+    { k: /BBQ|バーベキュー|焼肉|食事|ランチ|昼食/i, art: "food", c1: "#C58A1E", c2: "#C58A1E", soft: "#F5E9CF", dot: "#C58A1E" },
+    { k: /旅行|研修|見学|バス/, art: "trip", c1: "#2E6E8E", c2: "#2E6E8E", soft: "#DCE9EF", dot: "#2E6E8E" },
+    { k: /花見|桜/, art: "flower", c1: "#BE5B78", c2: "#BE5B78", soft: "#F4E0E6", dot: "#BE5B78" },
+    { k: /クリスマス|X'?mas/i, art: "tree", c1: "#2F6B4F", c2: "#2F6B4F", soft: "#DDEBE3", dot: "#2F6B4F" },
   ];
   var FALLBACK = [
-    { art: "spark", c1: "#FF9A8B", c2: "#A08CF0", soft: "#FFE3DD", dot: "#FF9A8B" },
-    { art: "party", c1: "#6BB8F0", c2: "#A08CF0", soft: "#E0F0FC", dot: "#6BB8F0" },
-    { art: "spark", c1: "#5CC9A7", c2: "#6BB8F0", soft: "#DDF5EC", dot: "#5CC9A7" },
+    { art: "spark", c1: "#D2603A", c2: "#D2603A", soft: "#F7E3D9", dot: "#D2603A" },
+    { art: "party", c1: "#2E6E8E", c2: "#2E6E8E", soft: "#DCE9EF", dot: "#2E6E8E" },
+    { art: "spark", c1: "#2F6B4F", c2: "#2F6B4F", soft: "#DDEBE3", dot: "#2F6B4F" },
   ];
   function theme(ev){
     var t = THEMES.find(function(x){ return x.k.test(ev.name + " " + (ev.schedule || "")); });
@@ -681,12 +754,12 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   function viewHome(){
     var ups = upcoming();
     var next = ups[0];
-    var h = '<div class="view"><div class="hello"><div><h1 class="page">こんにちは</h1><p class="sub">親睦会の行事・出欠・チーム分けをまとめて見られます</p></div></div>';
+    var h = '<div class="view"><div class="hello"><div><h1 class="page">行事予定</h1><p class="sub">これからの行事と出欠の状況</p></div></div>';
     if (next) {
       var th = theme(next), c = counts(next), dd = daysUntil(parseDate(next.date));
-      h += '<div class="card next" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><span class="tag">NEXT EVENT</span><div class="emoji">' + th.e + '</div>'
+      h += '<div class="card next" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><span class="tag">次の行事</span><div class="emoji">' + th.e + '</div>'
         + '<h2>' + esc(next.name) + '</h2><div class="meta"><span>' + I('calendar') + ' ' + esc(fmtDate(next)) + '</span>' + (next.time ? '<span>' + I('clock') + ' ' + esc(next.time) + '</span>' : '') + (next.location ? '<span>' + I('pin') + ' ' + esc(next.location) + '</span>' : '') + '</div>'
-        + (dd !== null ? '<div class="count">' + (dd === 0 ? '<b>今日</b>開催！' : 'あと<b>' + dd + '</b>日') + '</div>' : '')
+        + (dd !== null ? '<div class="count">' + (dd === 0 ? '<b>今日</b>開催' : 'あと<b>' + dd + '</b>日') + '</div>' : '')
         + '<div class="actions"><a class="btn" href="#/event/' + next.id + '">詳しく見る</a><button class="btn glass" data-checkin="' + next.id + '">' + I('check') + ' 出欠を入力</button><span class="btn glass" style="cursor:default">出席 ' + c.present + '名</span></div></div>';
     } else {
       h += '<div class="card empty">予定されている行事はまだありません</div>';
@@ -777,9 +850,9 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var pct = function(n){ return c.total ? (n / c.total * 100).toFixed(1) : 0; };
     var h = '<div class="view"><a class="back" href="#/">‹ ホームへ</a>';
     h += '<div class="card hero" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><div class="emoji">' + th.e + '</div><h1>' + esc(ev.name) + '</h1><div class="facts">'
-      + '<div class="fact"><small>DATE</small>' + I('calendar') + ' ' + esc(fmtDate(ev)) + '</div>'
-      + (ev.time ? '<div class="fact"><small>TIME</small>' + I('clock') + ' ' + esc(ev.time) + '</div>' : '')
-      + (ev.location ? '<div class="fact"><small>PLACE</small>' + I('pin') + ' ' + esc(ev.location) + '</div>' : '') + '</div></div>';
+      + '<div class="fact"><small>日にち</small>' + I('calendar') + ' ' + esc(fmtDate(ev)) + '</div>'
+      + (ev.time ? '<div class="fact"><small>時間</small>' + I('clock') + ' ' + esc(ev.time) + '</div>' : '')
+      + (ev.location ? '<div class="fact"><small>場所</small>' + I('pin') + ' ' + esc(ev.location) + '</div>' : '') + '</div></div>';
     h += '<div class="grid2"><div class="card box"><h3>' + I('clock') + ' 当日の流れ</h3>' + (sch.length ? schedHtml(sch, ev) : '<div class="empty">まだ決まっていません</div>')
       + (ev.notes ? '<h3 style="margin-top:20px">' + I('note') + ' メモ</h3><div class="notes">' + esc(ev.notes) + '</div>' : '') + '</div>';
     h += '<div><div class="card box"><h3>' + I('check') + ' 出欠状況</h3><div class="att"><div class="p"><b>' + c.present + '</b>出席</div><div class="a"><b>' + c.absent + '</b>欠席</div><div class="w"><b>' + c.pending + '</b>未入力</div></div>'
@@ -875,7 +948,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
         + '<button class="todo-del" data-todo-del="' + i + '" aria-label="削除">' + I('trash') + '</button></div>';
     }).join("");
     return '<div class="view"><a class="back no-print" href="' + (ev ? '#/event/' + ev.id : '#/teams') + '">‹ ' + (ev ? esc(ev.name) : 'もどる') + '</a>'
-      + '<div class="meet-head" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><span class="tag">MEETING</span><h1>' + (isNew ? '打ち合わせを追加' : esc(fmtMeetDate(d)) + 'の打ち合わせ') + '</h1><p>' + (ev ? esc(ev.name) : '') + '</p></div>'
+      + '<div class="meet-head" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><span class="tag">打ち合わせ</span><h1>' + (isNew ? '打ち合わせを追加' : esc(fmtMeetDate(d)) + 'の打ち合わせ') + '</h1><p>' + (ev ? esc(ev.name) : '') + '</p></div>'
       + '<div class="card panel edit-form meet-form">'
       + '<div class="two">' + f('日付', 'date', '', 'date') + f('時間', 'time', '例：17:30〜18:00') + '</div>'
       + '<div class="two">' + f('場所', 'place', '例：本社 休憩室') + f('出席者', 'attendees', '例：髙橋（会長）・齊藤（副会長）・伊藤（会計）') + '</div>'
@@ -916,7 +989,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     return h;
   }
   /* ---------- ルーレット ---------- */
-  var RL_COLORS = ["#FF8A80", "#FFB74D", "#F6C453", "#9CCC65", "#5CC9A7", "#4FC3C7", "#6BB8F0", "#8C9EFF", "#A08CF0", "#F27BA5"];
+  var RL_COLORS = ["#D2603A", "#2E6E8E", "#C58A1E", "#2F6B4F", "#BE5B78", "#5E4F8C", "#9A6A45", "#3E8A8A", "#B8873A", "#6B7F3A"];
   var rl = { style: "wheel", mode: "present", evId: null, custom: "", removed: {}, rot: 0, spinning: false, winner: null, removeWinner: true };
   try { rl.style = localStorage.getItem("portal_roulette_style") || "wheel"; } catch (e) {}
   try { rl.custom = localStorage.getItem("portal_roulette_custom") || "景品A\n景品B\n景品C\nハズレ\nもう一回！"; } catch (e) { rl.custom = "景品A\n景品B\n景品C"; }
@@ -951,7 +1024,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (!rl.evId && evs.length) rl.evId = evs[0].id;
     var items = rlItems();
     var removedCount = Object.keys(rl.removed).length;
-    return '<div class="view rl-view"><div class="rl-head no-print"><div><h1 class="page">ルーレット</h1><p class="sub">だれが当たるかな？ みんなで画面を見ながら回そう</p></div><button class="btn sm" data-rl-full>' + I('expand') + ' 大きく表示</button></div>'
+    return '<div class="view rl-view"><div class="rl-head no-print"><div><h1 class="page">ルーレット</h1><p class="sub">出席者・チーム・景品などから抽選します</p></div><button class="btn sm" data-rl-full>' + I('expand') + ' 大きく表示</button></div>'
       + '<button class="rl-exit" data-rl-full aria-label="大きく表示をやめる">×</button><div class="rl-flash"></div><div class="rl-hint">スペースキー・Enter・画面をタップでもスタート</div>'
       + '<div class="rl-ticker" id="rlTicker"></div><div class="rl-vignette"></div>'
       + '<div class="rl-wrap">' + stageHTML(items)
@@ -1079,7 +1152,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     }
     if (rl.style === "slot") {
       return '<div class="rl-stage sl-stage"><div class="rl-glow"></div><div class="sl-machine">'
-        + '<div class="sl-top">JACKPOT</div><div class="sl-lights">' + Array.from({ length: 14 }, function(_, k){ return '<i style="--k:' + k + '"></i>'; }).join("") + '</div>'
+        + '<div class="sl-top">大当たり</div><div class="sl-lights">' + Array.from({ length: 14 }, function(_, k){ return '<i style="--k:' + k + '"></i>'; }).join("") + '</div>'
         + '<div class="sl-window"><div class="sl-reel" id="slReel">' + slotStrip(items, null) + '</div><div class="sl-line"></div></div>'
         + '<div class="sl-lever" id="slLever"><span></span></div>'
         + '</div><button class="rl-go sl-go" data-rl-spin' + dis + '>スタート</button></div>';
@@ -1254,11 +1327,11 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
         + '<div class="nchips">' + (list.length ? list.map(nameChip).join("") : '<span class="hint" style="margin:0">' + (q ? '該当する人はいません' : 'まだいません') + '</span>') + '</div></section>';
     };
     var pct = c.total ? Math.round(c.present / c.total * 100) : 0;
-    return '<div class="view"><h1 class="page">出欠</h1><p class="sub">出欠の入力は、これまでどおり宴の会で。ここではきれいに確認できます</p>'
+    return '<div class="view"><h1 class="page">出欠</h1><p class="sub">入力は宴の会から。ここでは一覧で確認できます</p>'
       + '<div class="ev-pills no-print">' + evs.map(function(e){ var t2 = theme(e); return '<button class="ev-pill' + (e.id === ev.id ? ' on' : '') + '" data-attev="' + e.id + '" style="--cc:' + t2.dot + ';--cs:' + t2.soft + '"><span class="ev-pill-ic">' + t2.svg + '</span>' + esc(e.name) + '</button>'; }).join("") + '</div>'
       + '<div class="card att-hero" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '">'
       + '<div class="att-ring">' + ring(c) + '<div class="att-ring-c"><b>' + c.present + '</b><span>/ ' + c.total + '名</span><small>出席</small></div></div>'
-      + '<div class="att-info"><span class="tag">ATTENDANCE</span><h2>' + esc(ev.name) + '</h2><p>' + I('calendar') + ' ' + esc(fmtDate(ev)) + (ev.location ? '　' + I('pin') + ' ' + esc(ev.location) : '') + '</p>'
+      + '<div class="att-info"><span class="tag">出欠</span><h2>' + esc(ev.name) + '</h2><p>' + I('calendar') + ' ' + esc(fmtDate(ev)) + (ev.location ? '　' + I('pin') + ' ' + esc(ev.location) : '') + '</p>'
       + '<div class="att-legend"><span><i class="lp"></i>出席 <b>' + c.present + '</b></span><span><i class="la"></i>欠席 <b>' + c.absent + '</b></span><span><i class="lw"></i>未入力 <b>' + c.pending + '</b></span><span class="att-pct">出席率 <b>' + pct + '%</b></span></div>'
       + '<div class="att-actions"><button class="btn" data-checkin="' + ev.id + '">' + I('check') + ' 出欠を入力する（宴の会）</button><a class="btn glass" href="#/event/' + ev.id + '">行事を見る ' + I('arrow') + '</a></div></div></div>'
       + '<div class="att-search no-print"><input type="text" id="attQ" placeholder="名前で探す" value="' + esc(attQuery) + '"></div>'
@@ -1291,7 +1364,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   }
 
   /* ---------- チーム分け ---------- */
-  var TEAM_COLORS = ["#FF8A80", "#F6C453", "#5CC9A7", "#6BB8F0", "#A08CF0", "#F27BA5", "#F6A04D", "#4FC3C7", "#9CCC65", "#B39DDB", "#FFB74D", "#90A4AE"];
+  var TEAM_COLORS = ["#D2603A", "#C58A1E", "#2F6B4F", "#2E6E8E", "#5E4F8C", "#BE5B78", "#9A6A45", "#3E8A8A", "#6B7F3A", "#8C5A7A", "#B8873A", "#5F6B73"];
   var TEAM_NAMES = ["レッド", "イエロー", "グリーン", "ブルー", "パープル", "ピンク", "オレンジ", "ターコイズ", "ライム", "ラベンダー", "サンセット", "グレー"];
   var draft = null, selected = null, busyTeams = false, adminTab = "teams";
   function present(evId){ var a = S.att[evId] || {}; return S.roster.filter(function(r){ return a[r.id] === "present"; }); }
@@ -1384,7 +1457,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var cols = n <= 4 ? 2 : 3, rows = Math.max(max, 4);
     var ppl = present(ev.id), b = ppl.filter(function(p){ return p.gender === "男"; }).length, g = ppl.filter(function(p){ return p.gender === "女"; }).length;
     var d = new Date();
-    return '<section class="print-sheet"><div class="ps-head"><span class="ps-emoji">' + th.svg + '</span><small>TEAM LIST</small><h1>' + esc(ev.name) + '</h1><p>' + esc(fmtDate(ev)) + (ev.time ? '　' + esc(ev.time) : '') + (ev.location ? '　｜　' + esc(ev.location) : '') + '</p></div>'
+    return '<section class="print-sheet"><div class="ps-head"><span class="ps-emoji">' + th.svg + '</span><small>チーム表</small><h1>' + esc(ev.name) + '</h1><p>' + esc(fmtDate(ev)) + (ev.time ? '　' + esc(ev.time) : '') + (ev.location ? '　｜　' + esc(ev.location) : '') + '</p></div>'
       + '<div class="ps-sum"><span>出席 ' + ppl.length + '名</span><span>' + n + 'チーム</span>' + (b || g ? '<span style="color:#2F6FC4">♂ ' + b + '名</span><span style="color:#C94F7E">♀ ' + g + '名</span>' : '') + '</div>'
       + '<div class="ps-grid" style="--cols:' + cols + '">' + draft.teams.map(function(t, i){
         var lis = t.members.map(function(id){ var p = person(id); var gg = p && p.gender === "男" ? '<span class="g b">♂</span>' : p && p.gender === "女" ? '<span class="g f">♀</span>' : ''; return '<li>' + esc(p ? p.name : '') + gg + '</li>'; });
