@@ -794,6 +794,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .dock{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 .dock .pool,.dock .pend-box{margin-top:0}
 @media (max-width:760px){.dock{grid-template-columns:1fr}}
+.g-guest{display:block;font-size:.68rem;font-weight:800;color:#B48714}
+.nchip .gtag{font-size:.66rem;font-weight:800;color:#B48714;margin-left:2px}
 </style>
 </head>
 <body>
@@ -868,10 +870,12 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     return withArt(FALLBACK[h % FALLBACK.length]);
   }
   function withArt(t){ if (!t.svg) { t.svg = A(t.art); t.e = t.svg; } return t; }
+  function rosterFor(evId){ return S.roster.filter(function(p){ return !p.eventId || p.eventId === evId; }); }
   function counts(ev){
     var a = S.att[ev.id] || {}, p = 0, ab = 0;
-    S.roster.forEach(function(r){ if (a[r.id] === "present") p++; else if (a[r.id] === "absent") ab++; });
-    return { present: p, absent: ab, pending: S.roster.length - p - ab, total: S.roster.length };
+    var list = rosterFor(ev.id);
+    list.forEach(function(r){ if (a[r.id] === "present") p++; else if (a[r.id] === "absent") ab++; });
+    return { present: p, absent: ab, pending: list.length - p - ab, total: list.length };
   }
   function sortedEvents(){
     return S.events.slice().sort(function(a, b){
@@ -898,7 +902,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var t = await sb.from("ennokai_teams").select("*");
     var mt = await sb.from("ennokai_meetings").select("*").order("date");
     if (r.error || e.error) throw (r.error || e.error);
-    S.roster = (r.data || []).map(function(x){ return { id: x.id, name: x.name, gender: x.gender || null }; });
+    S.roster = (r.data || []).map(function(x){ return { id: x.id, name: x.name, gender: x.gender || null, eventId: x.event_id || null }; });
     S.hasGender = !!(r.data && r.data.length && Object.prototype.hasOwnProperty.call(r.data[0], "gender"));
     S.events = (e.data || []).map(function(x){ return { id: x.id, name: x.name, date: x.date || "", location: x.location || "", time: x.time || "", schedule: x.schedule || "", notes: x.notes || "" }; });
     S.att = {};
@@ -1081,7 +1085,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   }
   function nameChip(p){
     var g = p.gender === "男" ? "boy" : p.gender === "女" ? "girl" : "";
-    return '<span class="nchip' + (g ? ' ' + g : '') + '"><i>' + (g === "boy" ? "♂" : g === "girl" ? "♀" : "") + '</i>' + esc(p.name) + '</span>';
+    return '<span class="nchip' + (g ? ' ' + g : '') + '"><i>' + (g === "boy" ? "♂" : g === "girl" ? "♀" : "") + '</i>' + esc(p.name) + (p.eventId ? '<span class="gtag">ゲスト</span>' : '') + '</span>';
   }
   /* ---------- 打ち合わせ（主催者だけ） ---------- */
   function todayISO(){ var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
@@ -1691,7 +1695,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var q = attQuery.trim();
     var match = function(p){ return !q || p.name.replace(/\s|　/g, "").indexOf(q.replace(/\s|　/g, "")) >= 0; };
     var groups = { present: [], absent: [], pending: [] };
-    S.roster.forEach(function(p){ if (match(p)) groups[a[p.id] === "present" ? "present" : a[p.id] === "absent" ? "absent" : "pending"].push(p); });
+    rosterFor(ev.id).forEach(function(p){ if (match(p)) groups[a[p.id] === "present" ? "present" : a[p.id] === "absent" ? "absent" : "pending"].push(p); });
     var sec = function(key, title, sub, cls){
       var list = groups[key];
       return '<section class="att-sec ' + cls + '"><header><span class="att-dot"></span><b>' + title + '</b><span class="att-n">' + list.length + '名</span>' + (sub ? '<small>' + sub + '</small>' : '') + '</header>'
@@ -1738,7 +1742,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   var TEAM_COLORS = ["#FF8A80", "#F6C453", "#5CC9A7", "#6BB8F0", "#A08CF0", "#F27BA5", "#F6A04D", "#4FC3C7", "#9CCC65", "#B39DDB", "#FFB74D", "#90A4AE"];
   var TEAM_NAMES = ["レッド", "イエロー", "グリーン", "ブルー", "パープル", "ピンク", "オレンジ", "ターコイズ", "ライム", "ラベンダー", "サンセット", "グレー"];
   var draft = null, selected = null, busyTeams = false, adminTab = "teams";
-  function present(evId){ var a = S.att[evId] || {}; return S.roster.filter(function(r){ return a[r.id] === "present"; }); }
+  function present(evId){ var a = S.att[evId] || {}; return rosterFor(evId).filter(function(r){ return a[r.id] === "present"; }); }
   function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   // 男女それぞれ均等に、人数も揃うように配る
   // base: 固定（📌）した人を残したチーム。固定していない人だけを、人数と男女比がそろうように配り直す
@@ -1805,7 +1809,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       + '<span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" id="reshuffleBtn">' + I('shuffle') + ' もう一度シャッフル</button><button class="btn sm" id="printBtn">' + I('print') + ' 印刷</button><button class="btn sm primary" id="saveBtn">' + I('save') + ' ' + (draft.dirty ? '保存する' : '保存済み') + '</button></span></div>';
     var inTeam = {}; draft.teams.forEach(function(t){ t.members.forEach(function(id){ inTeam[id] = 1; }); });
     var att = S.att[ev.id] || {};
-    var pend = S.roster.filter(function(p){ return !att[p.id] && !inTeam[p.id] && draft.pool.indexOf(p.id) < 0; });
+    var pend = rosterFor(ev.id).filter(function(p){ return !att[p.id] && !inTeam[p.id] && draft.pool.indexOf(p.id) < 0; });
     if (selected) { var sp = person(selected); h += '<div class="sel-banner no-print">「' + esc(sp ? sp.name : '') + '」を選択中 — 入れ替えたい人の名前、または移動先のチームを押してください <button class="btn sm" data-unsel>やめる</button></div>'; }
     var nT = draft.teams.length;
     h += '<div class="board fit" style="--cl:' + Math.min(nT, nT > 6 ? Math.ceil(nT / 2) : nT) + ';--cm:' + (nT <= 4 ? nT : Math.ceil(nT / 2)) + ';--cs:' + (nT === 3 ? 3 : Math.min(nT, 2)) + '">' + draft.teams.map(function(t, i){
@@ -1823,7 +1827,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var b = S.roster.filter(function(p){ return p.gender === "男"; }).length, g = S.roster.filter(function(p){ return p.gender === "女"; }).length;
     return '<div class="card panel"><div class="stats" style="margin:0"><span class="stat">名簿 ' + S.roster.length + '名</span><span class="stat b">♂ ' + b + '名</span><span class="stat g">♀ ' + g + '名</span><span class="stat u">未設定 ' + (S.roster.length - b - g) + '名</span></div><p class="hint">一度設定すれば、すべての行事のチーム分けで使われます。</p></div>'
       + '<div class="gender-list">' + S.roster.map(function(p){
-        return '<div class="g-row"><span class="nm">' + esc(p.name) + '</span><span class="g-btns"><button class="boy' + (p.gender === "男" ? " on" : "") + '" data-g="男" data-pid="' + p.id + '">男</button><button class="girl' + (p.gender === "女" ? " on" : "") + '" data-g="女" data-pid="' + p.id + '">女</button></span></div>';
+        var gev = p.eventId ? S.events.find(function(e){ return e.id === p.eventId; }) : null;
+        return '<div class="g-row"><span class="nm">' + esc(p.name) + (gev ? '<small class="g-guest">' + esc(gev.name) + 'のみ</small>' : '') + '</span><span class="g-btns"><button class="boy' + (p.gender === "男" ? " on" : "") + '" data-g="男" data-pid="' + p.id + '">男</button><button class="girl' + (p.gender === "女" ? " on" : "") + '" data-g="女" data-pid="' + p.id + '">女</button></span></div>';
       }).join("") + '</div>';
   }
   function printSheet(ev, pend){

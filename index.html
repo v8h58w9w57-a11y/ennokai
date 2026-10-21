@@ -729,6 +729,12 @@
   .backup-row .why{ flex:1; min-width:9rem; font-size:.86rem; color:var(--ink-soft); }
   .backup-row .sum{ font-size:.78rem; color:var(--ink-muted); }
   .backup-row .btn{ flex:none; }
+  .guest-add{ margin:.2rem 0 .9rem; padding:.8rem .9rem; border:1px dashed var(--amber); border-radius:14px; background:rgba(201,161,68,0.06); }
+  .guest-add-head b{ display:block; font-size:.92rem; }
+  .guest-add-head small{ display:block; font-size:.78rem; color:var(--ink-muted); margin-top:.1rem; }
+  .guest-add-row{ display:flex; gap:.5rem; margin-top:.6rem; }
+  .guest-add-row input{ flex:1; min-width:0; }
+  .src-tag.guest-tag{ opacity:1; background:rgba(201,161,68,.16); color:var(--amber); padding:.1rem .5rem; border-radius:999px; font-family:inherit; font-weight:800; }
   /* ---------- 一括で出席 ---------- */
   .bulk-row{ display:flex; gap:.5rem; flex-wrap:wrap; margin:.2rem 0 .8rem; }
   .bulk-btn{ flex:1; min-width:12rem; min-height:2.9rem; font-weight:800; }
@@ -1220,6 +1226,10 @@
         <button type="button" class="btn bulk-btn" id="bulkPendingPresentBtn">未入力の人を全員「出席」にする</button>
         <button type="button" class="btn btn-ghost bulk-btn" id="bulkAllPresentBtn">全員を「出席」にする</button>
       </div>
+      <div class="guest-add">
+        <div class="guest-add-head"><b>この行事だけの参加者を追加</b><small>ほかの行事の名簿には出ません（家族・他部署・ゲストなど）</small></div>
+        <div class="guest-add-row"><input type="text" id="guestName" placeholder="名前（複数は、区切り）" autocomplete="off"><button type="button" class="btn btn-primary" id="guestAddBtn">追加</button></div>
+      </div>
       <div class="roster" id="orgRoster"></div>
 
       <div class="export-row">
@@ -1339,6 +1349,9 @@
   function uid(prefix){ return (prefix || "p") + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
   function getEvent(id){ return state.events.find(function(e){ return e.id === id; }); }
   function getPerson(id){ return state.roster.find(function(p){ return p.id === id; }); }
+  // 共通の名簿（全行事）と、その行事だけの参加者
+  function sharedRoster(){ return state.roster.filter(function(p){ return !p.eventId; }); }
+  function rosterFor(ev){ return state.roster.filter(function(p){ return !p.eventId || (ev && p.eventId === ev.id); }); }
 
   /* ---------- cloud sync (Supabase) ---------- */
   async function loadFromCloud(){
@@ -1348,7 +1361,7 @@
     var settingsRes = await sb.from("ennokai_settings").select("*").eq("id", 1).maybeSingle();
 
     state.roster = (rosterRes.data || []).map(function(r){
-      return { id: r.id, name: r.name, source: r.source };
+      return { id: r.id, name: r.name, source: r.source, eventId: r.event_id || null };
     });
 
     var attByEvent = {};
@@ -1481,23 +1494,24 @@
     return (ev && ev.attendance && ev.attendance[personId]) || "pending";
   }
   function counts(ev){
-    var present=0, absent=0, pending=0;
-    state.roster.forEach(function(p){
+    var present=0, absent=0, pending=0, list = rosterFor(ev);
+    list.forEach(function(p){
       var s = statusOf(ev, p.id);
       if(s==="present") present++;
       else if(s==="absent") absent++;
       else pending++;
     });
-    return { present:present, absent:absent, pending:pending, total:state.roster.length };
+    return { present:present, absent:absent, pending:pending, total:list.length };
   }
-  function findPersonByName(name){
+  function findPersonByName(name, ev){
     var n = name.trim();
-    return state.roster.find(function(p){ return p.name === n; });
+    var list = ev === undefined ? sharedRoster() : rosterFor(ev);
+    return list.find(function(p){ return p.name === n; });
   }
   async function setStatus(ev, name, status){
     var n = name.trim();
     if(!n || !ev) return null;
-    var p = findPersonByName(n);
+    var p = findPersonByName(n, ev);
     if(!p){
       var ins = await sb.from("ennokai_roster").insert({ name: n, source: "manual" }).select().single();
       if(ins.error){ showToast("登録に失敗しました"); return null; }
@@ -1681,8 +1695,9 @@
     placeholder.value = ""; placeholder.textContent = "選択してください"; placeholder.disabled = true;
     sel.appendChild(placeholder);
 
-    var preset = state.roster.filter(function(p){ return p.source === "preset"; });
-    var manual = state.roster.filter(function(p){ return p.source === "manual"; });
+    var pubEv = getEvent(publicEventId);
+    var preset = rosterFor(pubEv).filter(function(p){ return p.source === "preset" && !p.eventId; });
+    var manual = rosterFor(pubEv).filter(function(p){ return p.source === "manual" || p.eventId; });
 
     function optionFor(p){
       var opt = document.createElement("option");
@@ -1704,7 +1719,7 @@
       }
       placeholder.selected = true;
     }
-    if(prevValue && findPersonByName(prevValue)){ sel.value = prevValue; }
+    if(prevValue && findPersonByName(prevValue, pubEv)){ sel.value = prevValue; }
     updateCurrentStatusHint();
   }
 
@@ -1713,7 +1728,7 @@
     var ev = getEvent(publicEventId);
     var name = currentEntryName();
     if(!ev || !name){ hint.hidden = true; return; }
-    var p = findPersonByName(name);
+    var p = findPersonByName(name, ev);
     var pStatus = p ? statusOf(ev, p.id) : "pending";
     hint.hidden = false;
     hint.className = "current-status";
@@ -1967,7 +1982,7 @@
   function fillRosterBulkTextarea(){
     var ta = document.getElementById("rosterBulk");
     if(document.activeElement === ta) return;
-    ta.value = state.roster.map(function(p){ return p.name; }).join("\n");
+    ta.value = sharedRoster().map(function(p){ return p.name; }).join("\n");
   }
 
   function renderOrganizer(){
@@ -1993,7 +2008,7 @@
     setStatValue("statTotal", c.total);
 
     var q = orgSearch.trim().toLowerCase();
-    var list = state.roster.filter(function(p){
+    var list = rosterFor(ev).filter(function(p){
       var s = statusOf(ev, p.id);
       if(orgFilter !== "all" && s !== orgFilter) return false;
       if(q && p.name.toLowerCase().indexOf(q) === -1) return false;
@@ -2002,7 +2017,7 @@
 
     var rosterEl = document.getElementById("orgRoster");
     rosterEl.innerHTML = "";
-    if(state.roster.length === 0){
+    if(rosterFor(ev).length === 0){
       rosterEl.innerHTML = '<div class="empty">名簿が未登録です。上の「名簿を入力する」から登録してください。</div>';
       return;
     }
@@ -2027,7 +2042,7 @@
       }).join("");
       row.innerHTML =
         '<span class="name"></span>' +
-        (p.source === "manual" ? '<span class="src-tag">追加登録</span>' : '') +
+        (p.eventId ? '<span class="src-tag guest-tag">この行事のみ</span>' : p.source === "manual" ? '<span class="src-tag">追加登録</span>' : '') +
         '<div class="status-group">' + statusBtns + '</div>' +
         '<button type="button" class="del-btn" data-del="' + p.id + '" aria-label="名簿から削除" title="名簿から削除（全行事に影響）">✕</button>';
       row.querySelector(".name").textContent = p.name;
@@ -2085,7 +2100,7 @@
   async function bulkPresent(onlyPending){
     var ev = getEvent(orgEventId); if(!ev){ showToast("行事が選択されていません"); return; }
     if(!ev.attendance) ev.attendance = {};
-    var targets = state.roster.filter(function(p){ var st = ev.attendance[p.id]; return onlyPending ? !st : st !== "present"; });
+    var targets = rosterFor(ev).filter(function(p){ var st = ev.attendance[p.id]; return onlyPending ? !st : st !== "present"; });
     if(!targets.length){ showToast(onlyPending ? "未入力の人はいません" : "すでに全員が出席です"); return; }
     var ok = await askConfirm((onlyPending ? "未入力の " : "出席以外の ") + targets.length + "名を、まとめて「出席」にします。よろしいですか？");
     if(!ok) return;
@@ -2110,6 +2125,23 @@
   document.getElementById("bulkPendingPresentBtn").addEventListener("click", function(){ bulkPresent(true); });
   document.getElementById("bulkAllPresentBtn").addEventListener("click", function(){ bulkPresent(false); });
 
+  async function addGuests(){
+    var ev = getEvent(orgEventId); if(!ev){ showToast("行事が選択されていません"); return; }
+    var inp = document.getElementById("guestName");
+    var names = parseNames(inp.value);
+    if(!names.length){ showToast("名前を入力してください"); return; }
+    var exist = {}; rosterFor(ev).forEach(function(p){ exist[p.name.replace(/[\s　]/g, "")] = 1; });
+    var add = names.filter(function(n){ return !exist[n.replace(/[\s　]/g, "")]; });
+    if(!add.length){ showToast("すでにこの行事の名簿にいます"); return; }
+    var res = await sb.from("ennokai_roster").insert(add.map(function(n){ return { name: n, source: "manual", event_id: ev.id }; }));
+    if(res.error){ showToast(/event_id/.test(res.error.message || "") ? "データベースの準備（SQLの実行）が必要です" : "追加できませんでした"); return; }
+    inp.value = "";
+    await refreshFromCloud();
+    showToast("「" + ev.name + "」だけの参加者として " + add.length + "名を追加しました");
+  }
+  document.getElementById("guestAddBtn").addEventListener("click", addGuests);
+  document.getElementById("guestName").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); addGuests(); } });
+
   document.getElementById("orgSearch").addEventListener("input", function(e){ orgSearch = e.target.value; renderOrgRosterSection(); });
   document.querySelectorAll(".filter-tabs button").forEach(function(btn){
     btn.addEventListener("click", function(){
@@ -2122,17 +2154,17 @@
 
   document.getElementById("copyPresentBtn").addEventListener("click", function(){
     var ev = getEvent(orgEventId); if(!ev){ showToast("行事が選択されていません"); return; }
-    var names = state.roster.filter(function(p){ return statusOf(ev,p.id)==="present"; }).map(function(p){ return p.name; });
+    var names = rosterFor(ev).filter(function(p){ return statusOf(ev,p.id)==="present"; }).map(function(p){ return p.name; });
     copyToClipboard(names.join("\n"), "出席者がいません", "出席者 " + names.length + "名をコピーしました");
   });
   document.getElementById("copyAbsentBtn").addEventListener("click", function(){
     var ev = getEvent(orgEventId); if(!ev){ showToast("行事が選択されていません"); return; }
-    var names = state.roster.filter(function(p){ return statusOf(ev,p.id)==="absent"; }).map(function(p){ return p.name; });
+    var names = rosterFor(ev).filter(function(p){ return statusOf(ev,p.id)==="absent"; }).map(function(p){ return p.name; });
     copyToClipboard(names.join("\n"), "欠席者がいません", "欠席者 " + names.length + "名をコピーしました");
   });
   document.getElementById("copyPendingBtn").addEventListener("click", function(){
     var ev = getEvent(orgEventId); if(!ev){ showToast("行事が選択されていません"); return; }
-    var names = state.roster.filter(function(p){ return statusOf(ev,p.id)==="pending"; }).map(function(p){ return p.name; });
+    var names = rosterFor(ev).filter(function(p){ return statusOf(ev,p.id)==="pending"; }).map(function(p){ return p.name; });
     copyToClipboard(names.join("\n"), "未入力の方はいません", "未入力 " + names.length + "名をコピーしました");
   });
 
@@ -2159,9 +2191,9 @@
     if(names.length === 0){ showToast("名前が入力されていません"); return; }
     var key = function(n){ return String(n).replace(/[\s　]/g, ""); };
     var want = {}; names.forEach(function(n){ want[key(n)] = n; });
-    var have = {}; state.roster.forEach(function(p){ have[key(p.name)] = p; });
-    var keep = state.roster.filter(function(p){ return want[key(p.name)]; });
-    var remove = state.roster.filter(function(p){ return !want[key(p.name)]; });
+    var have = {}; sharedRoster().forEach(function(p){ have[key(p.name)] = p; });
+    var keep = sharedRoster().filter(function(p){ return want[key(p.name)]; });
+    var remove = sharedRoster().filter(function(p){ return !want[key(p.name)]; });
     var add = Object.keys(want).filter(function(k){ return !have[k]; }).map(function(k){ return want[k]; });
     if(!add.length && !remove.length){ showToast("名簿に変更はありません"); return; }
     var msg = "名簿を貼り付けた内容に合わせます。\n・そのまま残す：" + keep.length + "名（男女・出欠は消えません）\n・追加：" + add.length + "名"
@@ -2200,7 +2232,7 @@
       });
       var data = {
         v: 1,
-        roster: (r.data || []).map(function(p){ return { name: p.name, gender: p.gender || null, source: p.source || "preset" }; }),
+        roster: (r.data || []).map(function(p){ return { name: p.name, gender: p.gender || null, source: p.source || "preset", event_id: p.event_id || null }; }),
         events: (e.data || []).map(function(x){ return { id: x.id, name: x.name, date: x.date, location: x.location, time: x.time, schedule: x.schedule, notes: x.notes, checkin_required: x.checkin_required }; }),
         attendance: att, teams: teams,
         meetings: mt.error ? [] : (mt.data || [])
@@ -2256,7 +2288,7 @@
       // 2) 名簿（名前で照らし合わせ、いない人は追加・男女を合わせる）
       var cur = await sb.from("ennokai_roster").select("id,name,gender");
       var have = {}; (cur.data || []).forEach(function(p){ have[nameKey(p.name)] = p; });
-      var add = (d.roster || []).filter(function(p){ return !have[nameKey(p.name)]; }).map(function(p){ return { name: p.name, gender: p.gender, source: p.source || "preset" }; });
+      var add = (d.roster || []).filter(function(p){ return !have[nameKey(p.name)]; }).map(function(p){ var o = { name: p.name, gender: p.gender, source: p.source || "preset" }; if(p.event_id) o.event_id = p.event_id; return o; });
       if(add.length) await sb.from("ennokai_roster").insert(add);
       var byG = {};
       (d.roster || []).forEach(function(p){ var h = have[nameKey(p.name)]; if(h && (h.gender || null) !== (p.gender || null)) (byG[p.gender || ""] = byG[p.gender || ""] || []).push(h.id); });
@@ -2367,12 +2399,12 @@
       "作成日時：" + now.getFullYear() + "/" + pad(now.getMonth()+1) + "/" + pad(now.getDate()) +
       " " + pad(now.getHours()) + ":" + pad(now.getMinutes());
 
-    var present = state.roster.filter(function(p){ return statusOf(ev,p.id) === "present"; });
-    var absent = state.roster.filter(function(p){ return statusOf(ev,p.id) === "absent"; });
-    var pending = state.roster.filter(function(p){ return statusOf(ev,p.id) === "pending"; });
+    var present = rosterFor(ev).filter(function(p){ return statusOf(ev,p.id) === "present"; });
+    var absent = rosterFor(ev).filter(function(p){ return statusOf(ev,p.id) === "absent"; });
+    var pending = rosterFor(ev).filter(function(p){ return statusOf(ev,p.id) === "pending"; });
 
     document.getElementById("printSummary").textContent =
-      "出席 " + present.length + "名　／　欠席 " + absent.length + "名　／　全体 " + state.roster.length + "名";
+      "出席 " + present.length + "名　／　欠席 " + absent.length + "名　／　全体 " + rosterFor(ev).length + "名";
     document.getElementById("printPresentCount").textContent = "（" + present.length + "名）";
     document.getElementById("printAbsentCount").textContent = "（" + absent.length + "名）";
     document.getElementById("printPendingCount").textContent = "（" + pending.length + "名）";
