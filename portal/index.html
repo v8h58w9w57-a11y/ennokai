@@ -772,6 +772,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .rl-theater:has(.cd-stage) .th-curtain.l,.rl-theater:has(.lt-stage) .th-curtain.l{transform:translateX(-66%)!important}
 .rl-theater:has(.cd-stage) .th-curtain.r,.rl-theater:has(.lt-stage) .th-curtain.r{transform:scaleX(-1) translateX(-66%)!important}
 .rl-theater:has(.cd-stage){padding-left:5%;padding-right:5%}
+.rl-go.is-stop{background:#1E5BC6!important;border-color:#fff!important;animation:stopPulse .6s ease-in-out infinite!important}
+@keyframes stopPulse{0%,100%{transform:translate(-50%,0) scale(1)}50%{transform:translate(-50%,0) scale(1.08)}}
 </style>
 </head>
 <body>
@@ -1302,6 +1304,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     }
   }
   function spin(){
+    if (ltRun) { stopLights(); return; }
     var items = rlItems();
     if (rl.spinning || items.length < 2) return;
     rl.spinning = true;
@@ -1414,7 +1417,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (rl.style === "garapon") return runGarapon(items, win);
     if (rl.style === "slot") return runSlot(items, win);
     if (rl.style === "cards") return runCards(items);
-    if (rl.style === "lights") return runLights(items, win);
+    if (rl.style === "lights") return runLights(items);
     return runWheel(items, win);
   }
   // ガラガラ抽選機: 回して、最後に玉がころんと出てくる
@@ -1558,33 +1561,55 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (fs) setTimeout(function(){ close(false); }, 10000);
     m.addEventListener("click", function(e){ if (e.target.closest("[data-rl-again]")) close(true); else if (fs || e.target.closest("[data-rl-close]") || !e.target.closest(".wn-content")) close(false); });
   }
-  // ===== ライト: 光が名前の輪を高速で回って、だんだん止まる =====
-  function runLights(items, win){
+  // ===== ライト: 光が名前の輪を高速で回り、ストップを押すとだんだん止まる =====
+  var ltRun = null;
+  function runLights(items){
     var tiles = Array.from(document.querySelectorAll(".lt")), now = document.getElementById("ltNow"), n = tiles.length;
     if (!n) return;
     beginSpinUI();
-    var laps = 7 + Math.floor(Math.random() * 2), start = Math.floor(Math.random() * n), total = laps * n + ((win - start) % n + n) % n;
-    var step = 0, pos = start;
+    var btn = document.querySelector("[data-rl-spin]");
+    if (btn) { btn.disabled = false; btn.textContent = "ストップ"; btn.classList.add("is-stop"); }
+    var pos = Math.floor(Math.random() * n);
+    ltRun = { running: true, stopAt: null, left: 0, total: 0 };
     var light = function(p){
       tiles.forEach(function(t){ t.classList.remove("on", "t1", "t2"); });
       tiles[p].classList.add("on"); tiles[(p - 1 + n) % n].classList.add("t1"); tiles[(p - 2 + n) % n].classList.add("t2");
       if (now) now.textContent = items[p].label;
     };
     light(pos);
+    var t0 = performance.now();
     (function next(){
-      step++; pos = (pos + 1) % n; light(pos); tick();
-      var prog = step / total;
-      tickerUpdate(prog, items[pos].label);
-      if (step >= total) {
-        tiles[pos].classList.add("win");
-        var stg = document.querySelector(".rl-stage"); if (stg) stg.classList.add("lt-done");
-        setTimeout(function(){ if (stg) stg.classList.remove("lt-done"); celebrate(items, win, { delay: 500 }); }, 500);
+      pos = (pos + 1) % n; light(pos); tick();
+      var r = ltRun;
+      if (r.left > 0) {
+        // ストップを押したあと: だんだんゆっくり
+        r.left--;
+        var done = r.total - r.left, prog = .8 + .2 * (done / r.total);
+        tickerUpdate(prog, items[pos].label);
+        if (r.left === 0) {
+          ltRun = null;
+          if (btn) { btn.classList.remove("is-stop"); btn.textContent = "スタート"; btn.disabled = true; }
+          tiles[pos].classList.add("win");
+          var stg = document.querySelector(".rl-stage"); if (stg) stg.classList.add("lt-done");
+          setTimeout(function(){ if (stg) stg.classList.remove("lt-done"); celebrate(items, pos, { delay: 500 }); }, 500);
+          return;
+        }
+        var q = done / r.total;
+        setTimeout(next, 45 + Math.pow(q, 2.1) * 560 + (r.left <= 2 ? (3 - r.left) * 160 : 0));
         return;
       }
-      var remain = total - step, d = remain > n * 2 ? 26 : remain > n ? 26 + (n * 2 - remain) * (40 / n) : 70 + Math.pow((n - remain) / n, 2.2) * 520;
-      if (remain <= 3) d += (4 - remain) * 160;
-      setTimeout(next, d);
+      // 押すまでは高速で回り続ける（最初の1秒で加速）
+      var el = performance.now() - t0;
+      tickerUpdate(.5, items[pos].label);
+      setTimeout(next, el < 1000 ? 120 - el * .09 : 30);
     })();
+  }
+  function stopLights(){
+    if (!ltRun || ltRun.left > 0) return;
+    var n = document.querySelectorAll(".lt").length;
+    ltRun.total = ltRun.left = Math.max(8, Math.min(n + 4, 9 + Math.floor(Math.random() * 10)));
+    var btn = document.querySelector("[data-rl-spin]"); if (btn) { btn.disabled = true; btn.textContent = "…"; }
+    beep(440, .12);
   }
   function runWheel(items, win){
     var n = items.length, seg = 360 / n;
