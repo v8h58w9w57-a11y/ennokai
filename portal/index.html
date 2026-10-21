@@ -512,10 +512,12 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .sl-window::before{top:0;background:linear-gradient(#fff,rgba(255,255,255,0))}
 .sl-window::after{bottom:0;background:linear-gradient(rgba(255,255,255,0),#fff)}
 .sl-reel{will-change:transform}
-.sl-item{height:clamp(70px,12vh,130px);display:grid;place-items:center;font-family:var(--font-title);font-weight:900;font-size:clamp(1.4rem,4.6vh,3rem);color:var(--c);border-bottom:2px dashed #F1E8EE;padding:0 12px;text-align:center;line-height:1.15}
+.sl-window{--row:calc(100% / 3)}
+.sl-item{height:var(--rowpx,90px);display:flex;align-items:center;justify-content:center;font-family:var(--font-title);font-weight:900;font-size:calc(var(--rowpx,90px) * .38);color:var(--c);border-bottom:2px dashed #F1E8EE;padding:0 14px;text-align:center;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
+.sl-reel.blur .sl-item{filter:blur(1.5px)}
 .sl-item.muted{color:var(--muted);font-size:1rem}
 .sl-item.hit{background:linear-gradient(90deg,#FFF3C4,#FFE1EC,#FFF3C4);animation:winName 1s ease-in-out infinite}
-.sl-line{position:absolute;left:0;right:0;top:50%;height:clamp(70px,12vh,130px);transform:translateY(-50%);border-top:4px solid #F5B400;border-bottom:4px solid #F5B400;z-index:3;pointer-events:none;box-shadow:0 0 0 2000px rgba(0,0,0,.04)}
+.sl-line{position:absolute;left:0;right:0;top:50%;height:var(--rowpx,90px);transform:translateY(-50%);border-top:4px solid #F5B400;border-bottom:4px solid #F5B400;z-index:3;pointer-events:none;box-shadow:0 0 0 2000px rgba(0,0,0,.04)}
 .sl-lever{position:absolute;right:-9%;top:22%;width:6%;height:46%;z-index:1}
 .sl-lever span{position:absolute;left:50%;bottom:0;width:30%;height:100%;margin-left:-15%;border-radius:8px;background:linear-gradient(90deg,#bbb,#eee,#999);transform-origin:50% 100%}
 .sl-lever span::before{content:"";position:absolute;left:50%;top:-14%;width:300%;aspect-ratio:1;margin-left:-150%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FF8A80,#D32F2F)}
@@ -523,6 +525,21 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 @keyframes lever{0%{transform:none}35%{transform:scaleY(-.6)}100%{transform:none}}
 .sl-go{left:50%!important;top:auto!important;bottom:-1%;transform:translate(-50%,0)!important;width:22%!important}
 #app:fullscreen .rl-view .gp-stage,#app:fullscreen .rl-view .sl-stage{width:min(80vh,90vw)}
+
+.rl-stage.gp-shake .gp-machine{animation:gpShake .22s ease-in-out infinite}
+@keyframes gpShake{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(-2px,1px) rotate(-.6deg)}75%{transform:translate(2px,-1px) rotate(.6deg)}}
+.rl-stage.gp-hold .gp-chute{animation:chute .5s ease-in-out infinite}
+@keyframes chute{0%,100%{filter:none}50%{filter:brightness(1.6) drop-shadow(0 0 12px #FFD54F)}}
+.rl-stage.gp-pop .gp-machine{animation:gpPop .35s cubic-bezier(.2,1.6,.4,1)}
+@keyframes gpPop{0%{transform:scale(1)}40%{transform:scale(1.03,0.97)}100%{transform:none}}
+.gp-ball.shine{box-shadow:0 0 0 6px rgba(255,255,255,.6),0 0 40px 12px rgba(255,213,79,.9);transition:box-shadow .4s}
+.rl-stage.sl-run .sl-top{animation:slTop .5s ease-in-out infinite}
+@keyframes slTop{0%,100%{filter:none;transform:translateX(-50%)}50%{filter:brightness(1.3) drop-shadow(0 0 14px #FFD54F);transform:translateX(-50%) scale(1.06)}}
+.rl-stage.sl-bump .sl-window{animation:slBump .12s ease-out}
+@keyframes slBump{0%{transform:translateY(2px)}100%{transform:none}}
+.sl-machine.jackpot{animation:jp .6s ease-in-out 3}
+@keyframes jp{0%,100%{box-shadow:0 30px 60px -24px rgba(120,20,70,.6),inset 0 0 0 8px rgba(255,255,255,.15)}50%{box-shadow:0 0 0 10px rgba(255,213,79,.6),0 0 70px 20px rgba(255,213,79,.7),inset 0 0 0 8px rgba(255,255,255,.4)}}
+.sl-machine.jackpot .sl-lights i{animation-duration:.15s}
 </style>
 </head>
 <body>
@@ -1117,10 +1134,12 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   function runGarapon(items, win){
     var drum = document.getElementById("gpDrum"), handle = document.getElementById("gpHandle");
     beginSpinUI();
-    var dur = 9000, t0 = performance.now(), ang = 0, lastR = 0, lastName = 0, nameIdx = 0;
+    var dur = 12000, t0 = performance.now(), ang = 0, lastR = 0, lastName = 0, nameIdx = 0, stg = document.querySelector(".rl-stage"), shook = false;
     (function f(now){
       var p = Math.min(1, (now - t0) / dur);
-      var speed = p < .12 ? p / .12 : p > .7 ? Math.max(.06, 1 - (p - .7) / .3) : 1; // 加速→一定→減速
+      var speed = p < .12 ? p / .12 : p > .66 ? Math.max(.05, 1 - (p - .66) / .34) : 1 + Math.sin(p * 18) * .15; // 加速→ゆさぶり→減速
+      if (stg) stg.classList.toggle("gp-shake", p > .12 && p < .66);
+      if (!shook && p > .9) { shook = true; if (stg) stg.classList.add("gp-hold"); }
       ang += speed * 14;
       if (drum) drum.style.transform = "rotate(" + ang + "deg)";
       if (handle) handle.style.transform = "rotate(" + ang + "deg)";
@@ -1128,41 +1147,54 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       if (now - lastName > 90 / Math.max(.2, speed)) { lastName = now; nameIdx = (nameIdx + 1 + Math.floor(Math.random() * 3)) % items.length; tickerUpdate(p, items[nameIdx].label); } else tickerUpdate(p, null);
       if (p < 1) requestAnimationFrame(f);
       else {
-        // 玉がころんと出る
+        // 玉がころんと出る（出口が一度ガタッと揺れてから）
+        if (stg) { stg.classList.remove("gp-shake", "gp-hold"); stg.classList.add("gp-pop"); }
         var out = document.getElementById("gpOut"), w = items[win];
         if (out) {
           out.innerHTML = '<span class="gp-ball" style="--c:' + GP_COLORS[win % GP_COLORS.length] + '"><b>' + esc(w.label) + '</b></span>';
           out.classList.remove("go"); void out.offsetWidth; out.classList.add("go");
         }
-        var c0 = ac && ac(); setTimeout(function(){ beep(520, .08); }, 450); setTimeout(function(){ beep(440, .08); }, 800); setTimeout(function(){ beep(600, .1); }, 1150);
-        setTimeout(function(){ celebrate(items, win, { delay: 400 }); }, 1500);
+        setTimeout(function(){ beep(520, .08); }, 450); setTimeout(function(){ beep(440, .08); }, 800); setTimeout(function(){ beep(600, .1); }, 1150);
+        setTimeout(function(){ var b = document.querySelector(".gp-ball"); if (b) b.classList.add("shine"); }, 1400);
+        setTimeout(function(){ if (stg) stg.classList.remove("gp-pop"); celebrate(items, win, { delay: 500 }); }, 1900);
       }
     })(t0);
   }
-  // スロット: 名前のリールが回って、だんだん止まる
+  // スロット: 1行の高さを窓の1/3にそろえ、当たりがぴったり真ん中の線に止まる
+  function slotSize(){
+    var win = document.querySelector(".sl-window"); if (!win) return 90;
+    var h = win.getBoundingClientRect().height, row = Math.floor(h / 3);
+    win.style.setProperty("--rowpx", row + "px");
+    return row;
+  }
   function runSlot(items, win){
-    var reel = document.getElementById("slReel"), lever = document.getElementById("slLever");
+    var reel = document.getElementById("slReel"), lever = document.getElementById("slLever"), stg = document.querySelector(".rl-stage");
     if (lever) { lever.classList.remove("pull"); void lever.offsetWidth; lever.classList.add("pull"); }
-    var seq = []; var total = Math.max(60, items.length * 4);
+    var row = slotSize();
+    var seq = [], total = Math.max(110, items.length * 5);
     for (var i = 0; i < total; i++) seq.push(items[Math.floor(Math.random() * items.length)]);
-    seq.push(items[win]); seq.push(items[Math.floor(Math.random() * items.length)]);
-    if (reel) reel.innerHTML = slotStrip(items, seq);
-    var itemH = reel && reel.firstChild ? reel.firstChild.getBoundingClientRect().height : 100;
-    var winY = (seq.length - 2) * itemH; // 当たりを真ん中の線に
-    var win0 = reel ? reel.parentNode.getBoundingClientRect().height : 300;
-    var endY = winY - (win0 - itemH) / 2;
+    var near = items.length > 2 ? items[(win + 1) % items.length] : items[win];
+    seq.push(near); seq.push(items[win]); seq.push(items[Math.floor(Math.random() * items.length)]);
+    var winIdx = seq.length - 2;
+    if (reel) { reel.innerHTML = slotStrip(items, seq); reel.style.transform = "translateY(0)"; }
+    var endY = (winIdx - 1) * row;           // 当たりの行を真ん中（2行目）に
+    var overY = endY + row * .55;            // 一度少し行き過ぎて、戻って止まる
     beginSpinUI();
-    var dur = 9000, t0 = performance.now(), lastIdx = -1;
+    if (stg) stg.classList.add("sl-run");
+    var dur = 12500, t0 = performance.now(), lastIdx = -1;
     (function f(now){
-      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 4);
-      var y = endY * e;
-      if (reel) reel.style.transform = "translateY(" + (-y) + "px)";
-      var idx = Math.round((y + (win0 - itemH) / 2) / itemH);
-      if (idx !== lastIdx) { lastIdx = idx; tick(); tickerUpdate(p, seq[idx] ? seq[idx].label : null); } else tickerUpdate(p, null);
+      var p = Math.min(1, (now - t0) / dur), y;
+      if (p < .9) { var q = p / .9, e = 1 - Math.pow(1 - q, 3.2); y = overY * e; }
+      else { var q2 = (p - .9) / .1, e2 = 1 - Math.pow(1 - q2, 3); y = overY + (endY - overY) * e2; }
+      if (reel) { reel.style.transform = "translateY(" + (-y) + "px)"; reel.classList.toggle("blur", p < .55); }
+      var idx = Math.round(y / row) + 1;
+      if (idx !== lastIdx) { lastIdx = idx; tick(); tickerUpdate(p, seq[idx] ? seq[idx].label : null); if (p > .7 && stg) { stg.classList.remove("sl-bump"); void stg.offsetWidth; stg.classList.add("sl-bump"); } } else tickerUpdate(p, null);
       if (p < 1) requestAnimationFrame(f);
       else {
-        var it = reel && reel.children[seq.length - 2]; if (it) it.classList.add("hit");
-        celebrate(items, win, { delay: 700 });
+        if (stg) stg.classList.remove("sl-run");
+        var it = reel && reel.children[winIdx]; if (it) it.classList.add("hit");
+        var m = document.querySelector(".sl-machine"); if (m) { m.classList.remove("jackpot"); void m.offsetWidth; m.classList.add("jackpot"); }
+        celebrate(items, win, { delay: 900 });
       }
     })(t0);
   }
@@ -1439,7 +1471,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     else if (tab === "teams") app.innerHTML = viewTeams(r[1]);
     else if (tab === "edit") app.innerHTML = viewEdit(r[1]);
     else if (tab === "meeting") app.innerHTML = viewMeeting(r[1], r[2]);
-    else if (tab === "roulette") { if (!rl.spinning) app.innerHTML = viewRoulette(); }
+    else if (tab === "roulette") { if (!rl.spinning) { app.innerHTML = viewRoulette(); requestAnimationFrame(slotSize); } }
     else if (tab === "admin") app.innerHTML = viewGate("#/teams");
     else app.innerHTML = viewHome();
   }
@@ -1542,6 +1574,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (fsEl === app && location.hash.indexOf("#/roulette") === 0 && !e.target.closest("button, .rl-win, select, textarea, input") && e.target.closest(".rl-stage")) spin();
   });
   document.addEventListener("fullscreenchange", function(){ if (location.hash.indexOf("#/roulette") === 0 && !rl.spinning) render(); });
+  window.addEventListener("resize", function(){ if (!rl.spinning) slotSize(); });
   document.addEventListener("keydown", function(e){ if (e.key === "Enter" && e.target.id === "gatePw") tryLogin(document.getElementById("gateGo").dataset.next); });
   // パソコン用: ドラッグで移動
   document.addEventListener("dragstart", function(e){ var m = e.target.closest && e.target.closest(".m[data-pid]"); if (m) { e.dataTransfer.setData("text/plain", m.dataset.pid); e.dataTransfer.effectAllowed = "move"; } });
