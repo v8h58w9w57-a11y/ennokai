@@ -472,6 +472,57 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .rl-count3.go b{animation:cnt .7s cubic-bezier(.2,1.4,.4,1) forwards}
 @keyframes cnt{0%{transform:scale(2.2);opacity:0}25%{transform:scale(1);opacity:1}80%{opacity:1}100%{transform:scale(.7);opacity:0}}
 @media (prefers-reduced-motion:reduce){.dokidoki,.rl-view.suspense .rl-wheel,.rl-view.suspense .rl-vignette{animation:none}}
+
+/* ---------- ガラガラ抽選機 ---------- */
+.rl-style button{font-size:.8rem;padding:8px 6px}
+.gp-stage{aspect-ratio:1/1}
+.gp-machine{position:absolute;inset:4% 6% 12%}
+.gp-stand{position:absolute;left:14%;right:14%;bottom:0;height:16%;border-radius:18px 18px 10px 10px;background:linear-gradient(180deg,#C98B4E,#8D5A2B);box-shadow:0 10px 20px -8px rgba(0,0,0,.4)}
+.gp-legs{position:absolute;left:28%;right:28%;bottom:14%;height:26%;background:linear-gradient(90deg,#A46D3A 0 14%,transparent 14% 86%,#A46D3A 86%);}
+.gp-drum{position:absolute;left:50%;top:40%;width:66%;aspect-ratio:1;margin-left:-33%;margin-top:-33%;clip-path:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%);background:radial-gradient(circle at 35% 30%,#FF8A80,#E53950 60%,#B71C3B);box-shadow:inset 0 0 0 10px rgba(255,255,255,.12)}
+.gp-face{position:absolute;inset:9%;clip-path:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%);background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.35),rgba(255,255,255,.08) 60%);border:0}
+.gp-b{position:absolute;left:var(--x);top:var(--y);width:11%;aspect-ratio:1;margin:-5.5% 0 0 -5.5%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 12%,var(--c) 40%);box-shadow:0 2px 3px rgba(0,0,0,.25);animation:gpJig .5s ease-in-out infinite alternate;animation-delay:var(--d)}
+.rl-stage.spinning .gp-b{animation-duration:.14s}
+@keyframes gpJig{from{transform:translate(-6px,4px)}to{transform:translate(6px,-6px)}}
+.gp-axle{position:absolute;left:50%;top:40%;width:9%;aspect-ratio:1;margin:-4.5% 0 0 -4.5%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE082,#C9A13B);box-shadow:0 2px 6px rgba(0,0,0,.35);z-index:2}
+.gp-handle{position:absolute;left:50%;top:40%;width:0;height:0;z-index:3}
+.gp-handle span{position:absolute;left:0;top:-4px;width:min(26vh,120px);height:8px;border-radius:8px;background:#5D4037;transform-origin:0 50%}
+.gp-handle span::after{content:"";position:absolute;right:-10px;top:-8px;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE082,#E0A100)}
+.gp-chute{position:absolute;left:62%;top:68%;width:16%;height:9%;background:linear-gradient(180deg,#8D5A2B,#6D4421);border-radius:0 0 12px 12px;transform:skewX(-20deg)}
+.gp-tray{position:absolute;left:58%;right:2%;top:80%;height:6%;border-radius:0 0 22px 22px;background:linear-gradient(180deg,#E0B07A,#B47A43);box-shadow:inset 0 4px 6px rgba(0,0,0,.2)}
+.gp-out{position:absolute;left:66%;top:70%;z-index:5;opacity:0;pointer-events:none}
+.gp-out.go{animation:gpDrop 1.4s cubic-bezier(.3,0,.3,1) forwards}
+@keyframes gpDrop{0%{opacity:1;transform:translate(0,0) scale(.5)}35%{transform:translate(4%,14vh) scale(.9)}50%{transform:translate(6%,11vh) scale(.95)}65%{transform:translate(12%,13.5vh) scale(1)}100%{opacity:1;transform:translate(18%,12vh) scale(1.6)}}
+#app:fullscreen .gp-out.go{animation-name:gpDropFs}
+@keyframes gpDropFs{0%{opacity:1;transform:translate(0,0) scale(.6)}35%{transform:translate(4%,9vh) scale(1)}50%{transform:translate(6%,7vh) scale(1)}65%{transform:translate(12%,9vh) scale(1.1)}100%{opacity:1;transform:translate(18%,8vh) scale(1.9)}}
+.gp-ball{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 10%,var(--c) 45%);box-shadow:0 6px 14px rgba(0,0,0,.35);animation:gpRoll 1.4s linear}
+.gp-ball b{display:grid;place-items:center;width:70%;height:70%;border-radius:50%;background:#fff;font-size:9px;font-weight:900;color:#3B3241;text-align:center;line-height:1.1;padding:2px;overflow:hidden}
+@keyframes gpRoll{from{transform:rotate(-540deg)}to{transform:none}}
+.gp-go{left:22%!important;top:auto!important;bottom:-2%;transform:translate(-50%,0)!important;width:24%!important}
+/* ---------- スロット ---------- */
+.sl-stage{aspect-ratio:1/1}
+.sl-machine{position:absolute;inset:6% 10% 16% 4%;border-radius:36px;background:linear-gradient(170deg,#FF6F91,#C8346B 55%,#7B1E4F);box-shadow:0 30px 60px -24px rgba(120,20,70,.6),inset 0 0 0 8px rgba(255,255,255,.15);padding:10% 8% 8%}
+.sl-top{position:absolute;left:50%;top:-6%;transform:translateX(-50%);padding:6px 26px;border-radius:999px;background:linear-gradient(180deg,#FFE082,#F5B400);color:#7B1E4F;font-family:var(--font-title);font-weight:900;letter-spacing:.2em;font-size:clamp(.9rem,2.6vh,1.6rem);box-shadow:0 8px 16px -6px rgba(0,0,0,.4)}
+.sl-lights{position:absolute;inset:3%;pointer-events:none}
+.sl-lights i{position:absolute;width:3.5%;aspect-ratio:1;border-radius:50%;background:#FFF3C4;animation:bulb 1s ease-in-out infinite;animation-delay:calc(var(--k) * -.12s);left:calc(4% + (var(--k) * 6.8%));top:0}
+.sl-lights i:nth-child(n+8){top:auto;bottom:0;left:calc(4% + ((var(--k) - 7) * 13%))}
+.rl-stage.spinning .sl-lights i{animation-duration:.3s}
+.sl-window{position:relative;height:100%;border-radius:22px;overflow:hidden;background:#fff;box-shadow:inset 0 10px 18px rgba(0,0,0,.25),inset 0 -10px 18px rgba(0,0,0,.25)}
+.sl-window::before,.sl-window::after{content:"";position:absolute;left:0;right:0;height:30%;z-index:2;pointer-events:none}
+.sl-window::before{top:0;background:linear-gradient(#fff,rgba(255,255,255,0))}
+.sl-window::after{bottom:0;background:linear-gradient(rgba(255,255,255,0),#fff)}
+.sl-reel{will-change:transform}
+.sl-item{height:clamp(70px,12vh,130px);display:grid;place-items:center;font-family:var(--font-title);font-weight:900;font-size:clamp(1.4rem,4.6vh,3rem);color:var(--c);border-bottom:2px dashed #F1E8EE;padding:0 12px;text-align:center;line-height:1.15}
+.sl-item.muted{color:var(--muted);font-size:1rem}
+.sl-item.hit{background:linear-gradient(90deg,#FFF3C4,#FFE1EC,#FFF3C4);animation:winName 1s ease-in-out infinite}
+.sl-line{position:absolute;left:0;right:0;top:50%;height:clamp(70px,12vh,130px);transform:translateY(-50%);border-top:4px solid #F5B400;border-bottom:4px solid #F5B400;z-index:3;pointer-events:none;box-shadow:0 0 0 2000px rgba(0,0,0,.04)}
+.sl-lever{position:absolute;right:-9%;top:22%;width:6%;height:46%;z-index:1}
+.sl-lever span{position:absolute;left:50%;bottom:0;width:30%;height:100%;margin-left:-15%;border-radius:8px;background:linear-gradient(90deg,#bbb,#eee,#999);transform-origin:50% 100%}
+.sl-lever span::before{content:"";position:absolute;left:50%;top:-14%;width:300%;aspect-ratio:1;margin-left:-150%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FF8A80,#D32F2F)}
+.sl-lever.pull span{animation:lever .7s cubic-bezier(.3,1.4,.5,1)}
+@keyframes lever{0%{transform:none}35%{transform:scaleY(-.6)}100%{transform:none}}
+.sl-go{left:50%!important;top:auto!important;bottom:-1%;transform:translate(-50%,0)!important;width:22%!important}
+#app:fullscreen .rl-view .gp-stage,#app:fullscreen .rl-view .sl-stage{width:min(80vh,90vw)}
 </style>
 </head>
 <body>
@@ -849,7 +900,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   }
   /* ---------- ルーレット ---------- */
   var RL_COLORS = ["#FF8A80", "#FFB74D", "#F6C453", "#9CCC65", "#5CC9A7", "#4FC3C7", "#6BB8F0", "#8C9EFF", "#A08CF0", "#F27BA5"];
-  var rl = { mode: "present", evId: null, custom: "", removed: {}, rot: 0, spinning: false, winner: null, removeWinner: true };
+  var rl = { style: "wheel", mode: "present", evId: null, custom: "", removed: {}, rot: 0, spinning: false, winner: null, removeWinner: true };
+  try { rl.style = localStorage.getItem("portal_roulette_style") || "wheel"; } catch (e) {}
   try { rl.custom = localStorage.getItem("portal_roulette_custom") || "景品A\n景品B\n景品C\nハズレ\nもう一回！"; } catch (e) { rl.custom = "景品A\n景品B\n景品C"; }
   function rlItems(){
     var items = [];
@@ -885,9 +937,9 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     return '<div class="view rl-view"><div class="rl-head no-print"><div><h1 class="page">ルーレット</h1><p class="sub">だれが当たるかな？ みんなで画面を見ながら回そう</p></div><button class="btn sm" data-rl-full>' + I('expand') + ' 大きく表示</button></div>'
       + '<button class="rl-exit" data-rl-full aria-label="大きく表示をやめる">×</button><div class="rl-flash"></div><div class="rl-hint">スペースキー・Enter・画面をタップでもスタート</div>'
       + '<div class="rl-ticker" id="rlTicker"></div><div class="rl-vignette"></div>'
-      + '<div class="rl-wrap"><div class="rl-stage"><div class="rl-glow"></div><div class="rl-pointer"></div><div class="rl-wheel" id="rlWheel">' + wheelSVG(items) + '</div>'
-      + '<button class="rl-go" data-rl-spin' + (items.length < 2 ? ' disabled' : '') + '>スタート</button></div>'
-      + '<div class="card rl-side"><div class="seg rl-seg"><button data-rl-mode="present" class="' + (rl.mode === "present" ? "on" : "") + '">出席者</button><button data-rl-mode="teams" class="' + (rl.mode === "teams" ? "on" : "") + '">チーム</button><button data-rl-mode="custom" class="' + (rl.mode === "custom" ? "on" : "") + '">自由に入力</button></div>'
+      + '<div class="rl-wrap">' + stageHTML(items)
+      + '<div class="card rl-side"><div class="field" style="margin-bottom:12px">演出<div class="seg rl-seg rl-style">' + [["wheel", "ルーレット"], ["garapon", "ガラガラ抽選"], ["slot", "スロット"]].map(function(x){ return '<button data-rl-style="' + x[0] + '" class="' + (rl.style === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") + '</div></div>'
+      + '<div class="field">候補</div><div class="seg rl-seg"><button data-rl-mode="present" class="' + (rl.mode === "present" ? "on" : "") + '">出席者</button><button data-rl-mode="teams" class="' + (rl.mode === "teams" ? "on" : "") + '">チーム</button><button data-rl-mode="custom" class="' + (rl.mode === "custom" ? "on" : "") + '">自由に入力</button></div>'
       + (rl.mode !== "custom" ? '<label class="field" style="margin-top:14px">行事<select data-rl-ev>' + evs.map(function(e){ return '<option value="' + e.id + '"' + (e.id === rl.evId ? ' selected' : '') + '>' + esc(e.name) + '</option>'; }).join("") + '</select></label>' : '<label class="field" style="margin-top:14px">候補（1行に1つ）<textarea data-rl-custom style="min-height:170px">' + esc(rl.custom) + '</textarea></label>')
       + '<label class="rl-check"><input type="checkbox" data-rl-remove' + (rl.removeWinner ? ' checked' : '') + '> 当たったら次から外す（重ならない）</label>'
       + '<div class="rl-count">候補 <b>' + items.length + '</b>' + (removedCount ? '　｜　外した ' + removedCount + ' <button class="link-btn" data-rl-reset>元に戻す</button>' : '') + '</div>'
@@ -996,14 +1048,132 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var goBtn = document.querySelector("[data-rl-spin]"); if (goBtn) goBtn.disabled = true;
     countdown(function(){ runSpin(items); });
   }
+  var GP_COLORS = ["#FF8A80", "#FFD54F", "#81C784", "#64B5F6", "#BA68C8", "#F06292", "#4DD0E1", "#FFB74D"];
+  function stageHTML(items){
+    var dis = items.length < 2 ? ' disabled' : '';
+    if (rl.style === "garapon") {
+      var balls = ""; for (var i = 0; i < 16; i++) { var a = Math.random() * Math.PI * 2, d = Math.random() * 30; balls += '<i class="gp-b" style="--x:' + (50 + Math.cos(a) * d).toFixed(1) + '%;--y:' + (58 + Math.sin(a) * d * .7).toFixed(1) + '%;--c:' + GP_COLORS[i % GP_COLORS.length] + ';--d:' + (Math.random() * -.6).toFixed(2) + 's"></i>'; }
+      return '<div class="rl-stage gp-stage"><div class="rl-glow"></div><div class="gp-machine">'
+        + '<div class="gp-stand"></div><div class="gp-legs"></div>'
+        + '<div class="gp-drum" id="gpDrum"><div class="gp-face"></div>' + balls + '</div>'
+        + '<div class="gp-axle"></div><div class="gp-handle" id="gpHandle"><span></span></div>'
+        + '<div class="gp-chute"></div><div class="gp-tray"></div><div class="gp-out" id="gpOut"></div>'
+        + '</div><button class="rl-go gp-go" data-rl-spin' + dis + '>まわす！</button></div>';
+    }
+    if (rl.style === "slot") {
+      return '<div class="rl-stage sl-stage"><div class="rl-glow"></div><div class="sl-machine">'
+        + '<div class="sl-top">JACKPOT</div><div class="sl-lights">' + Array.from({ length: 14 }, function(_, k){ return '<i style="--k:' + k + '"></i>'; }).join("") + '</div>'
+        + '<div class="sl-window"><div class="sl-reel" id="slReel">' + slotStrip(items, null) + '</div><div class="sl-line"></div></div>'
+        + '<div class="sl-lever" id="slLever"><span></span></div>'
+        + '</div><button class="rl-go sl-go" data-rl-spin' + dis + '>スタート</button></div>';
+    }
+    return '<div class="rl-stage"><div class="rl-glow"></div><div class="rl-pointer"></div><div class="rl-wheel" id="rlWheel">' + wheelSVG(items) + '</div>'
+      + '<button class="rl-go" data-rl-spin' + dis + '>スタート</button></div>';
+  }
+  function slotStrip(items, seq){
+    seq = seq || items.slice(0, 3);
+    if (!seq.length) return '<div class="sl-item muted">候補がありません</div>';
+    return seq.map(function(it, i){ return '<div class="sl-item" style="--c:' + RL_COLORS[(i * 3) % RL_COLORS.length] + '">' + esc(it.label) + '</div>'; }).join("");
+  }
+  // 当たりが決まったあとの共通の演出
+  function celebrate(items, win, opts){
+    opts = opts || {};
+    var ticker = document.getElementById("rlTicker"), view = document.querySelector(".rl-view");
+    rl.spinning = false;
+    var w = items[win];
+    rl.winner = w; rl.history = (rl.history || []).concat([w.label]);
+    drumStop(); crash();
+    if (view) view.classList.remove("is-spinning", "suspense");
+    if (ticker) { ticker.dataset.mode = ""; ticker.innerHTML = '<span class="tk win">' + esc(w.label) + '</span>'; }
+    var stg = document.querySelector(".rl-stage"); if (stg) { stg.classList.remove("spinning"); stg.classList.remove("landed"); void stg.offsetWidth; stg.classList.add("landed"); }
+    var fl = document.querySelector(".rl-flash"); if (fl) { fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go"); }
+    fanfare(); sparkles();
+    var delay = opts.delay || 650;
+    setTimeout(function(){ confetti(!!document.fullscreenElement); showWinner(w); }, delay);
+    if (document.fullscreenElement) setTimeout(function(){ confetti(false); }, delay + 650);
+    setTimeout(fireworks, delay + 250);
+  }
+  function tickerUpdate(p, label){
+    var ticker = document.getElementById("rlTicker"), view = document.querySelector(".rl-view");
+    drumRate(p);
+    if (view) view.classList.toggle("suspense", p > .8);
+    if (!ticker) return;
+    if (p > .87) { if (ticker.dataset.mode !== "s") { ticker.dataset.mode = "s"; ticker.innerHTML = '<span class="dokidoki">ドキドキ…</span>'; } }
+    else if (label != null && ticker.dataset.last !== label) { ticker.dataset.mode = ""; ticker.dataset.last = label; ticker.innerHTML = '<span class="tk">' + esc(label) + '</span>'; }
+  }
+  function beginSpinUI(){
+    var view = document.querySelector(".rl-view"); if (view) view.classList.add("is-spinning");
+    var stg = document.querySelector(".rl-stage"); if (stg) stg.classList.add("spinning");
+    drumStart();
+  }
   function runSpin(items){
-    var n = items.length, seg = 360 / n, win = Math.floor(Math.random() * n);
+    var win = Math.floor(Math.random() * items.length);
+    if (rl.style === "garapon") return runGarapon(items, win);
+    if (rl.style === "slot") return runSlot(items, win);
+    return runWheel(items, win);
+  }
+  // ガラガラ抽選機: 回して、最後に玉がころんと出てくる
+  function rattle(){ try { var c = ac(), src = c.createBufferSource(); src.buffer = noiseBuf(); var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 900 + Math.random() * 900; bp.Q.value = 6; var g = c.createGain(); g.gain.setValueAtTime(0.12, c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + .07); src.connect(bp); bp.connect(g); g.connect(c.destination); src.start(); src.stop(c.currentTime + .08); } catch (e) {} }
+  function runGarapon(items, win){
+    var drum = document.getElementById("gpDrum"), handle = document.getElementById("gpHandle");
+    beginSpinUI();
+    var dur = 9000, t0 = performance.now(), ang = 0, lastR = 0, lastName = 0, nameIdx = 0;
+    (function f(now){
+      var p = Math.min(1, (now - t0) / dur);
+      var speed = p < .12 ? p / .12 : p > .7 ? Math.max(.06, 1 - (p - .7) / .3) : 1; // 加速→一定→減速
+      ang += speed * 14;
+      if (drum) drum.style.transform = "rotate(" + ang + "deg)";
+      if (handle) handle.style.transform = "rotate(" + ang + "deg)";
+      if (now - lastR > 70 / Math.max(.25, speed)) { lastR = now; rattle(); }
+      if (now - lastName > 90 / Math.max(.2, speed)) { lastName = now; nameIdx = (nameIdx + 1 + Math.floor(Math.random() * 3)) % items.length; tickerUpdate(p, items[nameIdx].label); } else tickerUpdate(p, null);
+      if (p < 1) requestAnimationFrame(f);
+      else {
+        // 玉がころんと出る
+        var out = document.getElementById("gpOut"), w = items[win];
+        if (out) {
+          out.innerHTML = '<span class="gp-ball" style="--c:' + GP_COLORS[win % GP_COLORS.length] + '"><b>' + esc(w.label) + '</b></span>';
+          out.classList.remove("go"); void out.offsetWidth; out.classList.add("go");
+        }
+        var c0 = ac && ac(); setTimeout(function(){ beep(520, .08); }, 450); setTimeout(function(){ beep(440, .08); }, 800); setTimeout(function(){ beep(600, .1); }, 1150);
+        setTimeout(function(){ celebrate(items, win, { delay: 400 }); }, 1500);
+      }
+    })(t0);
+  }
+  // スロット: 名前のリールが回って、だんだん止まる
+  function runSlot(items, win){
+    var reel = document.getElementById("slReel"), lever = document.getElementById("slLever");
+    if (lever) { lever.classList.remove("pull"); void lever.offsetWidth; lever.classList.add("pull"); }
+    var seq = []; var total = Math.max(60, items.length * 4);
+    for (var i = 0; i < total; i++) seq.push(items[Math.floor(Math.random() * items.length)]);
+    seq.push(items[win]); seq.push(items[Math.floor(Math.random() * items.length)]);
+    if (reel) reel.innerHTML = slotStrip(items, seq);
+    var itemH = reel && reel.firstChild ? reel.firstChild.getBoundingClientRect().height : 100;
+    var winY = (seq.length - 2) * itemH; // 当たりを真ん中の線に
+    var win0 = reel ? reel.parentNode.getBoundingClientRect().height : 300;
+    var endY = winY - (win0 - itemH) / 2;
+    beginSpinUI();
+    var dur = 9000, t0 = performance.now(), lastIdx = -1;
+    (function f(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 4);
+      var y = endY * e;
+      if (reel) reel.style.transform = "translateY(" + (-y) + "px)";
+      var idx = Math.round((y + (win0 - itemH) / 2) / itemH);
+      if (idx !== lastIdx) { lastIdx = idx; tick(); tickerUpdate(p, seq[idx] ? seq[idx].label : null); } else tickerUpdate(p, null);
+      if (p < 1) requestAnimationFrame(f);
+      else {
+        var it = reel && reel.children[seq.length - 2]; if (it) it.classList.add("hit");
+        celebrate(items, win, { delay: 700 });
+      }
+    })(t0);
+  }
+  function runWheel(items, win){
+    var n = items.length, seg = 360 / n;
     // 当たりのマスの中央（少しずらす）が真上の針に来る角度
     var jitter = (Math.random() - .5) * seg * .6;
     var target = 360 - (win * seg + seg / 2 + jitter);
     var start = rl.rot, base = start - (start % 360);
-    var end = base + 360 * (6 + Math.floor(Math.random() * 2)) + ((target % 360) + 360) % 360;
-    var dur = 7000, t0 = performance.now(), wheel = document.querySelector(".wheel-rot"), lastSeg = null;
+    var end = base + 360 * (9 + Math.floor(Math.random() * 2)) + ((target % 360) + 360) % 360;
+    var dur = 10000, t0 = performance.now(), wheel = document.querySelector(".wheel-rot"), lastSeg = null;
     var ticker = document.getElementById("rlTicker"), view = document.querySelector(".rl-view");
     document.querySelector(".rl-stage").classList.add("spinning");
     if (view) view.classList.add("is-spinning");
@@ -1019,20 +1189,9 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       if (sIdx !== lastSeg) { lastSeg = sIdx; tick(); var ptr = document.querySelector(".rl-pointer"); if (ptr) { ptr.classList.remove("flick"); void ptr.offsetWidth; ptr.classList.add("flick"); } }
       if (p < 1) requestAnimationFrame(f);
       else {
-        rl.spinning = false; rl.rot = end % 360;
-        var w = items[win];
-        rl.winner = w; rl.history = (rl.history || []).concat([w.label]);
-        drumStop(); crash();
-        if (view) view.classList.remove("is-spinning", "suspense");
-        if (ticker) { ticker.dataset.mode = ""; ticker.innerHTML = '<span class="tk win">' + esc(w.label) + '</span>'; }
-        var stg = document.querySelector(".rl-stage"); stg.classList.remove("spinning");
+        rl.rot = end % 360;
         var segEl = document.querySelector('.wheel-rot .seg[data-i="' + win + '"]'); if (segEl) segEl.classList.add("win-seg");
-        stg.classList.remove("landed"); void stg.offsetWidth; stg.classList.add("landed");
-        var fl = document.querySelector(".rl-flash"); if (fl) { fl.classList.remove("go"); void fl.offsetWidth; fl.classList.add("go"); }
-        fanfare(); sparkles();
-        setTimeout(function(){ confetti(!!document.fullscreenElement); showWinner(w); }, 650);
-        if (document.fullscreenElement) setTimeout(function(){ confetti(false); }, 1300);
-        setTimeout(fireworks, 900);
+        celebrate(items, win);
       }
     })(t0);
   }
@@ -1324,6 +1483,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       return;
     }
     if (e.target.closest("[data-rl-spin]")) { spin(); return; }
+    if ((t = e.target.closest("[data-rl-style]"))) { if (rl.spinning) return; rl.style = t.dataset.rlStyle; try { localStorage.setItem("portal_roulette_style", rl.style); } catch (x) {} render(); return; }
     if ((t = e.target.closest("[data-rl-mode]"))) { rl.mode = t.dataset.rlMode; rl.removed = {}; rl.history = []; render(); return; }
     if (e.target.closest("[data-rl-reset]")) { rl.removed = {}; rl.history = []; render(); return; }
     if (e.target.closest("[data-rl-full]")) { if (document.fullscreenElement) document.exitFullscreen(); else if (app.requestFullscreen) app.requestFullscreen().catch(function(){}); return; }
@@ -1366,7 +1526,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   });
   document.addEventListener("input", function(e){
     if (e.target.id === "attQ") { attQuery = e.target.value; render(); }
-    if (e.target.matches && e.target.matches("[data-rl-custom]")) { rl.custom = e.target.value; rl.removed = {}; try { localStorage.setItem("portal_roulette_custom", rl.custom); } catch (x) {} var w = document.getElementById("rlWheel"); if (w) w.innerHTML = wheelSVG(rlItems()); var c = document.querySelector(".rl-count b"); if (c) c.textContent = rlItems().length; var b = document.querySelector("[data-rl-spin]"); if (b) b.disabled = rlItems().length < 2; }
+    if (e.target.matches && e.target.matches("[data-rl-custom]")) { rl.custom = e.target.value; rl.removed = {}; try { localStorage.setItem("portal_roulette_custom", rl.custom); } catch (x) {} var w = document.getElementById("rlWheel"); if (w) w.innerHTML = wheelSVG(rlItems()); var sr = document.getElementById("slReel"); if (sr) sr.innerHTML = slotStrip(rlItems(), null); var c = document.querySelector(".rl-count b"); if (c) c.textContent = rlItems().length; var b = document.querySelector("[data-rl-spin]"); if (b) b.disabled = rlItems().length < 2; }
   });
   document.addEventListener("change", function(e){
     if (e.target.matches && e.target.matches("[data-rl-ev]")) { rl.evId = e.target.value; rl.removed = {}; rl.history = []; render(); }
