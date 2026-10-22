@@ -2140,7 +2140,11 @@
     showToast("「" + ev.name + "」だけの参加者として " + add.length + "名を追加しました");
   }
   document.getElementById("guestAddBtn").addEventListener("click", addGuests);
-  document.getElementById("guestName").addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); addGuests(); } });
+  document.getElementById("guestName").addEventListener("keydown", function(e){
+    // 日本語の変換を確定するEnterでは追加しない（変換が終わったあとのEnterだけ）
+    if(e.key !== "Enter" || e.isComposing || e.keyCode === 229) return;
+    e.preventDefault(); addGuests();
+  });
 
   document.getElementById("orgSearch").addEventListener("input", function(e){ orgSearch = e.target.value; renderOrgRosterSection(); });
   document.querySelectorAll(".filter-tabs button").forEach(function(btn){
