@@ -796,6 +796,14 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 @media (max-width:760px){.dock{grid-template-columns:1fr}}
 .g-guest{display:block;font-size:.68rem;font-weight:800;color:#B48714}
 .nchip .gtag{font-size:.66rem;font-weight:800;color:#B48714;margin-left:2px}
+.g-row{flex-wrap:wrap}
+.pos-btns{flex-basis:100%;display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.pos-btns button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:3px 10px;font-size:.76rem;font-weight:800;cursor:pointer;min-height:30px;touch-action:manipulation}
+.pos-btns button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.m em.pos{background:#3B3241;color:#fff;margin-left:4px}
+.board.fit .m em.pos{font-size:.6rem;padding:1px 5px}
+.pos-opt{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:800;min-height:46px}
+.pos-opt input{width:18px;height:18px;accent-color:var(--ink)}
 </style>
 </head>
 <body>
@@ -902,7 +910,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var t = await sb.from("ennokai_teams").select("*");
     var mt = await sb.from("ennokai_meetings").select("*").order("date");
     if (r.error || e.error) throw (r.error || e.error);
-    S.roster = (r.data || []).map(function(x){ return { id: x.id, name: x.name, gender: x.gender || null, eventId: x.event_id || null }; });
+    S.roster = (r.data || []).map(function(x){ return { id: x.id, name: x.name, gender: x.gender || null, eventId: x.event_id || null, position: x.position || null }; });
+    S.hasPosition = !!(r.data && r.data.length && Object.prototype.hasOwnProperty.call(r.data[0], "position"));
     S.hasGender = !!(r.data && r.data.length && Object.prototype.hasOwnProperty.call(r.data[0], "gender"));
     S.events = (e.data || []).map(function(x){ return { id: x.id, name: x.name, date: x.date || "", location: x.location || "", time: x.time || "", schedule: x.schedule || "", notes: x.notes || "" }; });
     S.att = {};
@@ -1746,6 +1755,10 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   // 男女それぞれ均等に、人数も揃うように配る
   // base: 固定（📌）した人を残したチーム。固定していない人だけを、人数と男女比がそろうように配り直す
+  var POSITIONS = ["社長", "工場長", "課長", "係長", "班長"];
+  var rl_balancePos = true;
+  try { rl_balancePos = localStorage.getItem("portal_balance_pos") !== "0"; } catch (e) {}
+  function isMaleBoss(p){ return p && p.gender === "男" && POSITIONS.indexOf(p.position) >= 0; }
   function autoTeams(people, n, base){
     var teams = []; for (var i = 0; i < n; i++) {
       var b0 = base && base[i];
@@ -1753,6 +1766,16 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     }
     var pinnedAll = {}; teams.forEach(function(t){ t.pinned.forEach(function(id){ pinnedAll[id] = 1; }); });
     people = people.filter(function(p){ return !pinnedAll[p.id]; });
+    // 男性の役職者を、役職の高い順にチームへ均等に配る
+    if (rl_balancePos) {
+      var bosses = shuffle(people.filter(isMaleBoss)).sort(function(a, b){ return POSITIONS.indexOf(a.position) - POSITIONS.indexOf(b.position); });
+      var bcount = function(t){ return t.members.filter(function(id){ var q = person(id); return q && isMaleBoss(q); }).length; };
+      bosses.forEach(function(p){
+        var best = shuffle(teams).sort(function(a, b){ return (bcount(a) - bcount(b)) || (a.members.length - b.members.length); })[0];
+        best.members.push(p.id);
+      });
+      people = people.filter(function(p){ return !isMaleBoss(p); });
+    }
     var by = { 女: [], 男: [], "": [] };
     shuffle(people).forEach(function(p){ by[p.gender === "女" || p.gender === "男" ? p.gender : ""].push(p); });
     var gcount = function(t, g){ return t.members.filter(function(id){ var p = S.roster.find(function(r){ return r.id === id; }); return p && (p.gender || "") === g; }).length; };
@@ -1775,11 +1798,12 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var cls = "m" + (g ? " " + g : "") + (selected === id ? " sel" : "") + (st === "absent" ? " gone" : "") + (st === "pending" && !inTeam ? " pend" : "");
     var tag = st === "absent" ? "<em>欠席</em>" : st === "pending" ? "<em>未入力</em>" : "";
     var pinned = inTeam && draft.teams.some(function(t){ return (t.pinned || []).indexOf(id) >= 0; });
-    return '<div class="' + cls + (pinned ? ' pinned' : '') + '" draggable="true" data-pid="' + id + '"><i>' + (g === "boy" ? "♂" : g === "girl" ? "♀" : "") + '</i><span>' + esc(p ? p.name : "（名簿から削除）") + '</span>' + (inTeam ? tag + '<button type="button" class="pin-btn' + (pinned ? ' on' : '') + '" data-pin="' + id + '" title="' + (pinned ? '固定を外す' : 'このチームに固定（シャッフルしても動かない）') + '" aria-label="固定">' + I('pin2') + '</button>' : "") + '</div>';
+    return '<div class="' + cls + (pinned ? ' pinned' : '') + '" draggable="true" data-pid="' + id + '"><i>' + (g === "boy" ? "♂" : g === "girl" ? "♀" : "") + '</i><span>' + esc(p ? p.name : "（名簿から削除）") + '</span>' + (p && p.position ? '<em class="pos">' + esc(p.position) + '</em>' : '') + (inTeam ? tag + '<button type="button" class="pin-btn' + (pinned ? ' on' : '') + '" data-pin="' + id + '" title="' + (pinned ? '固定を外す' : 'このチームに固定（シャッフルしても動かない）') + '" aria-label="固定">' + I('pin2') + '</button>' : "") + '</div>';
   }
   function teamStats(t){
     var b = 0, g = 0; t.members.forEach(function(id){ var p = person(id); if (p && p.gender === "男") b++; else if (p && p.gender === "女") g++; });
-    return t.members.length + '名' + (b || g ? '（♂' + b + ' ♀' + g + '）' : '');
+    var bo = t.members.filter(function(id){ return isMaleBoss(person(id)); }).length;
+    return t.members.length + '名' + (b || g ? '（♂' + b + ' ♀' + g + (bo ? '・役' + bo : '') + '）' : '');
   }
   function viewTeams(evId){
     if (!isAdmin()) return viewGate("#/teams" + (evId ? "/" + evId : ""));
@@ -1787,7 +1811,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (!evId && evs.length) evId = (upcoming()[0] || evs[0]).id;
     var ev = S.events.find(function(e){ return e.id === evId; });
     var h = '<div class="view"><h1 class="page">主催者メニュー</h1><p class="sub">チーム分け・名簿の男女・行事の打ち合わせを管理できます</p>'
-      + '<div class="seg no-print"><button data-atab="teams" class="' + (adminTab === "teams" ? "on" : "") + '">' + I('users') + ' チーム分け</button><button data-atab="gender" class="' + (adminTab === "gender" ? "on" : "") + '">' + I('person') + ' 名簿の男女</button><button data-atab="meetings" class="' + (adminTab === "meetings" ? "on" : "") + '">' + I('chat') + ' 打ち合わせ</button></div>';
+      + '<div class="seg no-print"><button data-atab="teams" class="' + (adminTab === "teams" ? "on" : "") + '">' + I('users') + ' チーム分け</button><button data-atab="gender" class="' + (adminTab === "gender" ? "on" : "") + '">' + I('person') + ' 名簿の男女・役職</button><button data-atab="meetings" class="' + (adminTab === "meetings" ? "on" : "") + '">' + I('chat') + ' 打ち合わせ</button></div>';
     if (!S.hasTeams || !S.hasGender) h += '<div class="warn">' + I('alert') + ' データベースの準備がまだです（SQLを1回実行してください）。それまでは' + (!S.hasGender ? '男女の設定と' : '') + (!S.hasTeams ? 'チームの保存' : '') + 'ができません。</div>';
     if (adminTab === "gender") return h + viewGender() + '</div>';
     if (adminTab === "meetings") return h + viewMeetingsAll() + '</div>';
@@ -1801,8 +1825,9 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var defN = draft.teams.length || Math.max(2, Math.min(12, Math.round(ppl.length / 4) || 2));
     h += '<div class="card panel no-print"><div class="row-flex"><label class="field" style="flex:1;min-width:220px">行事<select id="teamEv">' + evs.map(function(e){ return '<option value="' + e.id + '"' + (e.id === ev.id ? ' selected' : '') + '>' + esc(e.name) + '（' + esc(fmtDate(e)) + '）</option>'; }).join("") + '</select></label>'
       + '<label class="field">チーム数<input type="number" id="teamN" min="2" max="12" value="' + defN + '" style="width:110px"></label>'
+      + '<label class="pos-opt"><input type="checkbox" data-balpos' + (rl_balancePos ? ' checked' : '') + '> 男性の役職者を均等に</label>'
       + '<button class="btn primary" id="autoBtn">' + I('dice') + ' 自動で分ける</button><button class="btn" id="manualBtn">' + I('hand') + ' 手動で分ける</button></div>'
-      + '<div class="stats"><span class="stat">出席 ' + ppl.length + '名</span><span class="stat b">♂ 男性 ' + b + '名</span><span class="stat g">♀ 女性 ' + g + '名</span>' + (u ? '<span class="stat u">未設定 ' + u + '名</span>' : '') + '</div>'
+      + '<div class="stats"><span class="stat">出席 ' + ppl.length + '名</span>' + (ppl.filter(isMaleBoss).length ? '<span class="stat">男性の役職者 ' + ppl.filter(isMaleBoss).length + '名</span>' : '') + '<span class="stat b">♂ 男性 ' + b + '名</span><span class="stat g">♀ 女性 ' + g + '名</span>' + (u ? '<span class="stat u">未設定 ' + u + '名</span>' : '') + '</div>'
       + (u ? '<div class="warn">男女が未設定の人が ' + u + '名います。「名簿の男女」で設定すると、男女比もそろえて分けられます。</div>' : '') + '</div>';
     if (!draft.teams.length) return h + '<div class="card empty" style="margin-top:14px">「自動で分ける」でランダムに作るか、「手動で分ける」で空のチームから自分で振り分けられます。</div></div>';
     h += '<div class="row-flex no-print" style="margin-top:16px;justify-content:space-between"><span class="hint" style="margin:0">' + I('info') + ' 名前を押してから<b>別の人の名前</b>を押すと入れ替え（同じチーム内なら順番の入れ替え）、<b>チームの空いた所</b>を押すと移動。' + I('pin2') + 'で固定すると、シャッフルしても動きません。パソコンはドラッグでも動かせます。</span>'
@@ -1825,10 +1850,11 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   function viewGender(){
     if (!S.roster.length) return '<div class="card empty" style="margin-top:14px">名簿が未登録です（出欠アプリの主催者画面で登録してください）</div>';
     var b = S.roster.filter(function(p){ return p.gender === "男"; }).length, g = S.roster.filter(function(p){ return p.gender === "女"; }).length;
-    return '<div class="card panel"><div class="stats" style="margin:0"><span class="stat">名簿 ' + S.roster.length + '名</span><span class="stat b">♂ ' + b + '名</span><span class="stat g">♀ ' + g + '名</span><span class="stat u">未設定 ' + (S.roster.length - b - g) + '名</span></div><p class="hint">一度設定すれば、すべての行事のチーム分けで使われます。</p></div>'
+    return '<div class="card panel"><div class="stats" style="margin:0"><span class="stat">名簿 ' + S.roster.length + '名</span><span class="stat b">♂ ' + b + '名</span><span class="stat g">♀ ' + g + '名</span><span class="stat u">未設定 ' + (S.roster.length - b - g) + '名</span></div><p class="hint">一度設定すれば、すべての行事のチーム分けで使われます。役職はもう一度押すと外れます。</p>' + (S.hasPosition ? '' : '<div class="warn">役職を保存するには、データベースの準備（SQLを1回実行）が必要です。</div>') + '</div>'
       + '<div class="gender-list">' + S.roster.map(function(p){
         var gev = p.eventId ? S.events.find(function(e){ return e.id === p.eventId; }) : null;
-        return '<div class="g-row"><span class="nm">' + esc(p.name) + (gev ? '<small class="g-guest">' + esc(gev.name) + 'のみ</small>' : '') + '</span><span class="g-btns"><button class="boy' + (p.gender === "男" ? " on" : "") + '" data-g="男" data-pid="' + p.id + '">男</button><button class="girl' + (p.gender === "女" ? " on" : "") + '" data-g="女" data-pid="' + p.id + '">女</button></span></div>';
+        return '<div class="g-row"><span class="nm">' + esc(p.name) + (gev ? '<small class="g-guest">' + esc(gev.name) + 'のみ</small>' : '') + '</span><span class="g-btns"><button class="boy' + (p.gender === "男" ? " on" : "") + '" data-g="男" data-pid="' + p.id + '">男</button><button class="girl' + (p.gender === "女" ? " on" : "") + '" data-g="女" data-pid="' + p.id + '">女</button></span>'
+          + '<span class="pos-btns">' + POSITIONS.map(function(ps){ return '<button class="' + (p.position === ps ? 'on' : '') + '" data-pos="' + ps + '" data-pid="' + p.id + '">' + ps + '</button>'; }).join("") + '</span></div>';
       }).join("") + '</div>';
   }
   function printSheet(ev, pend){
@@ -1946,6 +1972,14 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     }
     if ((t = e.target.closest("#gateGo"))) { tryLogin(t.dataset.next); return; }
     if ((t = e.target.closest("[data-atab]"))) { adminTab = t.dataset.atab; render(); return; }
+    if ((t = e.target.closest("[data-pos]"))) {
+      if (!S.hasPosition) { toast("先にSQLを実行してください"); return; }
+      var pp = person(t.dataset.pid), np = pp.position === t.dataset.pos ? null : t.dataset.pos, op = pp.position;
+      pp.position = np; render();
+      var pr = await sb.from("ennokai_roster").update({ position: np }).eq("id", pp.id);
+      if (pr.error) { pp.position = op; render(); toast("保存できませんでした"); }
+      return;
+    }
     if ((t = e.target.closest("[data-g]"))) {
       if (!S.hasGender) { toast("先にSQLを実行してください"); return; }
       var p = person(t.dataset.pid), g = p.gender === t.dataset.g ? null : t.dataset.g, old = p.gender;
@@ -2014,6 +2048,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (e.target.matches && e.target.matches("[data-rl-custom]")) { rl.custom = e.target.value; rl.removed = {}; try { localStorage.setItem("portal_roulette_custom", rl.custom); } catch (x) {} var w = document.getElementById("rlWheel"); if (w) w.innerHTML = wheelSVG(rlItems()); var sr = document.getElementById("slReel"); if (sr) sr.innerHTML = slotStrip(rlItems(), null); var c = document.querySelector(".rl-count b"); if (c) c.textContent = rlItems().length; var b = document.querySelector("[data-rl-spin]"); if (b) b.disabled = rlItems().length < 2; }
   });
   document.addEventListener("change", function(e){
+    if (e.target.matches && e.target.matches("[data-balpos]")) { rl_balancePos = e.target.checked; try { localStorage.setItem("portal_balance_pos", rl_balancePos ? "1" : "0"); } catch (x) {} }
     if (e.target.matches && e.target.matches("[data-rl-ev]")) { rl.evId = e.target.value; rl.removed = {}; rl.history = []; render(); }
     if (e.target.matches && e.target.matches("[data-rl-remove]")) { rl.removeWinner = e.target.checked; }
     if (e.target.matches && e.target.matches("[data-rl-draw]")) { rl.draw = +e.target.value; try { localStorage.setItem("portal_roulette_draw", rl.draw); } catch (x) {} if (!rl.spinning) render(); }

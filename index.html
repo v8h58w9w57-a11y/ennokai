@@ -2232,7 +2232,7 @@
       });
       var data = {
         v: 1,
-        roster: (r.data || []).map(function(p){ return { name: p.name, gender: p.gender || null, source: p.source || "preset", event_id: p.event_id || null }; }),
+        roster: (r.data || []).map(function(p){ return { name: p.name, gender: p.gender || null, source: p.source || "preset", event_id: p.event_id || null, position: p.position || null }; }),
         events: (e.data || []).map(function(x){ return { id: x.id, name: x.name, date: x.date, location: x.location, time: x.time, schedule: x.schedule, notes: x.notes, checkin_required: x.checkin_required }; }),
         attendance: att, teams: teams,
         meetings: mt.error ? [] : (mt.data || [])
@@ -2286,13 +2286,16 @@
       // 1) 行事
       if((d.events || []).length) await sb.from("ennokai_events").upsert(d.events, { onConflict: "id" });
       // 2) 名簿（名前で照らし合わせ、いない人は追加・男女を合わせる）
-      var cur = await sb.from("ennokai_roster").select("id,name,gender");
+      var cur = await sb.from("ennokai_roster").select("*");
       var have = {}; (cur.data || []).forEach(function(p){ have[nameKey(p.name)] = p; });
-      var add = (d.roster || []).filter(function(p){ return !have[nameKey(p.name)]; }).map(function(p){ var o = { name: p.name, gender: p.gender, source: p.source || "preset" }; if(p.event_id) o.event_id = p.event_id; return o; });
+      var add = (d.roster || []).filter(function(p){ return !have[nameKey(p.name)]; }).map(function(p){ var o = { name: p.name, gender: p.gender, source: p.source || "preset" }; if(p.event_id) o.event_id = p.event_id; if(p.position) o.position = p.position; return o; });
       if(add.length) await sb.from("ennokai_roster").insert(add);
       var byG = {};
       (d.roster || []).forEach(function(p){ var h = have[nameKey(p.name)]; if(h && (h.gender || null) !== (p.gender || null)) (byG[p.gender || ""] = byG[p.gender || ""] || []).push(h.id); });
       for(var g in byG){ await sb.from("ennokai_roster").update({ gender: g || null }).in("id", byG[g]); }
+      var byP = {};
+      (d.roster || []).forEach(function(p){ var h = have[nameKey(p.name)]; if(h && p.position !== undefined && (h.position || null) !== (p.position || null)) (byP[p.position || ""] = byP[p.position || ""] || []).push(h.id); });
+      for(var ps in byP){ await sb.from("ennokai_roster").update({ position: ps || null }).in("id", byP[ps]); }
       var now = await sb.from("ennokai_roster").select("id,name");
       var idOf = {}; (now.data || []).forEach(function(p){ idOf[nameKey(p.name)] = p.id; });
       // 3) 出欠（その時点の行事ごとに入れ直す）
