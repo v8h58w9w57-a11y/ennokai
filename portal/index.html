@@ -90,7 +90,8 @@ h1.page{font-family:var(--font-title);font-size:1.7rem;font-weight:900;margin:.2
 .cal-nav{display:flex;gap:6px}
 .cal-nav button{width:40px;height:40px;border-radius:14px;border:none;background:var(--card);box-shadow:var(--shadow);cursor:pointer;font-size:1.1rem}
 .cal{padding:14px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.day{min-width:0}
 .dow{text-align:center;font-size:.72rem;font-weight:800;color:var(--muted);padding:4px 0}
 .dow.sun{color:#E2677F}.dow.sat{color:#4E8FD8}
 .day{min-height:84px;border-radius:16px;padding:6px;background:#FFFBF8;border:1px solid transparent;display:flex;flex-direction:column;gap:3px}
@@ -99,9 +100,16 @@ h1.page{font-family:var(--font-title);font-size:1.7rem;font-weight:900;margin:.2
 .day .n{font-size:.78rem;font-weight:800}
 .day.sun .n{color:#E2677F}.day.sat .n{color:#4E8FD8}
 .chip{display:block;font-size:.68rem;font-weight:800;line-height:1.3;padding:3px 6px;border-radius:9px;text-decoration:none;color:var(--ink);background:var(--soft,#FFE3DD);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip.mt{background:#fff;border:1.5px dashed var(--dot,#A08CF0);color:#6B6274;padding:2px 6px}
+.chip.mt .ic{width:12px;height:12px;vertical-align:-2px;color:var(--dot,#A08CF0)}
+.cal-legend{display:flex;gap:16px;justify-content:flex-end;margin-top:10px;font-size:.74rem;font-weight:800;color:var(--muted)}
+.cal-legend span{display:inline-flex;align-items:center;gap:6px}
+.cal-legend i{display:inline-block;width:18px;height:10px;border-radius:5px}
+.lg-ev{background:#FFE3DD}
+.lg-mt{background:#fff;border:1.5px dashed #A08CF0}
 .tbd{margin-top:14px;padding:16px 18px}
 .tbd h3{margin:0 0 8px;font-size:.95rem}
-@media (max-width:620px){.day{min-height:62px;padding:4px}.chip{font-size:0;padding:0;height:8px;border-radius:4px;background:var(--dot,#FF9A8B)}}
+@media (max-width:620px){.day{min-height:62px;padding:4px}.chip{font-size:0;padding:0;height:8px;border-radius:4px;background:var(--dot,#FF9A8B)}.chip.mt{background:#fff;border:1.5px dashed var(--dot,#A08CF0);height:8px;padding:0}.chip.mt .ic{display:none}}
 
 /* ---------- event detail ---------- */
 .back{display:inline-flex;align-items:center;gap:4px;text-decoration:none;font-weight:800;font-size:.86rem;color:var(--muted);margin-bottom:10px}
@@ -142,6 +150,21 @@ h1.page{font-family:var(--font-title);font-size:1.7rem;font-weight:900;margin:.2
 .full-embed{height:calc(100vh - 210px);min-height:520px;width:100%;border:0;border-radius:24px;background:#fff;box-shadow:var(--shadow)}
 
 /* ---------- admin ---------- */
+.adm-title{display:flex;align-items:center;gap:10px}
+.adm-ic{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(140deg,#FF9A8B,#A08CF0);color:#fff}
+.adm-ic .ic{width:22px;height:22px}
+.adm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:18px}
+.adm-card{display:flex;align-items:center;gap:16px;padding:20px;border-radius:22px;background:var(--card);box-shadow:var(--shadow);text-decoration:none;color:var(--ink);border:2px solid transparent;transition:transform .15s,border-color .15s}
+.adm-card:hover{transform:translateY(-2px);border-color:var(--ac)}
+.adm-card-ic{flex:none;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:var(--ac);color:#fff;box-shadow:0 8px 18px -8px var(--ac)}
+.adm-card-ic .ic{width:30px;height:30px}
+.adm-card-body{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}
+.adm-card-body b{font-family:var(--font-title);font-weight:900;font-size:1.15rem}
+.adm-card-body b small{font-family:inherit;font-size:.68rem;font-weight:800;color:var(--muted);margin-left:4px}
+.adm-card-body>span{font-size:.84rem;color:var(--muted);font-weight:700}
+.adm-card-body em{font-style:normal;font-size:.78rem;font-weight:800;color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,#fff);border-radius:10px;padding:4px 10px;align-self:flex-start;margin-top:2px}
+.adm-arrow{flex:none;color:#C9C1CF}
+.adm-foot{margin-top:24px;display:flex;justify-content:center}
 .seg{display:inline-flex;background:#fff;border-radius:999px;padding:4px;box-shadow:var(--shadow);gap:2px}
 .seg button{border:none;background:none;border-radius:999px;padding:8px 16px;font-weight:800;font-size:.86rem;cursor:pointer;color:var(--muted)}
 .seg button.on{background:var(--ink);color:#fff}
@@ -355,6 +378,40 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .meet-head h1{font-family:var(--font-title);font-weight:900;font-size:1.5rem;margin:8px 0 2px}
 .meet-head p{margin:0;font-weight:700;opacity:.92}
 .todos{display:flex;flex-direction:column;gap:8px;margin:6px 0 10px}
+.mh-compact{padding:14px 20px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.mh-compact h1{font-size:1.25rem;margin:0}
+.mf2{padding:16px 18px}
+.mf2 .field{gap:4px}
+.mf-top{display:grid;grid-template-columns:150px 150px 1fr 1.6fr;gap:10px}
+.mf-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+.mf-col{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mf-col.pre{padding:12px;border-radius:16px;background:#FFFAF2;border:1.5px solid #F3D9B8}
+.mf-col.pre .field{flex:1}
+.mf-h{display:flex;align-items:center;gap:6px;font-weight:900;color:var(--ink);font-size:.86rem}
+.mf-h small{color:var(--muted);font-weight:700;font-size:.74rem}
+.mf-col.pre .mf-h .ic{color:#D98A2B}.mf-col.rec .mf-h .ic{color:#4E8FD8}
+.mf2 textarea,.edit-form textarea{min-height:110px;overflow:hidden;resize:none}
+.mf2 .mf-big{min-height:260px;background:#fff}
+.mf-todo{margin-top:0}
+.mf-todo .todos{margin:4px 0 0}
+.mh-acts{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mh-acts .btn.sm{background:rgba(255,255,255,.92);color:var(--ink);border:none}
+.mh-acts .btn.sm.danger{color:#C2415E}
+.mh-compact p{margin:0}
+.mf2 input[type=date]{height:44px;padding:0 12px;border-radius:14px;border:1.5px solid #EDE6F2;background:#fff;font:inherit;font-weight:700;color:var(--ink)}
+.mf2 + .edit-actions,.mf2 .edit-actions{margin-top:12px}
+@media (max-width:760px){.mf-top{grid-template-columns:1fr 1fr}.mf-cols{grid-template-columns:1fr}.mf2 textarea{height:auto;min-height:110px}}
+.msec{margin:18px 0 6px;padding:18px 18px 8px;border-radius:20px;border:1.5px solid var(--ms,#EDE6F2);background:var(--mb,#FCFAFE)}
+.msec.pre{--ms:#F3D9B8;--mb:#FFFAF2}
+.msec.rec{--ms:#D8E4F7;--mb:#F7FAFF}
+.msec-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.msec-h b{font-family:var(--font-title);font-weight:900;font-size:1.05rem}
+.msec-h small{color:var(--muted);font-weight:700;font-size:.78rem}
+.msec.pre .msec-h .ic{color:#D98A2B}.msec.rec .msec-h .ic{color:#4E8FD8}
+.ag-no{flex:none;width:24px;height:24px;border-radius:50%;background:#F3D9B8;color:#8A5410;font-weight:900;font-size:.78rem;display:grid;place-items:center}
+.ag-row input[data-ag-text]{flex:1;min-width:0}
+.ag-row.done input[data-ag-text]{text-decoration:line-through;color:var(--muted)}
+.todo-row .todo-due{width:110px;flex:none}
 .todo-row{display:flex;gap:8px;align-items:center}
 .todo-row input[data-todo-text]{flex:1;min-width:0}
 .todo-row .todo-who{width:130px;flex:none}
@@ -368,7 +425,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .open-todo .todo-chk{width:22px;height:22px;border-radius:7px}
 .open-todo .who{font-size:.74rem;padding:2px 9px;border-radius:999px;background:var(--sky-soft);color:#2F6FC4}
 .open-todo small{margin-left:auto;font-size:.74rem;color:var(--muted);font-weight:700}
-@media (max-width:560px){.todo-row{flex-wrap:wrap}.todo-row .todo-who{width:auto;flex:1}}
+@media (max-width:560px){.todo-row{flex-wrap:wrap}.todo-row .todo-who,.todo-row .todo-due{width:auto;flex:1}.msec{padding:14px 12px 4px}}
 @media print{
   .meet-form{box-shadow:none;border:1px solid #ddd}
   .meet-form input,.meet-form textarea{border:none;padding:0;min-height:0;resize:none;box-shadow:none}
@@ -817,7 +874,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   <a href="#/calendar" data-tab="calendar"><span data-ic="calendar"></span>カレンダー</a>
   <a href="#/checkin" data-tab="checkin"><span data-ic="check"></span>出欠</a>
   <a href="#/roulette" data-tab="roulette"><span data-ic="wheel"></span>ルーレット</a>
-  <a href="#/teams" data-tab="teams"><span data-ic="users"></span>チーム分け</a>
+  <a href="#/admin" data-tab="admin"><span data-ic="lock"></span>主催者</a>
 </nav>
 <div class="toast" id="toast"></div>
 
@@ -938,6 +995,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var b = document.getElementById("adminBtn");
     b.classList.toggle("on", isAdmin());
     b.innerHTML = isAdmin() ? I("unlock") + " 主催者モード" : I("lock") + " 主催者";
+    var at = document.querySelector('.tabbar a[data-tab="admin"] [data-ic]'); if (at) at.innerHTML = I(isAdmin() ? "unlock" : "lock");
   }
   function fmtDate(ev){
     var pd = parseDate(ev.date);
@@ -985,15 +1043,29 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       if (pd && pd.y === calY && pd.m === calM) { if (pd.exact) (byDay[pd.d] = byDay[pd.d] || []).push(ev); else monthOnly.push(ev); }
       else if (!pd) tbd.push(ev);
     });
+    // 打ち合わせ（日付が決まっているもの）も同じ日に並べる
+    var meetByDay = {}, evById = {};
+    S.events.forEach(function(ev){ evById[ev.id] = ev; });
+    (S.meetings || []).forEach(function(m){
+      if (!m.date) return;
+      var p = m.date.split("-");
+      if (+p[0] === calY && +p[1] === calM) (meetByDay[+p[2]] = meetByDay[+p[2]] || []).push(m);
+    });
     var today = new Date();
     var h = '<div class="view"><div class="cal-head"><h2>' + calY + '年 ' + calM + '月</h2><div class="cal-nav"><button data-cal="-1" aria-label="前の月">‹</button><button data-cal="0" aria-label="今月">●</button><button data-cal="1" aria-label="次の月">›</button></div></div>';
     h += '<div class="card cal"><div class="cal-grid">' + ["日","月","火","水","木","金","土"].map(function(w, k){ return '<div class="dow' + (k === 0 ? ' sun' : k === 6 ? ' sat' : '') + '">' + w + '</div>'; }).join("");
     cells.forEach(function(c, k){
       var isToday = !c.out && today.getFullYear() === calY && today.getMonth() + 1 === calM && today.getDate() === c.d;
       h += '<div class="day' + (c.out ? ' out' : '') + (isToday ? ' today' : '') + (k % 7 === 0 ? ' sun' : k % 7 === 6 ? ' sat' : '') + '"><span class="n">' + c.d + '</span>'
-        + (!c.out && byDay[c.d] ? byDay[c.d].map(function(ev){ var th = theme(ev); return '<a class="chip" href="#/event/' + ev.id + '" style="--soft:' + th.soft + ';--dot:' + th.dot + '">' + th.e + ' ' + esc(ev.name) + '</a>'; }).join("") : '') + '</div>';
+        + (!c.out && byDay[c.d] ? byDay[c.d].map(function(ev){ var th = theme(ev); return '<a class="chip" href="#/event/' + ev.id + '" style="--soft:' + th.soft + ';--dot:' + th.dot + '">' + th.e + ' ' + esc(ev.name) + '</a>'; }).join("") : '')
+        + (!c.out && meetByDay[c.d] ? meetByDay[c.d].map(function(m){
+            var ev = evById[m.event_id], th = ev ? theme(ev) : { dot: "#A08CF0" };
+            var href = isAdmin() ? '#/meeting/' + m.id : (ev ? '#/event/' + ev.id : '#/');
+            var hm = half(m.time || "").match(/\d{1,2}[:：]\d{2}/);
+            return '<a class="chip mt" href="' + href + '" style="--dot:' + th.dot + '" title="打ち合わせ' + (ev ? '（' + esc(ev.name) + '）' : '') + (m.time ? '　' + esc(m.time) : '') + (m.place ? '　' + esc(m.place) : '') + '">' + I('chat') + ' 打合せ' + (hm ? ' ' + hm[0].replace("：", ":") : '') + '</a>';
+          }).join("") : '') + '</div>';
     });
-    h += '</div></div>';
+    h += '</div><div class="cal-legend"><span><i class="lg-ev"></i>行事</span><span><i class="lg-mt"></i>打ち合わせ</span></div></div>';
     if (monthOnly.length) h += '<div class="card tbd"><h3>' + I('calendar') + ' ' + calM + '月中（日にち調整中）</h3><div class="list">' + monthOnly.map(evCard).join("") + '</div></div>';
     if (tbd.length) h += '<div class="card tbd"><h3>' + I('hourglass') + ' 日程調整中</h3><div class="list">' + tbd.map(evCard).join("") + '</div></div>';
     return h + '</div>';
@@ -1107,7 +1179,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   function nextMeetingId(list){ var t = todayISO(); var n = list.find(function(m){ return m.date && m.date >= t; }); return n ? n.id : null; }
   function meetCard(m, isNext){
     var td = m.todos || [], done = td.filter(function(x){ return x.done; }).length;
-    var first = String(m.content || m.decisions || "").split("\n").map(function(x){ return x.trim(); }).filter(Boolean)[0] || "";
+    var xx = m.extra || {}, ag = (xx.agenda || []).filter(function(a){ return a.text; });
+    var first = String(m.content || m.decisions || "").split("\n").map(function(x){ return x.trim(); }).filter(Boolean)[0] || (xx.confirm ? "確認すること：" + String(xx.confirm).split("\n").map(function(x){ return x.replace(/^[・\-\s]+/, "").trim(); }).filter(Boolean).join("、") : "");
     var past = m.date && m.date < todayISO();
     return '<a class="meet' + (isNext ? ' next-meet' : '') + (past ? ' past' : '') + '" href="#/meeting/' + m.id + '">'
       + '<span class="meet-date"><b>' + (m.date ? (+m.date.split("-")[2]) : "?") + '</b><small>' + (m.date ? (+m.date.split("-")[1]) + "月" : "未定") + '</small></span>'
@@ -1129,7 +1202,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var m = isNew ? null : (S.meetings || []).find(function(x){ return x.id === id; });
     if (!isNew && !m) return '<div class="view card empty">打ち合わせが見つかりませんでした</div>';
     if (!meetDraft || meetDraft._key !== (isNew ? "new:" + evIdForNew : id)) {
-      meetDraft = isNew ? { _key: "new:" + evIdForNew, event_id: evIdForNew, date: todayISO(), time: "", place: "", attendees: "", content: "", decisions: "", todos: [] } : JSON.parse(JSON.stringify(m));
+      meetDraft = isNew ? { _key: "new:" + evIdForNew, event_id: evIdForNew, date: todayISO(), time: "", place: "", attendees: "", content: "", decisions: "", todos: [], extra: {} } : JSON.parse(JSON.stringify(m));
+      meetDraft.extra = meetDraft.extra || {}; meetDraft.extra.agenda = meetDraft.extra.agenda || [];
       meetDraft._key = isNew ? "new:" + evIdForNew : id;
     }
     var d = meetDraft, ev = S.events.find(function(e){ return e.id === d.event_id; });
@@ -1139,29 +1213,54 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       return '<div class="todo-row' + (t.done ? ' done' : '') + '"><button class="todo-chk" data-todo-done="' + i + '" aria-label="完了">' + (t.done ? I('check') : '') + '</button>'
         + '<input type="text" data-todo-text="' + i + '" value="' + esc(t.text || '') + '" placeholder="やること">'
         + '<input type="text" class="todo-who" data-todo-who="' + i + '" value="' + esc(t.who || '') + '" placeholder="担当">'
+        + '<input type="text" class="todo-due" data-todo-due="' + i + '" value="' + esc(t.due || '') + '" placeholder="いつまで">'
         + '<button class="todo-del" data-todo-del="' + i + '" aria-label="削除">' + I('trash') + '</button></div>';
     }).join("");
-    return '<div class="view"><a class="back no-print" href="' + (ev ? '#/event/' + ev.id : '#/teams') + '">‹ ' + (ev ? esc(ev.name) : 'もどる') + '</a>'
-      + '<div class="meet-head" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><span class="tag">MEETING</span><h1>' + (isNew ? '打ち合わせを追加' : esc(fmtMeetDate(d)) + 'の打ち合わせ') + '</h1><p>' + (ev ? esc(ev.name) : '') + '</p></div>'
-      + '<div class="card panel edit-form meet-form">'
-      + '<div class="two">' + f('日付', 'date', '', 'date') + f('時間', 'time', '例：17:30〜18:00') + '</div>'
-      + '<div class="two">' + f('場所', 'place', '例：本社 休憩室') + f('出席者', 'attendees', '例：髙橋（会長）・齊藤（副会長）・伊藤（会計）') + '</div>'
-      + '<label class="field">話し合った内容<textarea data-mf="content" placeholder="・種目について&#10;・チーム分けについて">' + esc(d.content || '') + '</textarea></label>'
-      + '<label class="field">決まったこと<textarea data-mf="decisions" style="min-height:120px" placeholder="・卓球はダブルスで行う&#10;・昼食はレストラン コロナ">' + esc(d.decisions || '') + '</textarea></label>'
-      + '<div class="field">やること（担当つき）<div class="todos">' + (todos || '<span class="hint" style="margin:0">まだありません</span>') + '</div><button class="btn sm no-print" data-todo-add style="align-self:flex-start">' + I('plus') + ' やることを追加</button></div>'
-      + '<div class="edit-actions no-print">' + (isNew ? '<span></span>' : '<button class="btn danger" data-meet-del="' + d.id + '">' + I('trash') + ' 削除</button>') + '<span style="display:flex;gap:8px;flex-wrap:wrap">' + (isNew ? '' : '<button class="btn" data-meet-print>' + I('print') + ' 印刷</button>') + '<button class="btn primary" data-meet-save>' + I('save') + ' 保存する</button></span></div>'
+    var x = d.extra || {};
+    var xa = function(label, key, ph, h){ return '<label class="field">' + label + '<textarea data-mx="' + key + '" style="min-height:' + (h || 90) + 'px" placeholder="' + ph + '">' + esc(x[key] || '') + '</textarea></label>'; };
+    var xi = function(label, key, ph){ return '<label class="field">' + label + '<input type="text" data-mx="' + key + '" value="' + esc(x[key] || '') + '" placeholder="' + esc(ph) + '"></label>'; };
+    var agenda = (x.agenda || []).map(function(a, i){
+      return '<div class="todo-row ag-row' + (a.done ? ' done' : '') + '"><button class="todo-chk" data-ag-done="' + i + '" aria-label="話した">' + (a.done ? I('check') : '') + '</button>'
+        + '<span class="ag-no">' + (i + 1) + '</span><input type="text" data-ag-text="' + i + '" value="' + esc(a.text || '') + '" placeholder="話し合いたいこと">'
+        + '<input type="text" class="todo-who" data-ag-who="' + i + '" value="' + esc(a.who || '') + '" placeholder="説明する人">'
+        + '<button class="todo-del" data-ag-del="' + i + '" aria-label="削除">' + I('trash') + '</button></div>';
+    }).join("");
+    var noExtra = (S.meetings || []).length && !("extra" in S.meetings[0]);
+    return '<div class="view"><a class="back no-print" href="' + (ev ? '#/event/' + ev.id : '#/admin/meetings') + '">‹ ' + (ev ? esc(ev.name) : 'もどる') + '</a>'
+      + '<div class="meet-head mh-compact" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><h1>' + (isNew ? '打ち合わせを追加' : esc(fmtMeetDate(d)) + 'の打ち合わせ') + '</h1><p>' + (ev ? esc(ev.name) : '') + '</p>' + '<span class="mh-acts no-print">' + (isNew ? '' : '<button class="btn sm" data-meet-print>' + I('print') + ' 印刷</button><button class="btn sm danger" data-meet-del="' + d.id + '">' + I('trash') + ' 削除</button>') + '<button class="btn primary" data-meet-save>' + I('save') + ' 保存する</button></span>' + '</div>'
+      + (noExtra ? '<div class="warn no-print">「打ち合わせで確認すること」を保存するには、データベースの更新（SQLを1回実行）が必要です。</div>' : '')
+      + '<div class="card panel edit-form meet-form mf2">'
+      + '<div class="mf-top">' + f('日付', 'date', '', 'date') + f('時間', 'time', '例：17:30〜') + f('場所', 'place', '例：休憩室') + f('出席者', 'attendees', '例：髙橋・齊藤・伊藤') + '</div>'
+      + '<div class="mf-cols">'
+      + '<div class="mf-col pre"><label class="field"><span class="mf-h">' + I('note') + '打ち合わせで確認すること<small>事前に入力しておく</small></span>'
+      + '<textarea data-mx="confirm" class="mf-big" placeholder="・種目と時間割の最終確認&#10;・乗り合わせの担当は誰にするか&#10;・景品の予算と買い出し&#10;・当日の役割分担">' + esc(x.confirm || '') + '</textarea></label></div>'
+      + '<div class="mf-col rec">'
+      + '<label class="field"><span class="mf-h">' + I('chat') + '話し合った内容</span><textarea data-mf="content" placeholder="・種目について&#10;・チーム分けについて">' + esc(d.content || '') + '</textarea></label>'
+      + '<label class="field"><span class="mf-h">' + I('check') + '決まったこと</span><textarea data-mf="decisions" placeholder="・卓球はダブルスで行う&#10;・昼食はレストラン コロナ">' + esc(d.decisions || '') + '</textarea></label>'
+      + '<div class="field mf-todo"><span class="mf-h">' + I('todo') + 'やること（担当・期限つき）<button class="btn sm no-print" data-todo-add style="margin-left:auto">' + I('plus') + ' 追加</button></span><div class="todos">' + (todos || '<span class="hint" style="margin:0">まだありません</span>') + '</div></div>'
+      + '</div></div>'
       + '</div></div>';
   }
   function readMeetForm(){
     document.querySelectorAll("[data-mf]").forEach(function(el){ meetDraft[el.dataset.mf] = el.value; });
     document.querySelectorAll("[data-todo-text]").forEach(function(el){ meetDraft.todos[+el.dataset.todoText].text = el.value; });
     document.querySelectorAll("[data-todo-who]").forEach(function(el){ meetDraft.todos[+el.dataset.todoWho].who = el.value; });
+    document.querySelectorAll("[data-todo-due]").forEach(function(el){ meetDraft.todos[+el.dataset.todoDue].due = el.value; });
+    meetDraft.extra = meetDraft.extra || {}; meetDraft.extra.agenda = meetDraft.extra.agenda || [];
+    document.querySelectorAll("[data-mx]").forEach(function(el){ meetDraft.extra[el.dataset.mx] = el.value; });
+    document.querySelectorAll("[data-ag-text]").forEach(function(el){ meetDraft.extra.agenda[+el.dataset.agText].text = el.value; });
+    document.querySelectorAll("[data-ag-who]").forEach(function(el){ meetDraft.extra.agenda[+el.dataset.agWho].who = el.value; });
   }
   async function saveMeeting(){
     readMeetForm();
     var d = meetDraft;
     var payload = { event_id: d.event_id, date: d.date || null, time: d.time || "", place: d.place || "", attendees: d.attendees || "", content: d.content || "", decisions: d.decisions || "", todos: (d.todos || []).filter(function(t){ return (t.text || "").trim(); }), updated_at: new Date().toISOString() };
-    var res = d.id ? await sb.from("ennokai_meetings").update(payload).eq("id", d.id).select().single() : await sb.from("ennokai_meetings").insert(payload).select().single();
+    var ex = Object.assign({}, d.extra || {}); ex.agenda = (ex.agenda || []).filter(function(a){ return (a.text || "").trim(); });
+    payload.extra = ex;
+    var send = function(pl){ return d.id ? sb.from("ennokai_meetings").update(pl).eq("id", d.id).select().single() : sb.from("ennokai_meetings").insert(pl).select().single(); };
+    var res = await send(payload);
+    // データベース更新前（extra 列がない）なら、今までの項目だけ保存する
+    if (res.error && /extra/.test(res.error.message || "")) { delete payload.extra; res = await send(payload); if (!res.error) toast("新しい項目はデータベース更新後に保存できます"); }
     if (res.error) { toast("保存できませんでした"); return; }
     toast("打ち合わせを保存しました");
     meetDraft = null;
@@ -1174,7 +1273,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var open = [];
     (S.meetings || []).forEach(function(m){ (m.todos || []).forEach(function(t){ if (!t.done) open.push({ m: m, t: t }); }); });
     var h = '';
-    if (open.length) h += '<div class="card panel"><h3 style="margin:0 0 10px;font-family:var(--font-title)">' + I('todo') + ' まだ終わっていないこと（' + open.length + '件）</h3>' + open.map(function(o){ var ev = S.events.find(function(e){ return e.id === o.m.event_id; }); return '<a class="open-todo" href="#/meeting/' + o.m.id + '"><span class="todo-chk"></span><span>' + esc(o.t.text) + '</span>' + (o.t.who ? '<span class="who">' + esc(o.t.who) + '</span>' : '') + '<small>' + esc(ev ? ev.name : '') + '・' + esc(fmtMeetDate(o.m)) + '</small></a>'; }).join("") + '</div>';
+    if (open.length) h += '<div class="card panel"><h3 style="margin:0 0 10px;font-family:var(--font-title)">' + I('todo') + ' まだ終わっていないこと（' + open.length + '件）</h3>' + open.map(function(o){ var ev = S.events.find(function(e){ return e.id === o.m.event_id; }); return '<a class="open-todo" href="#/meeting/' + o.m.id + '"><span class="todo-chk"></span><span>' + esc(o.t.text) + '</span>' + (o.t.who ? '<span class="who">' + esc(o.t.who) + '</span>' : '') + (o.t.due ? '<span class="who">' + esc(o.t.due) + 'まで</span>' : '') + '<small>' + esc(ev ? ev.name : '') + '・' + esc(fmtMeetDate(o.m)) + '</small></a>'; }).join("") + '</div>';
     h += evs.map(function(ev){
       var list = meetingsOf(ev.id), nx = nextMeetingId(list), th = theme(ev);
       return '<div class="card panel"><div class="row-flex" style="justify-content:space-between;align-items:center"><span style="display:flex;align-items:center;gap:10px;font-family:var(--font-title);font-weight:900;font-size:1.05rem"><span class="ev-pill-ic" style="--cc:' + th.dot + ';--cs:' + th.soft + '">' + th.svg + '</span>' + esc(ev.name) + '</span><a class="btn sm" href="#/meeting/new/' + ev.id + '">' + I('plus') + ' 追加</a></div>'
@@ -1743,7 +1842,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if ((await hashPassword(pw)) !== S.passwordHash) { err.textContent = "パスワードが違います"; return; }
     try { sessionStorage.setItem(SESSION_KEY, "1"); } catch(e){}
     toast("主催者モードになりました");
-    location.hash = next || "#/teams";
+    location.hash = next || "#/admin";
     render();
   }
 
@@ -1805,16 +1904,37 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var bo = t.members.filter(function(id){ return isMaleBoss(person(id)); }).length;
     return t.members.length + '名' + (b || g ? '（♂' + b + ' ♀' + g + (bo ? '・役' + bo : '') + '）' : '');
   }
+  /* ---------- 主催者メニュー（入口） ---------- */
+  function adminHead(ic, title, sub){
+    return '<div class="view"><a class="back no-print" href="#/admin">‹ 主催者メニュー</a><h1 class="page adm-title"><span class="adm-ic">' + I(ic) + '</span>' + title + '</h1><p class="sub">' + sub + '</p>';
+  }
+  function viewAdminHub(){
+    var nx = upcoming()[0], t = todayISO();
+    var tm = nx && S.teams[nx.id] && S.teams[nx.id].teams && S.teams[nx.id].teams.length ? S.teams[nx.id].teams.length : 0;
+    var nm = (S.meetings || []).filter(function(m){ return m.date && m.date >= t; }).sort(function(a, b){ return a.date.localeCompare(b.date); })[0];
+    var openTodo = 0; (S.meetings || []).forEach(function(m){ (m.todos || []).forEach(function(x){ if (!x.done) openTodo++; }); });
+    var noG = S.roster.filter(function(p){ return !p.gender; }).length;
+    var card = function(href, ic, color, title, desc, status, ext){
+      return '<a class="adm-card" href="' + href + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + ' style="--ac:' + color + '"><span class="adm-card-ic">' + I(ic) + '</span><span class="adm-card-body"><b>' + title + (ext ? ' <small>別のページで開く</small>' : '') + '</b><span>' + desc + '</span>' + (status ? '<em>' + status + '</em>' : '') + '</span><span class="adm-arrow">' + I('arrow') + '</span></a>';
+    };
+    var nmEv = nm ? S.events.find(function(e){ return e.id === nm.event_id; }) : null;
+    return '<div class="view"><h1 class="page">主催者メニュー</h1><p class="sub">行事の準備に使う機能は、ここにまとまっています</p>'
+      + '<div class="adm-grid">'
+      + card("#/teams", "users", "#FF8A80", "チーム分け", "出席者を自動・手動でチームに分ける", nx ? esc(nx.name) + "：" + (tm ? "チーム保存済み（" + tm + "チーム）" : "まだ作っていません") : "")
+      + card("#/admin/meetings", "chat", "#A08CF0", "打ち合わせ", "打ち合わせで確認すること・決まったことの記録", (nm ? "次回 " + esc(fmtMeetDate(nm)) + (nmEv ? "（" + esc(nmEv.name) + "）" : "") : "予定なし") + (openTodo ? "　｜　やること残り " + openTodo + "件" : ""))
+      + card("#/edit/new", "plus", "#F6A04D", "行事を追加", "新しい行事を登録（修正は各行事のページから）", "登録済みの行事 " + S.events.length + "件")
+      + card("#/admin/gender", "person", "#6BB8F0", "名簿の男女・役職", "チーム分けで男女・役職をそろえるための設定", noG ? "男女が未設定 " + noG + "名" : "全員設定済み")
+      + card("../", "check", "#5CC9A7", "出欠の受付（宴の会）", "名簿の登録・出欠の入力・バックアップ", "", true)
+      + '</div>'
+      + '<div class="adm-foot"><button class="btn" data-admin-logout>' + I('lock') + ' 主催者モードを終了</button></div></div>';
+  }
   function viewTeams(evId){
     if (!isAdmin()) return viewGate("#/teams" + (evId ? "/" + evId : ""));
     var evs = sortedEvents();
     if (!evId && evs.length) evId = (upcoming()[0] || evs[0]).id;
     var ev = S.events.find(function(e){ return e.id === evId; });
-    var h = '<div class="view"><h1 class="page">主催者メニュー</h1><p class="sub">チーム分け・名簿の男女・行事の打ち合わせを管理できます</p>'
-      + '<div class="seg no-print"><button data-atab="teams" class="' + (adminTab === "teams" ? "on" : "") + '">' + I('users') + ' チーム分け</button><button data-atab="gender" class="' + (adminTab === "gender" ? "on" : "") + '">' + I('person') + ' 名簿の男女・役職</button><button data-atab="meetings" class="' + (adminTab === "meetings" ? "on" : "") + '">' + I('chat') + ' 打ち合わせ</button></div>';
+    var h = adminHead("users", "チーム分け", "出席者を自動・手動でチームに分けます");
     if (!S.hasTeams || !S.hasGender) h += '<div class="warn">' + I('alert') + ' データベースの準備がまだです（SQLを1回実行してください）。それまでは' + (!S.hasGender ? '男女の設定と' : '') + (!S.hasTeams ? 'チームの保存' : '') + 'ができません。</div>';
-    if (adminTab === "gender") return h + viewGender() + '</div>';
-    if (adminTab === "meetings") return h + viewMeetingsAll() + '</div>';
     if (!ev) return h + '<div class="card empty">行事がありません</div></div>';
     var ppl = present(ev.id), saved = S.teams[ev.id];
     if (!draft || draft.evId !== ev.id) draft = saved && saved.teams ? { evId: ev.id, teams: JSON.parse(JSON.stringify(saved.teams)), pool: (saved.pool || []).slice(), dirty: false } : { evId: ev.id, teams: [], pool: [], dirty: false };
@@ -1942,7 +2062,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     lastRoute = routeKey;
     if (!S.loaded) { app.innerHTML = '<div class="empty">読み込み中…</div>'; return; }
     var r = route(), tab = r[0] || "home";
-    setTab(tab === "event" || tab === "edit" ? "home" : tab === "meeting" ? "teams" : tab);
+    setTab(tab === "event" ? "home" : tab === "edit" || tab === "meeting" || tab === "teams" ? "admin" : tab);
     if (tab === "calendar") app.innerHTML = viewCalendar();
     else if (tab === "event") app.innerHTML = viewEvent(r[1]);
     else if (tab === "checkin") { var hadFocus = document.activeElement && document.activeElement.id === "attQ"; app.innerHTML = viewCheckin(); if (hadFocus) { var qi = document.getElementById("attQ"); qi.focus(); qi.setSelectionRange(qi.value.length, qi.value.length); } }
@@ -1950,9 +2070,17 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     else if (tab === "edit") app.innerHTML = viewEdit(r[1]);
     else if (tab === "meeting") app.innerHTML = viewMeeting(r[1], r[2]);
     else if (tab === "roulette") { if (!rl.spinning) { app.innerHTML = viewRoulette(); requestAnimationFrame(slotSize); } }
-    else if (tab === "admin") app.innerHTML = viewGate("#/teams");
+    else if (tab === "admin") {
+      if (!isAdmin()) app.innerHTML = viewGate(location.hash);
+      else if (r[1] === "gender") app.innerHTML = adminHead("person", "名簿の男女・役職", "チーム分けで男女・役職をそろえるための設定です") + viewGender() + '</div>';
+      else if (r[1] === "meetings") app.innerHTML = adminHead("chat", "打ち合わせ", "行事ごとの打ち合わせの記録です") + viewMeetingsAll() + '</div>';
+      else app.innerHTML = viewAdminHub();
+    }
     else app.innerHTML = viewHome();
+    if (tab === "meeting" || tab === "edit") app.querySelectorAll("textarea").forEach(autoGrow);
   }
+  // 入力欄の中でスクロールしないよう、文章の量に合わせて高さを伸ばす
+  function autoGrow(el){ el.style.height = "auto"; el.style.height = (el.scrollHeight + 4) + "px"; }
   window.addEventListener("hashchange", function(){ selected = null; window.scrollTo(0, 0); render(); });
 
   /* ---------- 操作 ---------- */
@@ -1966,10 +2094,10 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       render(); return;
     }
     if (e.target.closest("#adminBtn")) {
-      if (isAdmin()) { if (location.hash.indexOf("#/teams") === 0) { try { sessionStorage.removeItem(SESSION_KEY); } catch(x){} toast("主催者モードを終了しました"); location.hash = "#/"; render(); } else location.hash = "#/teams"; }
-      else location.hash = "#/admin";
+      location.hash = "#/admin";
       return;
     }
+    if (e.target.closest("[data-admin-logout]")) { try { sessionStorage.removeItem(SESSION_KEY); } catch(x){} toast("主催者モードを終了しました"); location.hash = "#/"; render(); return; }
     if ((t = e.target.closest("#gateGo"))) { tryLogin(t.dataset.next); return; }
     if ((t = e.target.closest("[data-atab]"))) { adminTab = t.dataset.atab; render(); return; }
     if ((t = e.target.closest("[data-pos]"))) {
@@ -2015,11 +2143,14 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (e.target.closest("[data-todo-add]")) { readMeetForm(); meetDraft.todos = meetDraft.todos || []; meetDraft.todos.push({ text: "", who: "", done: false }); render(); var ins = document.querySelectorAll("[data-todo-text]"); if (ins.length) ins[ins.length - 1].focus(); return; }
     if ((t = e.target.closest("[data-todo-done]"))) { readMeetForm(); var td = meetDraft.todos[+t.dataset.todoDone]; td.done = !td.done; render(); return; }
     if ((t = e.target.closest("[data-todo-del]"))) { readMeetForm(); meetDraft.todos.splice(+t.dataset.todoDel, 1); render(); return; }
+    if (e.target.closest("[data-ag-add]")) { readMeetForm(); meetDraft.extra.agenda.push({ text: "", who: "", done: false }); render(); var ai = document.querySelectorAll("[data-ag-text]"); if (ai.length) ai[ai.length - 1].focus(); return; }
+    if ((t = e.target.closest("[data-ag-done]"))) { readMeetForm(); var ag = meetDraft.extra.agenda[+t.dataset.agDone]; ag.done = !ag.done; render(); return; }
+    if ((t = e.target.closest("[data-ag-del]"))) { readMeetForm(); meetDraft.extra.agenda.splice(+t.dataset.agDel, 1); render(); return; }
     if ((t = e.target.closest("[data-meet-del]"))) {
       if (!window.confirm("この打ち合わせの記録を削除します。よろしいですか？")) return;
       var md = await sb.from("ennokai_meetings").delete().eq("id", t.dataset.meetDel);
       if (md.error) { toast("削除できませんでした"); return; }
-      var evBack = meetDraft && meetDraft.event_id; meetDraft = null; toast("削除しました"); await load(); location.hash = evBack ? "#/event/" + evBack : "#/teams"; return;
+      var evBack = meetDraft && meetDraft.event_id; meetDraft = null; toast("削除しました"); await load(); location.hash = evBack ? "#/event/" + evBack : "#/admin/meetings"; return;
     }
     if ((t = e.target.closest("[data-delev]"))) {
       var dv = S.events.find(function(x){ return x.id === t.dataset.delev; });
@@ -2044,6 +2175,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if ((t = e.target.closest("[data-team]")) && selected) { moveTo(selected, t.dataset.team); return; }
   });
   document.addEventListener("input", function(e){
+    if (e.target.tagName === "TEXTAREA" && e.target.closest(".edit-form")) autoGrow(e.target);
     if (e.target.id === "attQ") { attQuery = e.target.value; render(); }
     if (e.target.matches && e.target.matches("[data-rl-custom]")) { rl.custom = e.target.value; rl.removed = {}; try { localStorage.setItem("portal_roulette_custom", rl.custom); } catch (x) {} var w = document.getElementById("rlWheel"); if (w) w.innerHTML = wheelSVG(rlItems()); var sr = document.getElementById("slReel"); if (sr) sr.innerHTML = slotStrip(rlItems(), null); var c = document.querySelector(".rl-count b"); if (c) c.textContent = rlItems().length; var b = document.querySelector("[data-rl-spin]"); if (b) b.disabled = rlItems().length < 2; }
   });
