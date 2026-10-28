@@ -958,6 +958,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .sv-mem li i{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:.62rem;color:#fff;background:#B9AFC0}
 .sv-mem li i.b{background:#2F6FC4}.sv-mem li i.f{background:#B8467A}
 .sv-mem li em{font-style:normal;font-size:.62rem;font-weight:800;color:#8A5410;background:#FFF0D6;border-radius:6px;padding:0 5px;white-space:nowrap}
+.sv-mem li span{white-space:nowrap}
 .sv-mem li small{font-size:.62rem;color:#8A6508;font-weight:800}
 .sv-games{margin:6px 12px 12px;padding:8px 10px;border-radius:12px;background:color-mix(in srgb,var(--tc) 10%,#fff)}
 .sv-games div{display:flex;gap:8px;font-size:.8rem;font-weight:700;line-height:1.5}
@@ -984,6 +985,11 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   .sv-write b{flex:none;width:19mm;color:var(--tc);filter:brightness(.75)}
   .sv-write span{flex:1;border-bottom:1pt solid #CFC5D6;height:15pt;font-size:8pt;color:var(--muted)}
 }
+.sv-var{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 0}
+.sv-var>span{font-size:.84rem;font-weight:800;color:var(--muted)}
+.sv-var .seg button{min-height:40px}
+.sv-vtag{display:inline-block;margin:0 0 10px;font-size:.84rem;font-weight:900;padding:4px 12px;border-radius:999px;background:#fff;color:#C94A36}
+@media print{.sv-vtag{margin:0 auto 0 8pt;font-size:9pt;padding:1.5pt 8pt;white-space:nowrap}.sv-head{flex-wrap:wrap;row-gap:4pt}.sv-head h1{white-space:nowrap}.sv-facts{flex-basis:100%;justify-content:flex-start}}
 /* 行事ページのスケジュール案内 */
 .sv-link{display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:linear-gradient(130deg,var(--peach-soft),var(--lav-soft));text-decoration:none;color:var(--ink)}
 .sv-link .ic-b{flex:none;width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:#fff;color:#E8644F}
@@ -1205,8 +1211,12 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     return h + '</div>';
   }
 
+  // 当日の流れに「【ダブルス】10:05〜…」のような印付きの行があれば、選んだパターン（なければ最初の印）の行だけを使う
+  var svVariant = null; try { svVariant = localStorage.getItem("portal_sched_variant"); } catch (e) {}
+  function schedVariants(text){ var v = []; String(text || "").replace(/^\s*【(.+?)】/gm, function(_, k){ if (v.indexOf(k) < 0) v.push(k); }); return v; }
   function parseSchedule(text){
-    return String(text || "").split(/\n/).map(function(l){ return l.trim(); }).filter(Boolean).reduce(function(out, line){
+    var vs = schedVariants(text), cur = vs.indexOf(svVariant) >= 0 ? svVariant : vs[0];
+    return String(text || "").split(/\n/).map(function(l){ return l.trim(); }).filter(Boolean).map(function(l){ var m = l.match(/^【(.+?)】\s*(.*)$/); return m ? (m[1] === cur ? m[2] : "") : l; }).filter(Boolean).reduce(function(out, line){
       var m = half(line).match(/^(\d{1,2}[:：]\d{2}(?:\s*[〜~\-]\s*(?:\d{1,2}[:：]\d{2})?)?\s*(?:頃)?)\s*(.*)$/);
       if (m) out.push({ tm: m[1].replace(/\s/g, ""), tx: line.slice(line.length - m[2].length) });
       else if (out.length) out[out.length - 1].tx += (/[A-Za-z0-9]$/.test(out[out.length - 1].tx) && /^[A-Za-z0-9]/.test(line) ? " " : "") + line;
@@ -1259,6 +1269,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     list.sort(function(a, b){ return key(a) - key(b); });
     var ev = (id && list.find(function(e){ return e.id === id; })) || list.find(function(e){ return key(e) >= today; }) || list[list.length - 1];
     var th = theme(ev), sch = parseSchedule(ev.schedule);
+    var vs = schedVariants(ev.schedule), curV = vs.indexOf(svVariant) >= 0 ? svVariant : vs[0];
     var rows = sch.map(function(st){
       var tm = half(st.tm).replace(/：/g, ":"), parts = tm.split(/[〜~\-]/), a = toMin(parts[0]), b = parts[1] ? toMin(parts[1]) : null;
       var tx = st.tx.trim(), sp = tx.search(/[\s　]/), title = sp > 0 && sp <= 22 ? tx.slice(0, sp) : tx, sub = sp > 0 && sp <= 22 ? tx.slice(sp + 1).trim() : "";
@@ -1272,9 +1283,10 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var pd = parseDate(ev.date), isToday = pd && pd.exact && pd.y === now.getFullYear() && pd.m === now.getMonth() + 1 && pd.d === now.getDate(), nm = now.getHours() * 60 + now.getMinutes();
     var h = '<div class="view sv"><a class="back" href="#/event/' + ev.id + '">‹ ' + esc(ev.name) + '</a>';
     if (list.length > 1) h += '<div class="sv-pick">' + list.map(function(e){ return '<a href="#/schedule/' + e.id + '"' + (e === ev ? ' class="on"' : '') + '>' + esc(e.name) + '</a>'; }).join("") + '</div>';
-    h += '<div class="sv-head" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><small>SCHEDULE</small><h1>' + esc(ev.name) + '　当日のスケジュール</h1><div class="sv-facts">'
+    h += '<div class="sv-head" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><small>SCHEDULE</small><h1>' + esc(ev.name) + '　当日のスケジュール</h1>' + (curV ? '<div class="sv-vtag">卓球：' + esc(curV) + '</div>' : '') + '<div class="sv-facts">'
       + '<span>' + I('calendar') + esc(fmtDate(ev)) + '</span>' + (ev.time ? '<span>' + I('clock') + esc(ev.time) + '</span>' : '') + (ev.location ? '<span>' + I('pin') + esc(ev.location) + '</span>' : '') + '</div></div>';
     var link = (ev.notes || "").match(/https?:\/\/\S+\.html/);
+    if (vs.length > 1) h += '<div class="sv-var no-print"><span>卓球のやり方</span><div class="seg">' + vs.map(function(v){ return '<button data-sv-var="' + esc(v) + '"' + (v === curV ? ' class="on"' : '') + '>' + esc(v) + '</button>'; }).join("") + '</div></div>';
     h += '<div class="sv-acts"><button class="btn primary" data-sv-print>' + I('print') + ' A4で印刷する</button>' + (link ? '<a class="btn" href="' + esc(link[0]) + '" target="_blank" rel="noopener">トーナメント表・ルール</a>' : '') + '</div>';
     if (timed.length > 1) {
       var S0 = timed[0].a, E0 = Math.max.apply(null, timed.map(function(r){ return r.bb; })), W = Math.max(E0 - S0, 1);
@@ -1289,11 +1301,11 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       return '<div class="sv-row' + (isNow ? ' now' : '') + '" style="--cc:' + r.kd.c + ';--cs:' + r.kd.s + '"><div class="sv-tm"><b>' + esc(r.start) + '</b>' + (r.end ? '<small>〜 ' + esc(r.end) + '</small>' : r.approx ? '<small>ごろ</small>' : '') + '</div>'
         + '<div class="sv-tx">' + (r.kd.label ? '<span class="tg">' + (isNow ? 'いまここ・' : '') + r.kd.label + '</span>' : '') + '<h3>' + esc(r.title) + '</h3>' + (r.sub ? '<p>' + esc(r.sub) + '</p>' : '') + '</div></div>';
     }).join("") + '</div>';
-    h += schedTeams(ev, rows);
+    h += schedTeams(ev, rows, curV);
     return h + '</div>';
   }
   // スケジュール: 各チームのメンバーと、そのチームが出る試合（当日の流れの文からチーム名で拾う）
-  function schedTeams(ev, rows){
+  function schedTeams(ev, rows, variant){
     var tm = S.teams[ev.id];
     if (!tm || !tm.teams || !tm.teams.length) return '';
     var pool = (tm.pool || []).map(person).filter(Boolean);
@@ -1307,7 +1319,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
         return '<div class="sv-team" style="--tc:' + esc(t.color || '#A08CF0') + '"><header><b>' + esc(t.name) + '</b><span>' + mem.length + '名' + (b || g ? '（♂' + b + ' ♀' + g + '）' : '') + '</span></header>'
           + '<ul class="sv-mem">' + mem.map(function(p){ var gc = p.gender === "男" ? "b" : p.gender === "女" ? "f" : ""; return '<li><i class="' + gc + '">' + (gc === "b" ? "♂" : gc === "f" ? "♀" : "") + '</i><span>' + esc(p.name) + '</span>' + (p.position ? '<em>' + esc(p.position) + '</em>' : '') + (p.eventId ? '<small>ゲスト</small>' : '') + '</li>'; }).join("") + '</ul>'
           + (games.length ? '<div class="sv-games">' + games.map(function(gm){ return '<div' + (gm.judge ? ' class="jd"' : '') + '><b>' + esc(gm.r.start) + '</b><span>' + esc(gm.r.title) + '　' + esc(gm.text) + '</span></div>'; }).join("") + '<p>決勝か3位決定戦かは準決勝の結果しだい</p></div>' : '')
-          + '<div class="sv-write"><div><b>卓球のペア</b><span>①</span><span>②</span><span>③</span></div><div><b>バスケ 前半</b><span></span></div><div><b>バスケ 後半</b><span></span></div></div>'
+          + '<div class="sv-write">' + (/シングル/.test(variant || '') ? (function(){ var n = Math.max(mem.length, 6), cs = '①②③④⑤⑥⑦⑧⑨⑩'.split(''), half = Math.ceil(n / 2), sp = function(a, b){ return cs.slice(a, b).map(function(c){ return '<span>' + c + '</span>'; }).join(''); }; return '<div><b>卓球の順番</b>' + sp(0, half) + '</div><div><b></b>' + sp(half, n) + '</div>'; })() : '<div><b>卓球のペア</b><span>①</span><span>②</span><span>③</span></div>')
+          + '<div><b>バスケ 前半</b><span></span></div><div><b>バスケ 後半</b><span></span></div></div>'
           + '</div>';
       }).join("") + '</div>'
       + (pool.length ? '<div class="sv-pool">チーム未定：' + pool.map(function(p){ return esc(p.name); }).join("・") + '</div>' : '')
@@ -2358,6 +2371,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (e.target.closest("[data-meet-save]")) { saveMeeting(); return; }
     if (e.target.closest("[data-meet-print]")) { window.print(); return; }
     if (e.target.closest("[data-sv-print]")) { window.print(); return; }
+    if ((t = e.target.closest("[data-sv-var]"))) { svVariant = t.dataset.svVar; try { localStorage.setItem("portal_sched_variant", svVariant); } catch (x) {} render(); return; }
     if (e.target.closest("[data-todo-add]")) { readMeetForm(); meetDraft.todos = meetDraft.todos || []; meetDraft.todos.push({ text: "", who: "", done: false }); render(); var ins = document.querySelectorAll("[data-todo-text]"); if (ins.length) ins[ins.length - 1].focus(); return; }
     if ((t = e.target.closest("[data-todo-done]"))) { readMeetForm(); var td = meetDraft.todos[+t.dataset.todoDone]; td.done = !td.done; render(); return; }
     if ((t = e.target.closest("[data-todo-del]"))) { readMeetForm(); meetDraft.todos.splice(+t.dataset.todoDel, 1); render(); return; }
