@@ -890,6 +890,69 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 }
 /* スマホのカレンダー: 予定の小さな点は見た目そのまま、押せる範囲だけ上下に広げる */
 @media (max-width:620px){.chip{position:relative;overflow:visible;color:transparent}.chip>*{display:none}.chip::after{content:"";position:absolute;inset:-6px -2px}}
+
+/* ---------- スケジュール（専用ページ・A4で印刷） ---------- */
+.sv-head{position:relative;overflow:hidden;border-radius:24px;padding:22px 24px;color:#fff;background:linear-gradient(130deg,var(--c1),var(--c2));box-shadow:var(--shadow)}
+.sv-head small{font-size:.7rem;font-weight:800;letter-spacing:.22em;opacity:.95}
+.sv-head h1{font-family:var(--font-title);font-weight:900;font-size:1.6rem;margin:4px 0 10px;line-height:1.25}
+.sv-facts{display:flex;flex-wrap:wrap;gap:8px}
+.sv-facts span{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;font-weight:800;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.22)}
+.sv-facts .ic{width:15px;height:15px}
+.sv-acts{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.sv-pick{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.sv-pick a{padding:8px 14px;min-height:40px;display:inline-flex;align-items:center;border-radius:999px;background:#fff;box-shadow:var(--shadow);text-decoration:none;font-weight:800;font-size:.84rem;color:var(--muted)}
+.sv-pick a.on{background:var(--ink);color:#fff}
+.sv-gantt{position:relative;margin:16px 0 4px;height:58px}
+.sv-gantt .ru{position:absolute;inset:0 0 auto;height:18px}
+.sv-gantt .ru span{position:absolute;transform:translateX(-50%);font-size:.68rem;font-weight:800;color:var(--muted);white-space:nowrap}
+.sv-gantt .ru span:first-child{transform:none}.sv-gantt .ru span:last-child{transform:translateX(-100%)}
+.sv-gantt .bl{position:absolute;left:0;right:0;top:20px;height:34px;border-radius:12px;overflow:hidden;background:#F1ECF4}
+.sv-gantt .b{position:absolute;top:0;bottom:0;background:var(--cc);border-right:2px solid #fff;color:#fff;font-size:.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:nowrap}
+.sv-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.sv-row{display:grid;grid-template-columns:104px 1fr;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 10px 24px -20px rgba(90,60,90,.6);border:1px solid var(--line)}
+.sv-tm{display:flex;flex-direction:column;justify-content:center;padding:10px 12px;background:var(--cs);border-left:6px solid var(--cc)}
+.sv-tm b{font-family:var(--font-title);font-weight:900;font-size:1.3rem;line-height:1.1;color:var(--cc)}
+.sv-tm small{font-size:.74rem;font-weight:800;color:var(--muted)}
+.sv-tx{padding:10px 14px;min-width:0}
+.sv-tx .tg{display:inline-block;font-size:.66rem;font-weight:800;color:#fff;background:var(--cc);border-radius:999px;padding:1px 9px;margin-bottom:3px}
+.sv-tx h3{margin:0;font-family:var(--font-title);font-weight:900;font-size:1.08rem;line-height:1.35}
+.sv-tx p{margin:3px 0 0;font-size:.88rem;font-weight:700;color:#4E4555;line-height:1.55}
+.sv-row.now{box-shadow:0 0 0 3px var(--cc)}
+@media (max-width:420px){.sv-row{grid-template-columns:84px 1fr}.sv-tm{padding:10px 8px}.sv-tm b{font-size:1.12rem}.sv-head h1{font-size:1.35rem}}
+@media print{
+  .sv .back,.sv .sv-acts,.sv .sv-pick{display:none!important}
+  .sv{display:flex;flex-direction:column;min-height:268mm}
+  .sv-head{border-radius:12px;padding:7pt 12pt;box-shadow:none;display:flex;align-items:center;justify-content:space-between;gap:8pt}
+  .sv-head small{display:none}
+  .sv-head h1{font-size:15pt;margin:0}
+  .sv-facts{gap:3pt;flex-wrap:nowrap;justify-content:flex-end}
+  .sv-facts span{white-space:nowrap}
+  .sv-facts .ic{display:none}
+  .sv-facts span{font-size:8.5pt;padding:1.5pt 7pt}
+  .sv-gantt{margin:6pt 0 0;height:34pt}
+  .sv-gantt .ru span{font-size:7.5pt}
+  .sv-gantt .bl{top:12pt;height:20pt;border-radius:7px}
+  .sv-gantt .b{font-size:7.5pt}
+  .sv-list{flex:1;gap:2.5pt;margin-top:5pt}
+  .sv-row{flex:1 0 auto;grid-template-columns:24mm 1fr;border-radius:8px;box-shadow:none;break-inside:avoid}
+  .sv-tm{padding:2pt 8pt;border-left-width:4pt}
+  .sv-tm b{font-size:12pt}.sv-tm small{font-size:7.5pt}
+  .sv-tx{padding:2pt 10pt;display:flex;flex-direction:column;justify-content:center}
+  .sv-tx .tg{display:none}
+  .sv-tx h3{font-size:10.5pt;line-height:1.25}
+  .sv-tx p{font-size:8.6pt;margin-top:.5pt;line-height:1.35}
+  .sv-row.now{box-shadow:none}
+}
+/* 行事ページのスケジュール案内 */
+.sv-link{display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:linear-gradient(130deg,var(--peach-soft),var(--lav-soft));text-decoration:none;color:var(--ink)}
+.sv-link .ic-b{flex:none;width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:#fff;color:#E8644F}
+.sv-link b{display:block;font-family:var(--font-title);font-weight:900;font-size:1.05rem}
+.sv-link span{font-size:.82rem;font-weight:700;color:var(--muted)}
+.sv-link .go{margin-left:auto;font-weight:900;font-size:1.3rem;color:var(--muted)}
+.sv-keys{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sv-keys span{font-size:.8rem;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--cs);color:var(--cc)}
+/* 下のメニュー: 6つ並ぶので、狭い画面では均等に詰める */
+@media (max-width:480px){.tabbar{width:calc(100% - 16px);justify-content:space-between;gap:2px;padding:5px}.tabbar a{min-width:0;flex:1;padding:6px 0;font-size:.6rem;letter-spacing:-.02em;white-space:nowrap}}
 </style>
 </head>
 <body>
@@ -900,6 +963,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 <main id="app"></main>
 <nav class="tabbar">
   <a href="#/" data-tab="home"><span data-ic="home"></span>ホーム</a>
+  <a href="#/schedule" data-tab="schedule"><span data-ic="clock"></span>スケジュール</a>
   <a href="#/calendar" data-tab="calendar"><span data-ic="calendar"></span>カレンダー</a>
   <a href="#/checkin" data-tab="checkin"><span data-ic="check"></span>出欠</a>
   <a href="#/roulette" data-tab="roulette"><span data-ic="wheel"></span>ルーレット</a>
@@ -1138,6 +1202,54 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
         + '</div></li>';
     }).join("") + '</ol>';
   }
+
+  // 行事ページ: 主な時刻だけ見せて、くわしいスケジュールは専用ページへ
+  function schedLink(sch, ev){
+    var keys = sch.filter(function(st){ return /集合|出発|食事|開会|解散/.test(st.tx); }).slice(0, 5);
+    return '<a class="sv-link" href="#/schedule/' + ev.id + '"><span class="ic-b">' + I('clock') + '</span><span><b>当日のスケジュールを見る</b><span>' + sch.length + '項目の時間割・A4で印刷できます</span></span><span class="go">›</span></a>'
+      + (keys.length ? '<div class="sv-keys">' + keys.map(function(st){ var tx = st.tx.trim(), sp = tx.search(/[\s　]/), t = sp > 0 ? tx.slice(0, sp) : tx, kd = STEP_KINDS.find(function(k){ return k.k.test(t); }) || stepKind(tx); return '<span style="--cc:' + kd.c + ';--cs:' + kd.s + '">' + esc(half(st.tm).replace(/[〜~\-].*$/, '').replace('頃', '')) + ' ' + esc(t) + '</span>'; }).join("") + '</div>' : '');
+  }
+  // スケジュール専用ページ（スマホでも横にはみ出さない1列。印刷はA4縦1枚）
+  function viewSchedule(id){
+    var list = S.events.filter(function(e){ return parseSchedule(e.schedule).length; });
+    if (!list.length) return '<div class="view card empty">スケジュールが入っている行事はまだありません</div>';
+    var now = new Date(), today = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+    var key = function(e){ var pd = parseDate(e.date); return pd ? pd.y * 10000 + pd.m * 100 + (pd.d || 0) : 99999999; };
+    list.sort(function(a, b){ return key(a) - key(b); });
+    var ev = (id && list.find(function(e){ return e.id === id; })) || list.find(function(e){ return key(e) >= today; }) || list[list.length - 1];
+    var th = theme(ev), sch = parseSchedule(ev.schedule);
+    var rows = sch.map(function(st){
+      var tm = half(st.tm).replace(/：/g, ":"), parts = tm.split(/[〜~\-]/), a = toMin(parts[0]), b = parts[1] ? toMin(parts[1]) : null;
+      var tx = st.tx.trim(), sp = tx.search(/[\s　]/), title = sp > 0 && sp <= 22 ? tx.slice(0, sp) : tx, sub = sp > 0 && sp <= 22 ? tx.slice(sp + 1).trim() : "";
+      var kd = STEP_KINDS.find(function(k){ return k.k.test(title); }) || stepKind(tx);
+      return { a: a, b: b, start: parts[0].replace("頃", ""), end: (parts[1] || "").replace("頃", ""), approx: /頃/.test(tm), title: title, sub: sub, kd: kd };
+    });
+    rows.forEach(function(r, i){ if (r.b === null && r.a !== null) { var nx = rows.slice(i + 1).find(function(x){ return x.a !== null; }); r.bb = nx ? nx.a : r.a + 15; } else r.bb = r.b; });
+    // 時間の帯では「卓球：準決勝」「卓球：決勝」のような続きの項目を1つにまとめる
+    var bars = []; rows.forEach(function(r){ if (r.a === null) return; var g = /[：:]/.test(r.title) ? r.title.split(/[：:]/)[0] : r.title.replace(/[（(].*$/, '').split('・')[0], last = bars[bars.length - 1]; if (last && last.g === g && last.bb >= r.a - 3) last.bb = Math.max(last.bb, r.bb); else bars.push({ g: g, a: r.a, bb: r.bb, c: r.kd.c }); });
+    var timed = rows.filter(function(r){ return r.a !== null; });
+    var pd = parseDate(ev.date), isToday = pd && pd.exact && pd.y === now.getFullYear() && pd.m === now.getMonth() + 1 && pd.d === now.getDate(), nm = now.getHours() * 60 + now.getMinutes();
+    var h = '<div class="view sv"><a class="back" href="#/event/' + ev.id + '">‹ ' + esc(ev.name) + '</a>';
+    if (list.length > 1) h += '<div class="sv-pick">' + list.map(function(e){ return '<a href="#/schedule/' + e.id + '"' + (e === ev ? ' class="on"' : '') + '>' + esc(e.name) + '</a>'; }).join("") + '</div>';
+    h += '<div class="sv-head" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><small>SCHEDULE</small><h1>' + esc(ev.name) + '　当日のスケジュール</h1><div class="sv-facts">'
+      + '<span>' + I('calendar') + esc(fmtDate(ev)) + '</span>' + (ev.time ? '<span>' + I('clock') + esc(ev.time) + '</span>' : '') + (ev.location ? '<span>' + I('pin') + esc(ev.location) + '</span>' : '') + '</div></div>';
+    var link = (ev.notes || "").match(/https?:\/\/\S+\.html/);
+    h += '<div class="sv-acts"><button class="btn primary" data-sv-print>' + I('print') + ' A4で印刷する</button>' + (link ? '<a class="btn" href="' + esc(link[0]) + '" target="_blank" rel="noopener">トーナメント表・ルール</a>' : '') + '</div>';
+    if (timed.length > 1) {
+      var S0 = timed[0].a, E0 = Math.max.apply(null, timed.map(function(r){ return r.bb; })), W = Math.max(E0 - S0, 1);
+      var tk = [], step = W > 300 ? 60 : 30;
+      for (var t = Math.ceil(S0 / step) * step; t <= E0; t += step) tk.push(t);
+      if (tk[0] !== S0) tk.unshift(S0);
+      h += '<div class="sv-gantt" aria-hidden="true"><div class="ru">' + tk.map(function(t){ return '<span style="left:' + ((t - S0) / W * 100) + '%">' + Math.floor(t / 60) + ':' + ('0' + t % 60).slice(-2) + '</span>'; }).join("") + '</div><div class="bl">'
+        + bars.map(function(r){ var w = (r.bb - r.a) / W * 100; return '<div class="b" style="--cc:' + r.c + ';left:' + ((r.a - S0) / W * 100) + '%;width:' + w + '%">' + (w > 7 ? esc(r.g) : '') + '</div>'; }).join("") + '</div></div>';
+    }
+    h += '<div class="sv-list">' + rows.map(function(r){
+      var isNow = isToday && r.a !== null && nm >= r.a && nm < r.bb;
+      return '<div class="sv-row' + (isNow ? ' now' : '') + '" style="--cc:' + r.kd.c + ';--cs:' + r.kd.s + '"><div class="sv-tm"><b>' + esc(r.start) + '</b>' + (r.end ? '<small>〜 ' + esc(r.end) + '</small>' : r.approx ? '<small>ごろ</small>' : '') + '</div>'
+        + '<div class="sv-tx">' + (r.kd.label ? '<span class="tg">' + (isNow ? 'いまここ・' : '') + r.kd.label + '</span>' : '') + '<h3>' + esc(r.title) + '</h3>' + (r.sub ? '<p>' + esc(r.sub) + '</p>' : '') + '</div></div>';
+    }).join("") + '</div></div>';
+    return h;
+  }
   function viewEvent(id){
     var ev = S.events.find(function(e){ return e.id === id; });
     if (!ev) return '<div class="view card empty">行事が見つかりませんでした</div>';
@@ -1148,7 +1260,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       + '<div class="fact"><small>DATE</small>' + I('calendar') + ' ' + esc(fmtDate(ev)) + '</div>'
       + (ev.time ? '<div class="fact"><small>TIME</small>' + I('clock') + ' ' + esc(ev.time) + '</div>' : '')
       + (ev.location ? '<div class="fact"><small>PLACE</small>' + I('pin') + ' ' + esc(ev.location) + '</div>' : '') + '</div></div>';
-    h += '<div class="grid2"><div class="card box"><h3>' + I('clock') + ' 当日の流れ</h3>' + (sch.length ? schedHtml(sch, ev) : '<div class="empty">まだ決まっていません</div>')
+    h += '<div class="grid2"><div class="card box"><h3>' + I('clock') + ' 当日の流れ</h3>' + (sch.length ? schedLink(sch, ev) : '<div class="empty">まだ決まっていません</div>')
       + (ev.notes ? '<h3 style="margin-top:20px">' + I('note') + ' メモ</h3><div class="notes">' + esc(ev.notes).replace(/https?:\/\/[^\s<]+/g, function(u){ return '<a href="' + u + '" target="_blank" rel="noopener" style="color:#2A62AE;font-weight:800;word-break:break-all">' + u + '</a>'; }) + '</div>' : '') + '</div>';
     h += '<div><div class="card box"><h3>' + I('check') + ' 出欠状況</h3><div class="att"><div class="p"><b>' + c.present + '</b>出席</div><div class="a"><b>' + c.absent + '</b>欠席</div><div class="w"><b>' + c.pending + '</b>未入力</div></div>'
       + '<div class="bar"><i style="width:' + pct(c.present) + '%;background:var(--mint)"></i><i style="width:' + pct(c.absent) + '%;background:var(--rose)"></i></div>'
@@ -2106,6 +2218,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     setTab(tab === "event" ? "home" : tab === "edit" || tab === "meeting" || tab === "teams" ? "admin" : tab);
     if (tab === "calendar") app.innerHTML = viewCalendar();
     else if (tab === "event") app.innerHTML = viewEvent(r[1]);
+    else if (tab === "schedule") app.innerHTML = viewSchedule(r[1]);
     else if (tab === "checkin") { var hadFocus = document.activeElement && document.activeElement.id === "attQ"; app.innerHTML = viewCheckin(); if (hadFocus) { var qi = document.getElementById("attQ"); qi.focus(); qi.setSelectionRange(qi.value.length, qi.value.length); } }
     else if (tab === "teams") app.innerHTML = viewTeams(r[1]);
     else if (tab === "edit") app.innerHTML = viewEdit(r[1]);
@@ -2181,6 +2294,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     if (e.target.closest("[data-saveev]")) { saveEvent(); return; }
     if (e.target.closest("[data-meet-save]")) { saveMeeting(); return; }
     if (e.target.closest("[data-meet-print]")) { window.print(); return; }
+    if (e.target.closest("[data-sv-print]")) { window.print(); return; }
     if (e.target.closest("[data-todo-add]")) { readMeetForm(); meetDraft.todos = meetDraft.todos || []; meetDraft.todos.push({ text: "", who: "", done: false }); render(); var ins = document.querySelectorAll("[data-todo-text]"); if (ins.length) ins[ins.length - 1].focus(); return; }
     if ((t = e.target.closest("[data-todo-done]"))) { readMeetForm(); var td = meetDraft.todos[+t.dataset.todoDone]; td.done = !td.done; render(); return; }
     if ((t = e.target.closest("[data-todo-del]"))) { readMeetForm(); meetDraft.todos.splice(+t.dataset.todoDel, 1); render(); return; }
