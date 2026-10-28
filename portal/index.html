@@ -1149,7 +1149,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       + (ev.time ? '<div class="fact"><small>TIME</small>' + I('clock') + ' ' + esc(ev.time) + '</div>' : '')
       + (ev.location ? '<div class="fact"><small>PLACE</small>' + I('pin') + ' ' + esc(ev.location) + '</div>' : '') + '</div></div>';
     h += '<div class="grid2"><div class="card box"><h3>' + I('clock') + ' 当日の流れ</h3>' + (sch.length ? schedHtml(sch, ev) : '<div class="empty">まだ決まっていません</div>')
-      + (ev.notes ? '<h3 style="margin-top:20px">' + I('note') + ' メモ</h3><div class="notes">' + esc(ev.notes) + '</div>' : '') + '</div>';
+      + (ev.notes ? '<h3 style="margin-top:20px">' + I('note') + ' メモ</h3><div class="notes">' + esc(ev.notes).replace(/https?:\/\/[^\s<]+/g, function(u){ return '<a href="' + u + '" target="_blank" rel="noopener" style="color:#2A62AE;font-weight:800;word-break:break-all">' + u + '</a>'; }) + '</div>' : '') + '</div>';
     h += '<div><div class="card box"><h3>' + I('check') + ' 出欠状況</h3><div class="att"><div class="p"><b>' + c.present + '</b>出席</div><div class="a"><b>' + c.absent + '</b>欠席</div><div class="w"><b>' + c.pending + '</b>未入力</div></div>'
       + '<div class="bar"><i style="width:' + pct(c.present) + '%;background:var(--mint)"></i><i style="width:' + pct(c.absent) + '%;background:var(--rose)"></i></div>'
       + '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="btn primary" data-checkin="' + ev.id + '">' + I('check') + ' 出欠を入力する</button><a class="btn" href="#/checkin" data-attev-link="' + ev.id + '">名前を見る</a></div></div>';
