@@ -1309,7 +1309,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var tm = S.teams[ev.id];
     if (!tm || !tm.teams || !tm.teams.length) return '';
     var pool = (tm.pool || []).map(person).filter(Boolean);
-    return '<div class="sv-teams-sec"><div class="sv-teams-h"><h2>' + I('users') + ' チーム</h2><span>' + tm.teams.length + 'チーム・ビブスの色で分かれます</span></div><div class="sv-teams">'
+    return '<div class="sv-teams-sec"><div class="sv-teams-h"><h2>' + I('users') + ' チーム</h2><span>' + tm.teams.length + 'チーム</span></div><div class="sv-teams">'
       + tm.teams.map(function(t){
         var mem = (t.members || []).map(person).filter(Boolean);
         var b = mem.filter(function(p){ return p.gender === "男"; }).length, g = mem.filter(function(p){ return p.gender === "女"; }).length;
