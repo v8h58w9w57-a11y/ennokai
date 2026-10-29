@@ -917,6 +917,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .sv-tx .tg{display:inline-block;font-size:.66rem;font-weight:800;color:#fff;background:var(--cc);border-radius:999px;padding:1px 9px;margin-bottom:3px}
 .sv-tx h3{margin:0;font-family:var(--font-title);font-weight:900;font-size:1.08rem;line-height:1.35}
 .sv-tx p{margin:3px 0 0;font-size:.88rem;font-weight:700;color:#4E4555;line-height:1.55}
+.sv-tx p span{display:block}
+.sv-gantt .b.clip{font-size:0!important}
 .sv-row.now{box-shadow:0 0 0 3px var(--cc)}
 @media (max-width:420px){.sv-row{grid-template-columns:84px 1fr}.sv-tm{padding:10px 8px}.sv-tm b{font-size:1.12rem}.sv-head h1{font-size:1.35rem}}
 @media print{
@@ -941,6 +943,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   .sv-tx .tg{display:none}
   .sv-tx h3{font-size:10.5pt;line-height:1.25}
   .sv-tx p{font-size:8.6pt;margin-top:.5pt;line-height:1.35}
+  .sv-tx p span{display:inline}.sv-tx p span+span::before{content:" ／ ";color:var(--muted)}
   .sv-row.now{box-shadow:none}
 }
 
@@ -1299,12 +1302,17 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     h += '<div class="sv-list">' + rows.map(function(r){
       var isNow = isToday && r.a !== null && nm >= r.a && nm < r.bb;
       return '<div class="sv-row' + (isNow ? ' now' : '') + '" style="--cc:' + r.kd.c + ';--cs:' + r.kd.s + '"><div class="sv-tm"><b>' + esc(r.start) + '</b>' + (r.end ? '<small>〜 ' + esc(r.end) + '</small>' : r.approx ? '<small>ごろ</small>' : '') + '</div>'
-        + '<div class="sv-tx">' + (r.kd.label ? '<span class="tg">' + (isNow ? 'いまここ・' : '') + r.kd.label + '</span>' : '') + '<h3>' + esc(r.title) + '</h3>' + (r.sub ? '<p>' + esc(r.sub) + '</p>' : '') + '</div></div>';
+        + '<div class="sv-tx">' + (r.kd.label ? '<span class="tg">' + (isNow ? 'いまここ・' : '') + r.kd.label + '</span>' : '') + '<h3>' + esc(r.title) + '</h3>' + (r.sub ? '<p>' + subLines(r.sub) + '</p>' : '') + '</div></div>';
     }).join("") + '</div>';
     h += schedTeams(ev, rows, curV);
     return h + '</div>';
   }
   // スケジュール: 各チームのメンバーと、そのチームが出る試合（当日の流れの文からチーム名で拾う）
+  // 説明文を「。」「／」で区切って1行ずつ（印刷では ／ でつないで1つの段落に）
+  function subLines(t){ return String(t).replace(/。(?=.)/g, "\n").split(/\n|／/).map(function(x){ return x.trim(); }).filter(Boolean).map(function(x){ return '<span>' + esc(x) + '</span>'; }).join(""); }
+  // 入りきらない帯の文字は隠す（「ミン」のように途中で切れないように）
+  function fitBars(){ document.querySelectorAll(".sv-gantt .b").forEach(function(b){ b.classList.remove("clip"); var rg = document.createRange(); rg.selectNodeContents(b); if (rg.getBoundingClientRect().width > b.clientWidth - 4) b.classList.add("clip"); }); }
+  addEventListener("resize", fitBars); try { matchMedia("print").addEventListener("change", function(){ fitBars(); requestAnimationFrame(fitBars); }); addEventListener("beforeprint", fitBars); } catch (e) {}
   function schedTeams(ev, rows, variant){
     var tm = S.teams[ev.id];
     if (!tm || !tm.teams || !tm.teams.length) return '';
@@ -2294,7 +2302,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     setTab(tab === "event" ? "home" : tab === "edit" || tab === "meeting" || tab === "teams" ? "admin" : tab);
     if (tab === "calendar") app.innerHTML = viewCalendar();
     else if (tab === "event") app.innerHTML = viewEvent(r[1]);
-    else if (tab === "schedule") app.innerHTML = viewSchedule(r[1]);
+    else if (tab === "schedule") { app.innerHTML = viewSchedule(r[1]); requestAnimationFrame(fitBars); }
     else if (tab === "checkin") { var hadFocus = document.activeElement && document.activeElement.id === "attQ"; app.innerHTML = viewCheckin(); if (hadFocus) { var qi = document.getElementById("attQ"); qi.focus(); qi.setSelectionRange(qi.value.length, qi.value.length); } }
     else if (tab === "teams") app.innerHTML = viewTeams(r[1]);
     else if (tab === "edit") app.innerHTML = viewEdit(r[1]);

@@ -99,6 +99,9 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
 .score div:nth-child(5n+1){border-left:none;text-align:left;padding-left:3mm;color:var(--muted);font-size:9pt;white-space:nowrap}
 .score .h{font-family:var(--font-title);font-weight:900;font-size:11pt}
 .score .blank{height:6mm}
+.foot .fi>span+span::before{content:" ／ ";color:var(--muted)}
+.vs-pair{white-space:nowrap}
+.gantt .b.clip{font-size:0!important}
 .note{margin:0;font-size:9pt;font-weight:700;color:var(--muted);line-height:1.55}
 @media screen and (max-width:1160px){
   body{background:#FFF7F2}
@@ -115,6 +118,7 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
   table.tt th,table.tt td{white-space:normal}
   table.tt td.t{white-space:nowrap}
   .foot{flex-direction:column}
+  .foot .fi>span{display:block}.foot .fi>span+span::before{content:none}
 }
 @media screen and (max-width:640px){
   .flow{grid-template-columns:1fr}
@@ -148,9 +152,9 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
   <div class="flow">
     <div class="ph" style="--pc:var(--c-meet)">
       <div class="ph-h"><b>① 準備・開会</b><span>9:00〜9:40</span></div>
-      <div class="it" style="--c:var(--c-prep)"><div class="t"><b>9:00</b><small>〜 9:30</small></div><h3>役員集合・会場設営</h3><p>卓球台の移動・得点板などの準備：<br>　山本・三浦・佐々木<br>バスケットゴール移動：樫山・神田<br>バドミントンのネット：池田・齊藤<br>ラインテープ：蔦原・髙橋<br>駐車場の誘導：坂井・髙橋<br>サポート係（競技には出ない）：<br>　引頭（得点板など）・赤坂（卓球の合図）<br>カメラ係：池田（1日を通して撮影）</p><div class="who">管理者全員</div></div>
-      <div class="it" style="--c:var(--c-meet)"><div class="t"><b>9:30</b><small>全員集合</small></div><h3>受付・チーム確認</h3><p>出欠確認、お茶を1本ずつ配布、チームごとに集合。準備が出来次第はじめます（この先の時刻は目安）</p></div>
-      <div class="it" style="--c:var(--c-talk)"><div class="t"><b>9:35</b><small>〜 9:40</small></div><h3>開会のあいさつ・ルール説明</h3><p>ケガ・水分補給・貴重品の注意、得点のつけ方</p></div>
+      <div class="it" style="--c:var(--c-prep)"><div class="t"><b>9:00</b><small>〜 9:30</small></div><h3>役員集合・会場設営</h3><p>卓球台・得点板：山本・三浦・佐々木<br>バスケットゴール移動：樫山・神田<br>バドミントンのネット：池田・齊藤<br>ラインテープ：蔦原・髙橋<br>駐車場の誘導：坂井・髙橋<br>サポート係（競技には出ない）：<br>　引頭（得点板）<br>　赤坂（卓球の合図）<br>カメラ係：池田（1日を通して撮影）</p><div class="who">管理者全員</div></div>
+      <div class="it" style="--c:var(--c-meet)"><div class="t"><b>9:30</b><small>全員集合</small></div><h3>受付・チーム確認</h3><p>出欠確認・お茶を1本ずつ配布<br>チームごとに集合<br>準備が出来次第スタート<br>（時刻は目安）</p></div>
+      <div class="it" style="--c:var(--c-talk)"><div class="t"><b>9:35</b><small>〜 9:40</small></div><h3>開会のあいさつ・ルール説明</h3><p>ケガ・水分補給・貴重品の注意<br>得点のつけ方</p></div>
     </div>
 
     <div class="ph" style="--pc:var(--c-sport)">
@@ -158,24 +162,24 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
       <div class="it" style="--c:var(--c-sport)"><div class="t"><b>9:40</b><small>〜 9:50</small></div><h3>ラジオ体操</h3><p>全員で。終わったら卓球の出る順番を決める</p></div>
       <div class="it big" style="--c:var(--c-sport);flex-grow:2.2"><div class="t"><b>9:50</b><small>〜 10:45</small></div><h3>卓球トーナメント（シングルス）</h3><p>9:50 順番決め・練習<br>10:00 準決勝（2台同時）<br>10:25 決勝・3位決定戦（2台同時）<br>合図（2分ごと）で次の人に交代</p><div class="who">合図：赤坂 ／ 審判：試合のないチーム</div></div>
       <div class="it" style="--c:var(--c-rest)"><div class="t"><b>10:45</b><small>〜 10:55</small></div><h3>休憩・水分補給</h3><p>役員は卓球台を片付け、バスケの用意</p></div>
-      <div class="it big" style="--c:var(--c-sport);flex-grow:2.2"><div class="t"><b>10:55</b><small>〜 11:45</small></div><h3>バスケ 3on3 トーナメント</h3><p>1試合＝前半5分＋後半5分（間でメンバー入れ替え）<br>準決勝2試合 → 3位決定戦 → 決勝</p><div class="who">審判・得点：試合のないチーム ／ くわしくは2枚目</div></div>
+      <div class="it big" style="--c:var(--c-sport);flex-grow:2.2"><div class="t"><b>10:55</b><small>〜 11:45</small></div><h3>バスケ 3on3 トーナメント</h3><p>1試合＝前半5分＋後半5分<br>（間でメンバー入れ替え）<br>準決勝2試合 → 3位決定戦 → 決勝</p><div class="who">審判・得点：試合のないチーム ／ くわしくは2枚目</div></div>
     </div>
 
     <div class="ph" style="--pc:var(--c-rest)">
       <div class="ph-h"><b>③ 休憩〜出発</b><span>11:45〜12:40</span></div>
-      <div class="it" style="--c:var(--c-rest)"><div class="t"><b>11:45</b><small>〜 11:55</small></div><h3>休憩・水分補給</h3><p>バスケのあとはしっかり休憩。役員は順位を集計</p></div>
-      <div class="it" style="--c:var(--c-sport)"><div class="t"><b>11:55</b><small>〜 12:25</small></div><h3>バドミントン（自由に）</h3><p>30分、自由に打ち合い。得点なし</p></div>
-      <div class="it" style="--c:var(--c-prep)"><div class="t"><b>12:25</b><small>〜 12:40</small></div><h3>片付け・モップ掛け</h3><p>用具返却、ゴミの持ち帰り、忘れ物確認</p><div class="who">全員</div></div>
-      <div class="it" style="--c:var(--c-move)"><div class="t"><b>12:40</b><small>出発</small></div><h3>体育館を出発</h3><p>乗り合わせで食事会場へ<br>車を出す人：山本・三浦・坂井・髙橋・伊藤</p></div>
+      <div class="it" style="--c:var(--c-rest)"><div class="t"><b>11:45</b><small>〜 11:55</small></div><h3>休憩・水分補給</h3><p>バスケのあとはしっかり休憩<br>役員は順位を集計</p></div>
+      <div class="it" style="--c:var(--c-sport)"><div class="t"><b>11:55</b><small>〜 12:25</small></div><h3>バドミントン（自由に）</h3><p>30分、自由に打ち合い<br>得点なし</p></div>
+      <div class="it" style="--c:var(--c-prep)"><div class="t"><b>12:25</b><small>〜 12:40</small></div><h3>片付け・モップ掛け</h3><p>用具返却・ゴミの持ち帰り<br>忘れ物確認</p><div class="who">全員</div></div>
+      <div class="it" style="--c:var(--c-move)"><div class="t"><b>12:40</b><small>出発</small></div><h3>体育館を出発</h3><p>乗り合わせで食事会場へ<br>車を出す人：<br>山本・三浦・坂井・髙橋・伊藤</p></div>
     </div>
 
     <div class="ph" style="--pc:var(--c-food)">
       <div class="ph-h"><b>④ 食事会</b><span>13:00〜</span></div>
-      <div class="it big food" style="--c:var(--c-food);flex-grow:3"><div class="t"><b>13:00</b><small>〜</small></div><h3>食事会・表彰式</h3><p>レストラン コロナ<br><br>13:00 開始・あいさつ<br>13:10ごろ 乾杯<br>13:40ごろ 表彰式<br>・卓球の優勝<br>・バスケの優勝<br>・総合順位の発表<br>景品：総合優勝チームのみ（カタログギフト）</p><div class="who">司会：役員</div></div>
-      <div class="it" style="--c:var(--c-move)"><div class="t"><b>14:30</b><small>ごろ</small></div><h3>解散</h3><p>乗り合わせで体育館へ戻り、各自の車で帰宅</p></div>
+      <div class="it big food" style="--c:var(--c-food);flex-grow:3"><div class="t"><b>13:00</b><small>〜</small></div><h3>食事会・表彰式</h3><p>レストラン コロナ<br><br>13:00 開始・あいさつ<br>13:10ごろ 乾杯<br>13:40ごろ 表彰式<br>・卓球の優勝<br>・バスケの優勝<br>・総合順位の発表<br><br>景品：総合優勝チームのみ<br>（カタログギフト）</p><div class="who">司会：役員</div></div>
+      <div class="it" style="--c:var(--c-move)"><div class="t"><b>14:30</b><small>ごろ</small></div><h3>解散</h3><p>乗り合わせで体育館へ戻り<br>各自の車で帰宅</p></div>
     </div>
   </div>
-  <div class="foot"><span>服装：<b>動きやすい服装で</b> ／ 持ち物：<b>上靴（体育館シューズ）</b>・タオル（お茶1本は支給。足りない人は飲み物も） ／ チーム分けは親睦会ポータルで確認</span><span>1 / 2</span></div>
+  <div class="foot"><span class="fi"><span>服装：<b>動きやすい服装で</b></span><span>持ち物：<b>上靴（体育館シューズ）</b>・タオル</span><span>お茶1本は支給（足りない人は飲み物も）</span><span>チーム分けは親睦会ポータルで確認</span></span><span>1 / 2</span></div>
 </section>
 
 <!-- ============ 2枚目: トーナメントと時間配分（左: 卓球 / 右: バスケ） ============ -->
@@ -192,13 +196,13 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
       <table class="tt">
         <tr><th>時刻</th><th>1番台</th><th>2番台</th></tr>
         <tr><td class="t">9:50〜10:00</td><td colspan="2">出る順番決め・練習（1台に2チームずつ）</td></tr>
-        <tr><td class="t">10:00〜10:23</td><td>準決勝① <span class="tm-chip R">レッド</span> 対 <span class="tm-chip Y">イエロー</span></td><td>準決勝② <span class="tm-chip G">グリーン</span> 対 <span class="tm-chip B">ブルー</span></td></tr>
+        <tr><td class="t">10:00〜10:23</td><td>準決勝① <span class="tm-chip R">レッド</span> <span class="vs-pair">対 <span class="tm-chip Y">イエロー</span></span></td><td>準決勝② <span class="tm-chip G">グリーン</span> <span class="vs-pair">対 <span class="tm-chip B">ブルー</span></span></td></tr>
         <tr><td class="t">10:25〜10:45</td><td><b>決勝</b>（勝ち同士）</td><td>3位決定戦（負け同士）</td></tr>
       </table>
       <ul class="rules">
         
         
-        <li><b>リレー方式：</b>1台で各チーム1人ずつ対戦。<b>笛の合図（2分ごと）</b>でチームの次の人に交代。<b>合図を出す係：赤坂</b></li>
+        <li><b>リレー方式：</b>1台で各チーム1人ずつ対戦。<b>笛の合図（2分ごと）</b>でチームの次の人に交代<br><b>合図を出す係：赤坂</b></li>
         <li>点数は交代しても続けて数え、<b>準決勝20分・決勝15分</b>で多い方の勝ち（同点なら1点勝負）</li>
         <li>審判・点数係は<b>試合のないチーム</b>から1人ずつ</li>
       </ul>
@@ -209,8 +213,8 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
       <svg class="bracket" id="bkBK" viewBox="0 0 300 150" aria-label="バスケのトーナメント表"></svg>
       <table class="tt">
         <tr><th>時刻</th><th>試合</th><th>勝ったチーム</th></tr>
-        <tr><td class="t">10:55〜11:07</td><td>準決勝① <span class="tm-chip R">レッド</span> 対 <span class="tm-chip G">グリーン</span></td><td class="res"></td></tr>
-        <tr><td class="t">11:08〜11:20</td><td>準決勝② <span class="tm-chip Y">イエロー</span> 対 <span class="tm-chip B">ブルー</span></td><td class="res"></td></tr>
+        <tr><td class="t">10:55〜11:07</td><td>準決勝① <span class="tm-chip R">レッド</span> <span class="vs-pair">対 <span class="tm-chip G">グリーン</span></span></td><td class="res"></td></tr>
+        <tr><td class="t">11:08〜11:20</td><td>準決勝② <span class="tm-chip Y">イエロー</span> <span class="vs-pair">対 <span class="tm-chip B">ブルー</span></span></td><td class="res"></td></tr>
         <tr><td class="t">11:21〜11:33</td><td>3位決定戦（負け同士）</td><td class="res"></td></tr>
         <tr><td class="t">11:33〜11:45</td><td><b>決勝</b>（勝ち同士）</td><td class="res"></td></tr>
       </table>
@@ -225,7 +229,7 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
   <div class="total">
     <div>
       <h2>総合順位（食事会の表彰式で発表）</h2>
-      <p class="note">順位点：1位 4点・2位 3点・3位 2点・4位 1点。卓球とバスケの合計で決め、同点ならバスケの順位が上のチームを上に。バドミントンは得点なし。<b>景品は総合優勝チームのみ（カタログギフト）</b>。<br>組み合わせは仮です。当日ポータルのルーレットで決め直してもOK。</p>
+      <p class="note">順位点：1位 4点・2位 3点・3位 2点・4位 1点<br>卓球とバスケの合計で決める（同点ならバスケの順位が上のチームが上）<br>バドミントンは得点なし<br><b>景品は総合優勝チームのみ（カタログギフト）</b><br>組み合わせは仮です。当日ポータルのルーレットで決め直してもOK</p>
     </div>
     <div class="score">
       <div></div><div class="h" style="color:#B23A2E">レッド</div><div class="h" style="color:#8A6508">イエロー</div><div class="h" style="color:#187356">グリーン</div><div class="h" style="color:#2A62AE">ブルー</div>
@@ -256,6 +260,10 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
   var tk = [];
   for (var t = S; t <= E; t += 30) tk.push('<span style="left:' + ((t - S) / W * 100) + '%">' + Math.floor(t / 60) + ':' + ('0' + t % 60).slice(-2) + '</span>');
   ru.innerHTML = tk.join("");
+  // 入りきらないラベルは隠す（「ミン」のように途中で切れないように）
+  function fitBars(){ bl.querySelectorAll(".b").forEach(function(b){ b.classList.remove("clip"); var rg = document.createRange(); rg.selectNodeContents(b); if (rg.getBoundingClientRect().width > b.clientWidth - 4) b.classList.add("clip"); }); }
+  fitBars(); addEventListener("resize", fitBars); try { matchMedia("print").addEventListener("change", function(){ fitBars(); requestAnimationFrame(fitBars); }); addEventListener("beforeprint", fitBars); } catch (e) {}
+  if (document.fonts) document.fonts.ready.then(fitBars);
   // トーナメント図（4チーム）
   function bracket(id, a, b, c, d, l1, l2){
     var T = { R:["レッド","#FFE6E3","#B23A2E"], Y:["イエロー","#FFF3D3","#8A6508"], G:["グリーン","#DDF5EC","#187356"], B:["ブルー","#E2EFFC","#2A62AE"] };
