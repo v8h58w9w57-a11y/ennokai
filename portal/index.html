@@ -1328,7 +1328,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
           + '<ul class="sv-mem">' + mem.map(function(p){ var gc = p.gender === "男" ? "b" : p.gender === "女" ? "f" : ""; return '<li><i class="' + gc + '">' + (gc === "b" ? "♂" : gc === "f" ? "♀" : "") + '</i><span>' + esc(p.name) + '</span>' + (p.position ? '<em>' + esc(p.position) + '</em>' : '') + (p.eventId ? '<small>ゲスト</small>' : '') + '</li>'; }).join("") + '</ul>'
           + (games.length ? '<div class="sv-games">' + games.map(function(gm){ return '<div' + (gm.judge ? ' class="jd"' : '') + '><b>' + esc(gm.r.start) + '</b><span>' + esc(gm.r.title) + '　' + esc(gm.text) + '</span></div>'; }).join("") + '<p>決勝か3位決定戦かは準決勝の結果しだい</p></div>' : '')
           + '<div class="sv-write">' + (/シングル/.test(variant || '') ? (function(){ var n = Math.max(mem.length, 6), cs = '①②③④⑤⑥⑦⑧⑨⑩'.split(''), half = Math.ceil(n / 2), sp = function(a, b){ return cs.slice(a, b).map(function(c){ return '<span>' + c + '</span>'; }).join(''); }; return '<div><b>卓球の順番</b>' + sp(0, half) + '</div><div><b></b>' + sp(half, n) + '</div>'; })() : '<div><b>卓球のペア</b><span>①</span><span>②</span><span>③</span></div>')
-          + '<div><b>バスケ 前半</b><span></span></div><div><b>バスケ 後半</b><span></span></div></div>'
+          + '</div>'
           + '</div>';
       }).join("") + '</div>'
       + (pool.length ? '<div class="sv-pool">チーム未定：' + pool.map(function(p){ return esc(p.name); }).join("・") + '</div>' : '')
