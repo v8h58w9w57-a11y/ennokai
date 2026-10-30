@@ -44,6 +44,8 @@ body{font-family:var(--font);color:var(--ink);background:#EDE6EA;word-break:auto
 .hd .meta{display:flex;gap:2mm;align-items:center;flex-wrap:nowrap;justify-content:flex-end}
 .hd .meta span{font-size:10pt;font-weight:800;padding:1mm 3.5mm;border-radius:999px;background:rgba(255,255,255,.22);white-space:nowrap}
 .hd .meta span.k{background:#fff;color:#A0560F}
+.venue{margin:1.6mm 0 0;font-size:9.6pt;font-weight:800;color:var(--ink)}
+.venue b{display:inline-block;margin-right:2mm;padding:.3mm 2.5mm;border-radius:999px;background:#F4F0F6;font-size:8.6pt}
 
 /* 時間の帯 */
 .gantt{position:relative;margin:3mm 0 0;height:17.5mm}
@@ -161,8 +163,8 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
       <div class="ph-h"><b>② スポーツ</b><span>9:40〜11:45</span></div>
       <div class="it" style="--c:var(--c-sport)"><div class="t"><b>9:40</b><small>〜 9:50</small></div><h3>ラジオ体操</h3><p>全員で。終わったら卓球の出る順番を決める</p></div>
       <div class="it big" style="--c:var(--c-sport);flex-grow:2.2"><div class="t"><b>9:50</b><small>〜 10:45</small></div><h3>卓球トーナメント（シングルス）</h3><p>9:50 順番決め・練習<br>10:05 準決勝（2台同時）<br>10:25 決勝・3位決定戦（2台同時）<br>合図（2分ごと）で次の人に交代</p><div class="who">合図：赤坂 ／ 審判：試合のないチーム</div></div>
-      <div class="it" style="--c:var(--c-rest)"><div class="t"><b>10:45</b><small>〜 10:55</small></div><h3>休憩・水分補給</h3><p>役員は卓球台を片付け、バスケの用意</p></div>
-      <div class="it big" style="--c:var(--c-sport);flex-grow:2.2"><div class="t"><b>10:55</b><small>〜 11:45</small></div><h3>バスケ（チーム全員出場）</h3><p>半面のフルコートで全員同時に出る<br>1試合＝4分 → 休憩2分 → 4分<br>準決勝2試合 → 3位決定戦 → 決勝</p><div class="who">審判・得点：試合のないチーム ／ くわしくは2枚目</div></div>
+      <div class="it" style="--c:var(--c-rest)"><div class="t"><b>10:45</b><small>〜 10:55</small></div><h3>休憩・水分補給</h3><p>卓球台は空き時間に片付け</p></div>
+      <div class="it big" style="--c:var(--c-sport);flex-grow:2.2"><div class="t"><b>10:55</b><small>〜 11:45</small></div><h3>バスケ（チーム全員出場）</h3><p>半面をフルコートに。全員出場<br>1試合＝4分 → 休憩2分 → 4分<br>準決勝2試合 → 3位決定戦 → 決勝</p><div class="who">審判・得点：試合のないチーム ／ くわしくは2枚目</div></div>
     </div>
 
     <div class="ph" style="--pc:var(--c-rest)">
@@ -175,7 +177,7 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
 
     <div class="ph" style="--pc:var(--c-food)">
       <div class="ph-h"><b>④ 食事会</b><span>13:00〜</span></div>
-      <div class="it big food" style="--c:var(--c-food);flex-grow:3"><div class="t"><b>13:00</b><small>〜</small></div><h3>食事会・表彰式</h3><p>レストラン コロナ<br><br>13:00 開始・あいさつ<br>13:10ごろ 乾杯<br>13:40ごろ 表彰式<br>・卓球の優勝<br>・バスケの優勝<br>・総合順位の発表<br><br>景品：総合優勝チームのみ<br>（カタログギフト）</p><div class="who">司会：役員</div></div>
+      <div class="it big food" style="--c:var(--c-food);flex-grow:3"><div class="t"><b>13:00</b><small>〜</small></div><h3>食事会・表彰式</h3><p>レストラン コロナ<br><br>13:00 開始・あいさつ<br>　→ 社長のお話<br>13:10ごろ 乾杯（工場長）<br>13:40ごろ 表彰式<br>・卓球の優勝<br>・バスケの優勝<br>・総合順位の発表<br><br>景品：総合優勝チームのみ<br>（カタログギフト）</p><div class="who">司会：役員</div></div>
       <div class="it" style="--c:var(--c-move)"><div class="t"><b>14:30</b><small>ごろ</small></div><h3>解散</h3><p>乗り合わせで体育館へ戻り<br>各自の車で帰宅</p></div>
     </div>
   </div>
@@ -188,6 +190,7 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
     <h1>トーナメント表と時間配分</h1>
     <div class="meta"><span class="tm-chip R">レッド</span><span class="tm-chip Y">イエロー</span><span class="tm-chip G">グリーン</span><span class="tm-chip B">ブルー</span></div>
   </div>
+  <p class="venue"><b>会場</b>体育館は全面を使用：半面＝卓球 → バドミントン ／ もう半面＝バスケ</p>
 
   <div class="two">
     <div class="sec" style="--c:var(--c-sport)">
@@ -209,7 +212,7 @@ table.tt td.res{width:22mm;border-left:1pt dashed var(--line)}
     </div>
 
     <div class="sec" style="--c:var(--c-sport)">
-      <div class="sec-h"><h2>バスケ（全員出場）</h2><span>10:55〜11:45　半面のフルコート</span></div>
+      <div class="sec-h"><h2>バスケ（全員出場）</h2><span>10:55〜11:45　体育館の半面をフルコートに</span></div>
       <svg class="bracket" id="bkBK" viewBox="0 0 300 150" aria-label="バスケのトーナメント表"></svg>
       <table class="tt">
         <tr><th>時刻</th><th>試合</th><th>勝ったチーム</th></tr>
