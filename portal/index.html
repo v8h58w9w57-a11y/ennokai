@@ -51,7 +51,7 @@ main{max-width:1000px;margin:0 auto;padding:22px 18px 30px}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 h1.page{font-family:var(--font-title);font-size:1.7rem;font-weight:900;margin:.2em 0 .1em;letter-spacing:.02em}
 .sub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
-.card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.card{background:rgba(255,255,255,.8);border-radius:24px;box-shadow:var(--shadow);border:1px solid var(--line)}
 .section-title{font-family:var(--font-title);font-weight:900;font-size:1.1rem;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
 .empty{color:var(--muted);text-align:center;padding:34px 10px;font-size:.92rem}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;cursor:pointer;border-radius:999px;padding:11px 20px;font-weight:800;font-size:.92rem;background:var(--card);box-shadow:var(--shadow);text-decoration:none;min-height:44px;touch-action:manipulation}
@@ -1003,6 +1003,34 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .sv-keys span{font-size:.8rem;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--cs);color:var(--cc)}
 /* 下のメニュー: 6つ並ぶので、狭い画面では均等に詰める */
 @media (max-width:480px){.tabbar{width:calc(100% - 16px);justify-content:space-between;gap:2px;padding:5px}.tabbar a{min-width:0;flex:1;padding:6px 0;font-size:.6rem;letter-spacing:-.02em;white-space:nowrap}}
+/* ===== 光の演出: 背景のオーロラ・カードのツヤ・指やマウスに合わせて光るスポットライト ===== */
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.aurora i{position:absolute;display:block;border-radius:50%;filter:blur(70px);opacity:.55;will-change:transform}
+.aurora i:nth-child(1){width:62vmax;height:52vmax;left:-18vmax;top:-20vmax;background:#FFB3A6;animation:au1 26s ease-in-out infinite alternate}
+.aurora i:nth-child(2){width:58vmax;height:50vmax;right:-20vmax;top:-12vmax;background:#C4B5FF;animation:au2 32s ease-in-out infinite alternate}
+.aurora i:nth-child(3){width:46vmax;height:40vmax;left:20vw;top:38vh;background:#FFC2DA;opacity:.45;animation:au3 38s ease-in-out infinite alternate}
+.aurora i:nth-child(4){width:40vmax;height:34vmax;left:-12vmax;bottom:-16vmax;background:#B9EBDC;opacity:.4;animation:au2 44s ease-in-out infinite alternate-reverse}
+@keyframes au1{to{transform:translate(18vw,14vh) scale(1.15) rotate(25deg)}}
+@keyframes au2{to{transform:translate(-16vw,18vh) scale(.9) rotate(-20deg)}}
+@keyframes au3{to{transform:translate(-22vw,-16vh) scale(1.2)}}
+#app,.top{position:relative;z-index:1}
+.top{position:sticky;z-index:20;background:rgba(255,247,242,.62)}
+/* 主役カードのツヤ（斜めの光の帯が数秒おきに横切る） */
+.shine{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:0}
+.shine::before{content:"";position:absolute;top:-60%;left:-70%;width:45%;height:220%;transform:rotate(18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.12) 30%,rgba(255,255,255,.5) 50%,rgba(255,255,255,.12) 70%,transparent);animation:shine 6s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes shine{0%{transform:translateX(0) rotate(18deg)}35%,100%{transform:translateX(420%) rotate(18deg)}}
+/* スポットライト（マウス・指の位置がふんわり明るくなる） */
+.next,.att-hero,.ev{position:relative}
+.ev{overflow:hidden}
+.next::before,.att-hero::before,.ev::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s;z-index:0;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.32),transparent 65%)}
+.ev::before{background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--soft,#FFE3DD) 90%,transparent),transparent 70%)}
+.ev > *{position:relative;z-index:1}
+.spot-on::before{opacity:1}
+@media (hover:hover){.next:hover::before,.att-hero:hover::before,.ev:hover::before{opacity:1}}
+@media (prefers-reduced-motion:reduce){.aurora i,.shine::before{animation:none}.shine{display:none}}
+@media print{.aurora,.shine{display:none!important}.card{background:#fff}}
 /* ===== 動き（Motion）: ふわっと表示・数字のカウントアップ・光る枠・メニューの印 ===== */
 .fx-on .view{animation:none}
 @property --beam-a{syntax:'<angle>';inherits:false;initial-value:0deg}
@@ -1018,6 +1046,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 </style>
 </head>
 <body>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <header class="top">
   <a class="logo" href="#/"><span class="logo-mark"><svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12.5" cy="14" r="6"/><circle cx="19.5" cy="14" r="6"/><path d="M16 22v4"/></svg></span><span><b>親睦会</b><small>FRIENDSHIP CLUB</small></span></a>
   <button class="top-admin" id="adminBtn" type="button">主催者</button>
@@ -1167,7 +1196,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var h = '<div class="view"><div class="hello"><div><h1 class="page">こんにちは</h1><p class="sub">親睦会の行事・出欠・チーム分けをまとめて見られます</p></div></div>';
     if (next) {
       var th = theme(next), c = counts(next), dd = daysUntil(parseDate(next.date));
-      h += '<div class="card next" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"' + (dd === 0 ? ' data-today="' + next.id + '"' : '') + '><span class="beam" aria-hidden="true"></span><span class="tag">NEXT EVENT</span><div class="emoji">' + th.e + '</div>'
+      h += '<div class="card next" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"' + (dd === 0 ? ' data-today="' + next.id + '"' : '') + '><span class="shine" aria-hidden="true"></span><span class="beam" aria-hidden="true"></span><span class="tag">NEXT EVENT</span><div class="emoji">' + th.e + '</div>'
         + '<h2>' + esc(next.name) + '</h2><div class="meta"><span>' + I('calendar') + ' ' + esc(fmtDate(next)) + '</span>' + (next.time ? '<span>' + I('clock') + ' ' + esc(next.time) + '</span>' : '') + (next.location ? '<span>' + I('pin') + ' ' + esc(next.location) + '</span>' : '') + '</div>'
         + (dd !== null ? '<div class="count">' + (dd === 0 ? '<b>今日</b>開催！' : 'あと<b data-count="' + dd + '">' + dd + '</b>日') + '</div>' : '')
         + '<div class="actions"><a class="btn" href="#/event/' + next.id + '">詳しく見る</a><button class="btn glass" data-checkin="' + next.id + '">' + I('check') + ' 出欠を入力</button><span class="btn glass" style="cursor:default">出席 ' + c.present + '名</span></div></div>';
@@ -2064,7 +2093,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var pct = c.total ? Math.round(c.present / c.total * 100) : 0;
     return '<div class="view"><h1 class="page">出欠</h1><p class="sub">出欠の入力は、これまでどおり宴の会で。ここではきれいに確認できます</p>'
       + '<div class="ev-pills no-print">' + evs.map(function(e){ var t2 = theme(e); return '<button class="ev-pill' + (e.id === ev.id ? ' on' : '') + '" data-attev="' + e.id + '" style="--cc:' + t2.dot + ';--cs:' + t2.soft + '"><span class="ev-pill-ic">' + t2.svg + '</span>' + esc(e.name) + '</button>'; }).join("") + '</div>'
-      + '<div class="card att-hero" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"' + (c.total && !c.pending ? ' data-allin="' + ev.id + '"' : '') + '>'
+      + '<div class="card att-hero" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"' + (c.total && !c.pending ? ' data-allin="' + ev.id + '"' : '') + '><span class="shine" aria-hidden="true"></span>'
       + '<div class="att-ring">' + ring(c) + '<div class="att-ring-c"><b data-count="' + c.present + '">' + c.present + '</b><span>/ ' + c.total + '名</span><small>出席</small></div></div>'
       + '<div class="att-info"><span class="tag">ATTENDANCE</span><h2>' + esc(ev.name) + '</h2><p>' + I('calendar') + ' ' + esc(fmtDate(ev)) + (ev.location ? '　' + I('pin') + ' ' + esc(ev.location) : '') + '</p>'
       + '<div class="att-legend"><span><i class="lp"></i>出席 <b>' + c.present + '</b></span><span><i class="la"></i>欠席 <b>' + c.absent + '</b></span><span><i class="lw"></i>未入力 <b>' + c.pending + '</b></span><span class="att-pct">出席率 <b><span data-count="' + pct + '">' + pct + '</span>%</b></span></div>'
@@ -2324,6 +2353,16 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     M.animate(tabInd, { x: to.x, y: to.y, width: to.width + "px", height: to.height + "px" }, { type: "spring", stiffness: 520, damping: 40 });
   }
   window.addEventListener("resize", function(){ moveTabInd(false); });
+  // スポットライト: カードの上のマウス・指の位置を CSS に渡す
+  var SPOT = ".next, .att-hero, .ev";
+  function spotAt(e){
+    var c = e.target.closest && e.target.closest(SPOT); if (!c) return;
+    var r = c.getBoundingClientRect();
+    c.style.setProperty("--mx", (e.clientX - r.left) + "px"); c.style.setProperty("--my", (e.clientY - r.top) + "px");
+    return c;
+  }
+  document.addEventListener("pointermove", spotAt, { passive: true });
+  document.addEventListener("pointerdown", function(e){ if (e.pointerType === "mouse") return; var c = spotAt(e); if (c) { c.classList.add("spot-on"); setTimeout(function(){ c.classList.remove("spot-on"); }, 700); } }, { passive: true });
   // 開いた画面の部品を、上から順にふわっと出す。数字は 0 から数え上げる
   var FX_TABS = { home: 1, checkin: 1, calendar: 1, event: 1 };
   function fx(tab, still){
