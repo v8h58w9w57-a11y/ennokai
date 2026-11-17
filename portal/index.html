@@ -1507,6 +1507,11 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       return (r.s ? r.s + (r.e ? "〜" + r.e : "") + (r.ap ? "頃" : "") + " " : "") + t + (sub ? " " + sub : "");
     }).join("\n");
   }
+  // 「時間」欄（例：10:00〜）の始まり。ひな形や新しい行はここに合わせる
+  function seEvStart(){ var el = document.getElementById("ef-time"); return el ? seMin(el.value) : null; }
+  // 基準の行＝「集合・受付」（なければ最初の時刻のある行）
+  function seAnchor(rows){ return rows.find(function(r){ return r.s && /集合|受付/.test(r.t); }) || rows.find(function(r){ return r.s; }); }
+  function seShift(rows, d){ rows.forEach(function(r){ if (r.s) r.s = seFmt(seMin(r.s) + d); if (r.e) r.e = seFmt(seMin(r.e) + d); }); }
   function seField(ev){
     se.locked = /^\s*【/m.test(ev.schedule || "");
     se.rows = seParse(ev.schedule); se.mode = se.locked ? "text" : "btn";
@@ -1541,7 +1546,9 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       body.innerHTML = '<div class="se-note">1行に1つ。「9:00〜10:00 準備」のように時刻を先頭に書くと、流れの表になります。' + (se.locked ? '<br>卓球のやり方の切り替え（【】の行）が入っているので、この行事は文字で編集してください。' : '') + '</div>';
       autoGrow(ta); sePrev(); return;
     }
-    body.innerHTML = (se.rows.length ? '' : '<div class="se-tpls"><b>ひな形から始める（あとで自由に直せます）</b><div>' + Object.keys(SE_TPLS).map(function(k){ return '<button type="button" data-se-tpl="' + esc(k) + '">' + esc(k) + '</button>'; }).join("") + '</div></div>')
+    var st = seEvStart(), an = seAnchor(se.rows), diff = st !== null && an ? st - seMin(an.s) : 0;
+    body.innerHTML = (se.rows.length ? '' : '<div class="se-tpls"><b>ひな形から始める（あとで自由に直せます）</b>' + (st !== null ? '<span class="se-note">上の「時間」の ' + seFmt(st) + ' に「集合・受付」を合わせて入ります</span>' : '<span class="se-note">上の「時間」に始まりの時刻（例：18:00〜）を入れると、それに合わせて入ります</span>') + '<div>' + Object.keys(SE_TPLS).map(function(k){ return '<button type="button" data-se-tpl="' + esc(k) + '">' + esc(k) + '</button>'; }).join("") + '</div></div>')
+      + (diff ? '<button type="button" class="se-add" data-se-fit>' + I('clock') + '「時間」の ' + seFmt(st) + ' に合わせて、全部の時刻を' + (Math.abs(diff) >= 60 ? Math.floor(Math.abs(diff) / 60) + '時間' + (Math.abs(diff) % 60 ? Math.abs(diff) % 60 + '分' : '') : Math.abs(diff) + '分') + (diff > 0 ? '遅く' : '早く') + 'する</button>' : '')
       + '<div class="se-rows">' + se.rows.map(seRowHtml).join("") + '</div>'
       + '<button type="button" class="se-add" data-se-add>' + I('plus') + (se.rows.length ? '次の予定を追加' : '1つ目の予定を追加') + '</button>'
       + '<div class="se-note">時刻を押すと選べます。並びは時刻の順に自動でそろいます。</div>';
@@ -1553,7 +1560,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     se.rows.sort(function(a, b){ return a._k - b._k || a._i - b._i; });
   }
   function seAdd(){
-    var last = se.rows[se.rows.length - 1], s = "18:00";
+    var last = se.rows[se.rows.length - 1], st = seEvStart(), s = st !== null ? seFmt(st) : "18:00";
     if (last) s = last.e || (last.s ? seFmt(seMin(last.s) + 30) : "");
     se.rows.push({ s: s, e: "", ap: false, t: "", sub: "" }); seRender();
     var ins = document.querySelectorAll('.se-row [data-se-f="t"]'); if (ins.length) ins[ins.length - 1].focus();
@@ -1606,8 +1613,9 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
       if (mode === "btn") { var txt = document.getElementById("ef-schedule").value; if (/^\s*【/m.test(txt)) { toast("【】の行があるので、文字で編集してください"); return true; } se.rows = seParse(txt); se.locked = false; }
       se.mode = mode; seRender(); return true;
     }
-    if ((t = e.target.closest("[data-se-tpl]"))) { se.rows = seParse(SE_TPLS[t.dataset.seTpl].join("\n")); seRender(); toast("ひな形を入れました"); return true; }
+    if ((t = e.target.closest("[data-se-tpl]"))) { se.rows = seParse(SE_TPLS[t.dataset.seTpl].join("\n")); var st0 = seEvStart(), an0 = seAnchor(se.rows); if (st0 !== null && an0) seShift(se.rows, st0 - seMin(an0.s)); seRender(); toast("ひな形を入れました"); return true; }
     if (e.target.closest("[data-se-add]")) { seAdd(); return true; }
+    if (e.target.closest("[data-se-fit]")) { var st1 = seEvStart(), an1 = seAnchor(se.rows); if (st1 !== null && an1) { seShift(se.rows, st1 - seMin(an1.s)); seSort(); seRender(); toast("時刻をずらしました"); } return true; }
     var row = e.target.closest("[data-se-i]"), i = row ? +row.dataset.seI : -1;
     if (row && (t = e.target.closest("[data-se-time]"))) { tpOpen(i, t.dataset.seTime); return true; }
     if (row && e.target.closest("[data-se-pick]")) { tpChips(i); return true; }
@@ -1626,6 +1634,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   function seInput(e){
     var f = e.target.dataset && e.target.dataset.seF, row = e.target.closest && e.target.closest("[data-se-i]");
     if (e.target.id === "ef-schedule" && se.mode === "text") { sePrev(); return; }
+    if (e.target.id === "ef-time" && se.mode === "btn") { seRender(); return; }
     if (!f || !row) return;
     var r = se.rows[+row.dataset.seI]; r[f] = e.target.value;
     if (f === "t") { var kd = seKind(r.t); row.style.setProperty("--cc", kd.c); row.style.setProperty("--cs", kd.s); row.querySelector(".se-ico").innerHTML = I(kd.ic); }
