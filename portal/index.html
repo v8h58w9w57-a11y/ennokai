@@ -1003,6 +1003,18 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .sv-keys span{font-size:.8rem;font-weight:800;padding:4px 10px;border-radius:999px;background:var(--cs);color:var(--cc)}
 /* 下のメニュー: 6つ並ぶので、狭い画面では均等に詰める */
 @media (max-width:480px){.tabbar{width:calc(100% - 16px);justify-content:space-between;gap:2px;padding:5px}.tabbar a{min-width:0;flex:1;padding:6px 0;font-size:.6rem;letter-spacing:-.02em;white-space:nowrap}}
+/* ===== 動き（Motion）: ふわっと表示・数字のカウントアップ・光る枠・メニューの印 ===== */
+.fx-on .view{animation:none}
+@property --beam-a{syntax:'<angle>';inherits:false;initial-value:0deg}
+.beam{position:absolute;inset:0;z-index:2;border-radius:inherit;padding:2px;pointer-events:none;
+  background:conic-gradient(from var(--beam-a),transparent 0 72%,rgba(255,255,255,.95) 88%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+  animation:beamSpin 6s linear infinite}
+@keyframes beamSpin{to{--beam-a:360deg}}
+.tabbar a{position:relative;z-index:1}
+.tab-ind{position:absolute;left:0;top:0;width:0;height:0;border-radius:18px;background:linear-gradient(135deg,var(--peach-soft),var(--lav-soft));z-index:0;pointer-events:none;opacity:0}
+.tabbar.has-ind a.on{background:transparent}
+@media (prefers-reduced-motion:reduce){.beam{animation:none;opacity:.6}}
 </style>
 </head>
 <body>
@@ -1022,6 +1034,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@11.18.2/dist/motion.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.js"></script>
 <script>
 (function(){
   "use strict";
@@ -1135,6 +1149,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   /* ---------- 画面 ---------- */
   function setTab(name){
     document.querySelectorAll(".tabbar a").forEach(function(a){ a.classList.toggle("on", a.dataset.tab === name); });
+    moveTabInd(true);
     var b = document.getElementById("adminBtn");
     b.classList.toggle("on", isAdmin());
     b.innerHTML = isAdmin() ? I("unlock") + " 主催者モード" : I("lock") + " 主催者";
@@ -1152,9 +1167,9 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var h = '<div class="view"><div class="hello"><div><h1 class="page">こんにちは</h1><p class="sub">親睦会の行事・出欠・チーム分けをまとめて見られます</p></div></div>';
     if (next) {
       var th = theme(next), c = counts(next), dd = daysUntil(parseDate(next.date));
-      h += '<div class="card next" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><span class="tag">NEXT EVENT</span><div class="emoji">' + th.e + '</div>'
+      h += '<div class="card next" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"' + (dd === 0 ? ' data-today="' + next.id + '"' : '') + '><span class="beam" aria-hidden="true"></span><span class="tag">NEXT EVENT</span><div class="emoji">' + th.e + '</div>'
         + '<h2>' + esc(next.name) + '</h2><div class="meta"><span>' + I('calendar') + ' ' + esc(fmtDate(next)) + '</span>' + (next.time ? '<span>' + I('clock') + ' ' + esc(next.time) + '</span>' : '') + (next.location ? '<span>' + I('pin') + ' ' + esc(next.location) + '</span>' : '') + '</div>'
-        + (dd !== null ? '<div class="count">' + (dd === 0 ? '<b>今日</b>開催！' : 'あと<b>' + dd + '</b>日') + '</div>' : '')
+        + (dd !== null ? '<div class="count">' + (dd === 0 ? '<b>今日</b>開催！' : 'あと<b data-count="' + dd + '">' + dd + '</b>日') + '</div>' : '')
         + '<div class="actions"><a class="btn" href="#/event/' + next.id + '">詳しく見る</a><button class="btn glass" data-checkin="' + next.id + '">' + I('check') + ' 出欠を入力</button><span class="btn glass" style="cursor:default">出席 ' + c.present + '名</span></div></div>';
     } else {
       h += '<div class="card empty">予定されている行事はまだありません</div>';
@@ -2049,10 +2064,10 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     var pct = c.total ? Math.round(c.present / c.total * 100) : 0;
     return '<div class="view"><h1 class="page">出欠</h1><p class="sub">出欠の入力は、これまでどおり宴の会で。ここではきれいに確認できます</p>'
       + '<div class="ev-pills no-print">' + evs.map(function(e){ var t2 = theme(e); return '<button class="ev-pill' + (e.id === ev.id ? ' on' : '') + '" data-attev="' + e.id + '" style="--cc:' + t2.dot + ';--cs:' + t2.soft + '"><span class="ev-pill-ic">' + t2.svg + '</span>' + esc(e.name) + '</button>'; }).join("") + '</div>'
-      + '<div class="card att-hero" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '">'
-      + '<div class="att-ring">' + ring(c) + '<div class="att-ring-c"><b>' + c.present + '</b><span>/ ' + c.total + '名</span><small>出席</small></div></div>'
+      + '<div class="card att-hero" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"' + (c.total && !c.pending ? ' data-allin="' + ev.id + '"' : '') + '>'
+      + '<div class="att-ring">' + ring(c) + '<div class="att-ring-c"><b data-count="' + c.present + '">' + c.present + '</b><span>/ ' + c.total + '名</span><small>出席</small></div></div>'
       + '<div class="att-info"><span class="tag">ATTENDANCE</span><h2>' + esc(ev.name) + '</h2><p>' + I('calendar') + ' ' + esc(fmtDate(ev)) + (ev.location ? '　' + I('pin') + ' ' + esc(ev.location) : '') + '</p>'
-      + '<div class="att-legend"><span><i class="lp"></i>出席 <b>' + c.present + '</b></span><span><i class="la"></i>欠席 <b>' + c.absent + '</b></span><span><i class="lw"></i>未入力 <b>' + c.pending + '</b></span><span class="att-pct">出席率 <b>' + pct + '%</b></span></div>'
+      + '<div class="att-legend"><span><i class="lp"></i>出席 <b>' + c.present + '</b></span><span><i class="la"></i>欠席 <b>' + c.absent + '</b></span><span><i class="lw"></i>未入力 <b>' + c.pending + '</b></span><span class="att-pct">出席率 <b><span data-count="' + pct + '">' + pct + '</span>%</b></span></div>'
       + '<div class="att-actions"><button class="btn" data-checkin="' + ev.id + '">' + I('check') + ' 出欠を入力する（宴の会）</button><a class="btn glass" href="#/event/' + ev.id + '">行事を見る ' + I('arrow') + '</a></div></div></div>'
       + '<div class="att-search no-print"><input type="text" id="attQ" placeholder="名前で探す" value="' + esc(attQuery) + '"></div>'
       + '<div class="att-grid">' + sec("present", "出席", "", "is-p") + sec("absent", "欠席", "", "is-a") + sec("pending", "未入力", "まだ返事がない人", "is-w") + '</div>'
@@ -2291,13 +2306,70 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   }
 
   /* ---------- ルーティング ---------- */
+
+  /* ---------- 動き（Motion） ---------- */
+  var M = window.Motion;
+  function noMotion(){ return !M || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches); }
+  // 下のメニュー: 選んだところへ印が滑って移動する
+  var tabInd = null, tabIndShown = false;
+  function moveTabInd(animate){
+    var bar = document.querySelector(".tabbar"); if (!bar) return;
+    if (!tabInd) { tabInd = document.createElement("span"); tabInd.className = "tab-ind"; tabInd.setAttribute("aria-hidden", "true"); bar.insertBefore(tabInd, bar.firstChild); bar.classList.add("has-ind"); }
+    var on = bar.querySelector("a.on");
+    if (!on) { tabInd.style.opacity = "0"; tabIndShown = false; return; }
+    var to = { x: on.offsetLeft, y: on.offsetTop, width: on.offsetWidth, height: on.offsetHeight };
+    if (!animate || !tabIndShown || noMotion()) {
+      tabInd.style.transform = "translate(" + to.x + "px," + to.y + "px)"; tabInd.style.width = to.width + "px"; tabInd.style.height = to.height + "px"; tabInd.style.opacity = "1"; tabIndShown = true; return;
+    }
+    M.animate(tabInd, { x: to.x, y: to.y, width: to.width + "px", height: to.height + "px" }, { type: "spring", stiffness: 520, damping: 40 });
+  }
+  window.addEventListener("resize", function(){ moveTabInd(false); });
+  // 開いた画面の部品を、上から順にふわっと出す。数字は 0 から数え上げる
+  var FX_TABS = { home: 1, checkin: 1, calendar: 1, event: 1 };
+  function fx(tab, still){
+    app.classList.toggle("fx-on", !!FX_TABS[tab] && !noMotion());
+    if (still || noMotion()) return;
+    if (FX_TABS[tab]) {
+      var view = app.querySelector(".view"); if (!view) return;
+      var els = [];
+      Array.prototype.forEach.call(view.children, function(el){
+        if (el.classList.contains("list") || el.classList.contains("att-grid")) Array.prototype.push.apply(els, el.children); else els.push(el);
+      });
+      els = els.slice(0, 14);
+      els.forEach(function(el){ el.style.opacity = "0"; });
+      M.animate(els, { opacity: [0, 1], y: [14, 0], filter: ["blur(6px)", "blur(0px)"] }, { duration: 0.5, delay: M.stagger(0.05), ease: [0.16, 1, 0.3, 1] })
+        .then(function(){ els.forEach(function(el){ el.style.filter = ""; el.style.transform = ""; el.style.opacity = ""; }); });
+    }
+    app.querySelectorAll("[data-count]").forEach(function(el){
+      var n = +el.dataset.count; if (!(n > 0)) return;
+      el.textContent = "0";
+      M.animate(0, n, { duration: Math.min(1.4, 0.6 + n / 80), delay: 0.25, ease: [0.16, 1, 0.3, 1], onUpdate: function(v){ el.textContent = Math.round(v); } });
+    });
+    // 出席の輪を描く
+    var rp = app.querySelector(".ring .ring-p"), ra = app.querySelector(".ring .ring-a");
+    if (rp) { var d = rp.getAttribute("stroke-dasharray").split(" "); M.animate(rp, { strokeDasharray: ["0 " + d[1], d[0] + " " + d[1]] }, { duration: 1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }); }
+    if (ra) { ra.style.opacity = "0"; M.animate(ra, { opacity: [0, 1] }, { duration: 0.4, delay: 1.1 }); }
+    // 今日が行事の日・全員の返事がそろったら紙吹雪（その行事で1回だけ）
+    var party = app.querySelector("[data-today],[data-allin]");
+    if (party && window.confetti) {
+      var key = "portal_confetti_" + (party.dataset.today ? "today_" + party.dataset.today : "allin_" + party.dataset.allin);
+      var done = false; try { done = sessionStorage.getItem(key) === "1"; sessionStorage.setItem(key, "1"); } catch (e) {}
+      if (!done) setTimeout(function(){
+        var colors = ["#FF9A8B", "#A08CF0", "#FFD54F", "#7FD1B9", "#F27BA5"];
+        confetti({ particleCount: 90, spread: 75, origin: { y: 0.3 }, colors: colors, disableForReducedMotion: true });
+        confetti({ particleCount: 40, angle: 60, spread: 55, origin: { x: 0, y: 0.65 }, colors: colors, disableForReducedMotion: true });
+        confetti({ particleCount: 40, angle: 120, spread: 55, origin: { x: 1, y: 0.65 }, colors: colors, disableForReducedMotion: true });
+      }, 600);
+    }
+  }
   function route(){ return location.hash.replace(/^#\/?/, "").split("/"); }
   var lastRoute = null;
   function render(){
     var routeKey = location.hash;
+    // 「読み込み中…」は数えない（読み込み後の最初の表示にも動きを付ける）
+    if (!S.loaded) { app.innerHTML = '<div class="empty">読み込み中…</div>'; return; }
     app.classList.toggle("still", routeKey === lastRoute);
     lastRoute = routeKey;
-    if (!S.loaded) { app.innerHTML = '<div class="empty">読み込み中…</div>'; return; }
     var r = route(), tab = r[0] || "home";
     setTab(tab === "event" ? "home" : tab === "edit" || tab === "meeting" || tab === "teams" ? "admin" : tab);
     if (tab === "calendar") app.innerHTML = viewCalendar();
@@ -2316,6 +2388,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     }
     else app.innerHTML = viewHome();
     if (tab === "meeting" || tab === "edit") app.querySelectorAll("textarea").forEach(autoGrow);
+    fx(tab, app.classList.contains("still"));
   }
   // 入力欄の中でスクロールしないよう、文章の量に合わせて高さを伸ばす
   function autoGrow(el){ el.style.height = "auto"; el.style.height = (el.scrollHeight + 4) + "px"; }
