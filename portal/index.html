@@ -1091,6 +1091,57 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   .svp.dense .svp-keys{margin-top:6pt}
   .svp.dense .svp-list{margin-top:3pt;gap:1pt}
 }
+/* しおりの色使い：前の印刷（グラデーションの見出し・色付きの時刻の帯）に合わせる */
+@media print{
+  .svp-head{padding:10pt 14pt;border:none;border-radius:12px;background:linear-gradient(130deg,var(--c1),var(--c2));color:#fff;align-items:center}
+  .svp-head::before{display:none}
+  .svp-ttl{padding-top:0}
+  .svp-ttl small{color:rgba(255,255,255,.92)}
+  .svp-ttl h1{color:#fff}
+  .svp-facts{gap:3pt 5pt}
+  .svp-facts span{color:#fff;background:rgba(255,255,255,.24);border-radius:999px;padding:1.5pt 8pt}
+  .svp-facts .ic{color:#fff}
+  .svp-date{border-left:1pt solid rgba(255,255,255,.55);color:#fff}
+  .svp-date small,.svp-date span,.svp-date b i{color:rgba(255,255,255,.92)}
+  .svp-qr{background:#fff;border-radius:8pt;padding:4pt 4pt 3pt;color:var(--muted)}
+  .svp-qr svg{width:13mm;height:13mm}
+  .svp-art{color:#fff}
+  .svp-kh{background:linear-gradient(160deg,var(--c1),var(--c2))}
+  .svp-keys > div{background:var(--cs);border-color:var(--cc)}
+  .svp-keys > div b{color:var(--cc)}
+  .svp-sec h3 span{background:linear-gradient(130deg,var(--c1),var(--c2))}
+  .svp-list{gap:2.5pt}
+  .svp-sec{display:flex;flex-direction:column;gap:2.5pt}
+  .svp-r{grid-template-columns:22mm 1fr;gap:0;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+  .svp-r::before,.svp-r.key::after,.svp-dot{display:none}
+  .svp-t{display:flex;flex-direction:column;justify-content:center;text-align:left;padding:2.5pt 8pt;background:var(--cs);border-left:4pt solid var(--cc)}
+  .svp-t b{color:var(--cc)}
+  .svp-x{display:flex;flex-direction:column;justify-content:center;padding:2.5pt 10pt}
+  .svp-r.key{border:1.2pt solid var(--cc)}
+  .svp-r.key .svp-t{background:var(--cc)}
+  .svp-r.key .svp-t b,.svp-r.key .svp-t small{color:#fff}
+  .svp-move{margin:0;background:var(--cs);border:1pt solid var(--cc)}
+  .svp.dense .svp-r{padding:0}
+  .svp.dense .svp-list,.svp.dense .svp-sec{gap:2pt}
+  .svp.dense .svp-t,.svp.dense .svp-x{padding-top:1.4pt;padding-bottom:1.4pt}
+  .svp.roomy .svp-r{grid-template-columns:28mm 1fr;padding:0}
+  .svp.roomy .svp-list,.svp.roomy .svp-sec{gap:5pt}
+  .svp.roomy .svp-t{padding:6pt 12pt}.svp.roomy .svp-x{padding:6pt 14pt}
+  .svp-r{align-items:stretch}
+  .svp-head,.svp.dense .svp-head{padding:8pt 12pt 8pt 14pt}
+  .svp-facts{flex-wrap:nowrap}
+  .svp-facts span{white-space:nowrap;font-size:8.5pt}
+  .svp.dense .svp-ttl h1{font-size:18pt;margin:1pt 0 4pt}
+  .svp.dense .svp-date b{font-size:24pt}
+  .svp.dense .svp-keys{margin:5pt 0 0}
+  .svp.dense .svp-keys > div{padding:3pt 8pt 4pt}
+  .svp.dense .svp-keys > div b{font-size:14pt}
+  .svp.dense .svp-list,.svp.dense .svp-sec{gap:1.6pt}
+  .svp.dense .svp-sec h3{margin:2pt 0 1pt;font-size:10pt}
+  .svp.dense .svp-t,.svp.dense .svp-x{padding-top:1pt;padding-bottom:1pt}
+  .svp.dense .svp-move{padding:2.5pt 9pt}
+  .svp.dense .svp-foot{min-height:9mm;margin-top:4pt}
+}
 /* スケジュール: 各チーム */
 .sv-teams-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:26px 0 10px}
 .sv-teams-h h2{margin:0;font-family:var(--font-title);font-weight:900;font-size:1.3rem}
@@ -1120,15 +1171,8 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   .sv-teams-h h2{font-size:15pt}
   .sv-teams{grid-template-columns:1fr 1fr;gap:8pt}
   .sv-team{box-shadow:none;border-radius:12px;break-inside:avoid}
-  .sv-team header{padding:6pt 10pt;background:color-mix(in srgb,var(--tc) 14%,#fff)!important;color:var(--ink)!important;border-bottom:1.5pt solid var(--tc)}
-  .sv-team header b{text-shadow:none!important;display:flex;align-items:center;gap:6pt}
-  .sv-team header b::before{content:"";width:10pt;height:10pt;border-radius:50%;background:var(--tc)}
-  .sv-team header span{background:#fff!important;color:#4E4555;border:1pt solid color-mix(in srgb,var(--tc) 50%,#fff)}
-  .sv-team{border-width:1.5pt}
-  .sv-teams-h{padding-top:9pt;position:relative;border-bottom:1pt solid #D9CFDF;padding-bottom:6pt;margin-bottom:8pt!important}
-  .sv-teams-h::before{content:"";position:absolute;left:0;right:0;top:0;height:3.5pt;border-radius:3pt;background:linear-gradient(90deg,#FF9A8B,#F6C453)}
-  .sv-teams-h h2{font-size:18pt!important}
-  .sv-mem{gap:9pt 8pt!important;padding-top:10pt!important}
+  .sv-team header{padding:6pt 10pt}
+  .sv-team header b{text-shadow:none!important}
   .sv-team header b{font-size:14pt}
   .sv-mem{padding:8pt 10pt 6pt;gap:7pt 8pt;align-content:start}
   .sv-mem li{font-size:12.5pt}
@@ -1548,7 +1592,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
     }).join('') + '</div>';
     h += '<footer class="svp-foot"><div class="svp-memo"><b>メモ</b><div class="svp-lines">' + new Array(40).join('<i></i>') + '</div></div></footer>';
     var dense = rows.length + rows.reduce(function(n, r){ return n + Math.floor((r.sub || '').length / 60); }, 0);
-    return '<div class="svp' + (dense > 20 ? ' dense' : dense <= 12 ? ' roomy' : '') + '">' + h + '</div>';
+    return '<div class="svp' + (dense > 20 ? ' dense' : dense <= 12 ? ' roomy' : '') + '" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '">' + h + '</div>';
   }
   // スケジュール: 各チームのメンバーと、そのチームが出る試合（当日の流れの文からチーム名で拾う）
   // 説明文を「。」「／」で区切って1行ずつ（印刷では ／ でつないで1つの段落に）
