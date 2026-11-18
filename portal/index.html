@@ -1400,6 +1400,18 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
 .mood-pick button.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}
 .mood-pick button:disabled{opacity:.55;cursor:not-allowed}
 
+/* その場で切り替えるスタイルの帯 */
+.mood-bar{margin:16px 0 0;padding:12px;border-radius:20px;background:var(--card);box-shadow:var(--shadow);max-width:600px}
+.mb-l{display:flex;align-items:center;gap:4px;font-size:.8125rem;font-weight:800;color:var(--muted);margin:0 0 8px 4px}
+.mb-l .ic{width:16px;height:16px;color:var(--peach)}
+.mb-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.mb-row button{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:64px;padding:4px 0;border:none;border-radius:12px;background:transparent;color:var(--ink);font:inherit;font-size:.6875rem;font-weight:800;cursor:pointer;line-height:1.2;transition:transform .15s ease-out}
+.mb-row button:active{transform:scale(.94)}
+.mb-row button i{width:36px;height:36px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.mb-row button b{white-space:nowrap;letter-spacing:-.04em;max-width:100%;overflow:hidden}
+.mb-row button small{display:none}
+.mb-row button.on{background:var(--card2)}
+.mb-row button.on i{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink)}
 /* 印刷の色を雰囲気に合わせる（body[data-pstyle="mood"]）。紙は白のまま、見出し・札・書体を雰囲気に */
 .sv-pstyle{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0 0}
 .sv-pstyle > span{font-size:.8125rem;font-weight:800;color:var(--muted)}
@@ -1425,19 +1437,19 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   body[data-pstyle="mood"][data-mood="summer"] .svp-head,body[data-pstyle="mood"][data-mood="summer"] .svh-hd{background:radial-gradient(70% 120% at 94% 0%,rgba(255,226,122,.95),transparent 55%),linear-gradient(135deg,#1488D8,#14B3C8 65%,#3CCB9B)!important}
   body[data-pstyle="mood"][data-mood="summer"] .svp-kh,body[data-pstyle="mood"][data-mood="summer"] .svp-sec h3 span{background:linear-gradient(160deg,#1488D8,#14B3C8)}
 
-  body[data-pstyle="mood"][data-mood="pop"] .svp,body[data-pstyle="mood"][data-mood="pop"] .svh,body[data-pstyle="mood"][data-mood="pop"] .sv-teams-sec{--font-title:"Dela Gothic One","M PLUS Rounded 1c",sans-serif;font-synthesis:none}
-  body[data-pstyle="mood"][data-mood="pop"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="pop"] .svh-hd h1,body[data-pstyle="mood"][data-mood="pop"] .svp-date b,body[data-pstyle="mood"][data-mood="pop"] .svp-sec h3,body[data-pstyle="mood"][data-mood="pop"] .sv-teams-h h2{font-weight:400}
-  body[data-pstyle="mood"][data-mood="pop"] .svp-head,body[data-pstyle="mood"][data-mood="pop"] .svh-hd{background:linear-gradient(135deg,#FF5A4E,#FF7A3D)!important;border:2pt solid #1D1A22!important;box-shadow:3pt 3pt 0 #1D1A22!important}
-  body[data-pstyle="mood"][data-mood="pop"] .svp-kh{background:#FFC400;color:#1D1A22;border:2pt solid #1D1A22}
-  body[data-pstyle="mood"][data-mood="pop"] .svp-sec h3 span{background:#1D1A22;color:#FFC400}
-  body[data-pstyle="mood"][data-mood="pop"] .svp-keys > div{border:2pt solid #1D1A22;box-shadow:2.5pt 2.5pt 0 #1D1A22}
-  body[data-pstyle="mood"][data-mood="pop"] .svp-r{border:1.2pt solid #1D1A22}
+  body[data-pstyle="mood"][data-mood="pop"] .svp,body[data-pstyle="mood"][data-mood="pop"] .svh,body[data-pstyle="mood"][data-mood="pop"] .sv-teams-sec{--font-title:"M PLUS Rounded 1c",sans-serif}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="pop"] .svh-hd h1,body[data-pstyle="mood"][data-mood="pop"] .svp-date b,body[data-pstyle="mood"][data-mood="pop"] .svp-sec h3,body[data-pstyle="mood"][data-mood="pop"] .sv-teams-h h2{font-weight:800}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-head,body[data-pstyle="mood"][data-mood="pop"] .svh-hd{background:radial-gradient(circle at 90% 20%,rgba(255,194,51,.95) 0 26pt,transparent 27pt),radial-gradient(circle at 97% 75%,rgba(20,184,166,.85) 0 9pt,transparent 10pt),linear-gradient(135deg,#FF5E62,#FF4F9A 52%,#7B6CFF)!important;border-radius:14pt!important}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-kh{background:#FFC233;color:#2A2233;border-radius:999px}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-sec h3 span{background:#FF4F9A;color:#fff;border-radius:999px}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-keys > div{border-radius:12pt;border:1.5pt solid color-mix(in srgb,var(--cc,#FF4F9A) 45%,#fff)}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-r{border-radius:8pt}
   body[data-pstyle="mood"][data-mood="pop"] .svp.dense .svp-foot{min-height:6mm}
   body[data-pstyle="mood"][data-mood="pop"] .svp.dense .svp-list,body[data-pstyle="mood"][data-mood="pop"] .svp.dense .svp-sec{gap:1.2pt}
   body[data-pstyle="mood"][data-mood="pop"] .svp-t b,body[data-pstyle="mood"][data-mood="pop"] .svh-it .t b{font-family:"M PLUS Rounded 1c",sans-serif;font-weight:800}
-  body[data-pstyle="mood"][data-mood="pop"] .svh-it{box-shadow:inset 0 0 0 1.2pt #1D1A22}
-  body[data-pstyle="mood"][data-mood="pop"] .svh-hd .meta span.k{border:1.5pt solid #1D1A22}
-  body[data-pstyle="mood"][data-mood="pop"] .sv-team{border-color:#1D1A22!important;box-shadow:3pt 3pt 0 #1D1A22}
+  body[data-pstyle="mood"][data-mood="pop"] .svh-it{border-radius:8pt}
+  body[data-pstyle="mood"][data-mood="pop"] .svh-hd .meta span.k{background:#FFC233;color:#2A2233}
+  body[data-pstyle="mood"][data-mood="pop"] .sv-team{border-radius:14pt}
 }
 /* ===== 着せ替え（行事ごとの雰囲気）：body[data-mood]。画面だけ（印刷はいつもの色） ===== */
 .mood-fx,.mood-deco{display:none}
@@ -1491,25 +1503,44 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   body[data-mood="wa"] .aurora{display:none}
   body[data-mood="wa"] .mood-deco{display:block;height:200px;opacity:.55;-webkit-mask-image:linear-gradient(transparent,#000 80%);mask-image:linear-gradient(transparent,#000 80%);
     background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24'%3E%3Cg fill='%23F3ECDF' stroke='%2334508A' stroke-opacity='.22' stroke-width='1.2'%3E%3Cg id='w'%3E%3Ccircle r='22'/%3E%3Ccircle r='16'/%3E%3Ccircle r='10'/%3E%3Ccircle r='4'/%3E%3C/g%3E%3Cuse href='%23w' x='48'/%3E%3Cuse href='%23w' x='24' y='12'/%3E%3Cuse href='%23w' y='24'/%3E%3Cuse href='%23w' x='48' y='24'/%3E%3C/g%3E%3C/svg%3E") repeat}
-  body[data-mood="wa"] .card{border-radius:12px}
-  body[data-mood="wa"] h1.page{letter-spacing:.12em;display:inline-flex;align-items:center;gap:12px}
-  body[data-mood="wa"] h1.page::after{content:"";width:12px;height:12px;border-radius:2px;background:#C8442B;transform:rotate(45deg)}
-  body[data-mood="wa"] .section-title{letter-spacing:.1em}
-  body[data-mood="wa"] .next,body[data-mood="wa"] .hero,body[data-mood="wa"] .att-hero,body[data-mood="wa"] .sv-head{border-radius:14px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24'%3E%3Cg fill='%2328396A' stroke='%23D9B35A' stroke-opacity='.28' stroke-width='1'%3E%3Cg id='w'%3E%3Ccircle r='22'/%3E%3Ccircle r='16'/%3E%3Ccircle r='10'/%3E%3Ccircle r='4'/%3E%3C/g%3E%3Cuse href='%23w' x='48'/%3E%3Cuse href='%23w' x='24' y='12'/%3E%3Cuse href='%23w' y='24'/%3E%3Cuse href='%23w' x='48' y='24'/%3E%3C/g%3E%3C/svg%3E") right bottom/48px 24px,linear-gradient(135deg,#1F2C52,#2E467C);box-shadow:inset 0 0 0 1px rgba(217,179,90,.5),0 20px 40px -26px rgba(30,40,80,.6)}
-  body[data-mood="wa"] .next::after{background:radial-gradient(circle,rgba(200,68,43,.9) 0 60%,transparent 61%);width:120px;height:120px;right:28px;top:-40px;opacity:.9}
-  body[data-mood="wa"] .next .tag{background:transparent;box-shadow:inset 0 0 0 1px rgba(217,179,90,.7);color:#E8CF8E;letter-spacing:.3em}
-  body[data-mood="wa"] .nx-count{box-shadow:inset 0 0 0 1.5px rgba(217,179,90,.85);background:rgba(15,22,45,.35)}
-  body[data-mood="wa"] .nx-count b{color:#F1DDA4}
-  body[data-mood="wa"] .nx-keys span{background:#FFFCF6;color:#6B5F53}
+  /* 和：藍と朱と金の細線。模様は右側にだけうっすら */
+  body[data-mood="wa"] .card{border-radius:10px}
+  body[data-mood="wa"] h1.page{letter-spacing:.06em;display:inline-flex;align-items:center;gap:12px}
+  body[data-mood="wa"] h1.page::after{content:"";width:10px;height:10px;border-radius:1px;background:#C8442B;transform:rotate(45deg)}
+  body[data-mood="wa"] .section-title{letter-spacing:.06em}
+  body[data-mood="wa"] .next,body[data-mood="wa"] .hero,body[data-mood="wa"] .att-hero,body[data-mood="wa"] .sv-head{border-radius:12px;background:linear-gradient(100deg,#1F2C52 38%,rgba(31,44,82,.55) 75%,rgba(31,44,82,.3)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24'%3E%3Cg fill='%231F2C52' stroke='%23D9B35A' stroke-opacity='.2' stroke-width='1'%3E%3Cg id='w'%3E%3Ccircle r='22'/%3E%3Ccircle r='16'/%3E%3Ccircle r='10'/%3E%3Ccircle r='4'/%3E%3C/g%3E%3Cuse href='%23w' x='48'/%3E%3Cuse href='%23w' x='24' y='12'/%3E%3Cuse href='%23w' y='24'/%3E%3Cuse href='%23w' x='48' y='24'/%3E%3C/g%3E%3C/svg%3E") #1F2C52;background-size:auto,48px 24px;box-shadow:inset 0 0 0 6px #1F2C52,inset 0 0 0 7px rgba(217,179,90,.55),var(--shadow)}
+  body[data-mood="wa"] .next::after,body[data-mood="wa"] .hero::before,body[data-mood="wa"] .hero::after{display:none}
+  body[data-mood="wa"] .next h2,body[data-mood="wa"] .hero h1,body[data-mood="wa"] .sv-head h1{letter-spacing:.06em;color:#FFFCF6}
+  body[data-mood="wa"] .next .tag,body[data-mood="wa"] .hero .tag,body[data-mood="wa"] .sv-head small{background:transparent;box-shadow:inset 0 0 0 1px rgba(217,179,90,.7);color:#E8CF8E;letter-spacing:.3em}
+  body[data-mood="wa"] .sv-head small{display:inline-block;padding:4px 12px;border-radius:2px}
+  body[data-mood="wa"] .next .meta span,body[data-mood="wa"] .fact,body[data-mood="wa"] .sv-facts span{background:transparent;box-shadow:inset 0 0 0 1px rgba(232,207,142,.45);color:#F4E9CF;border-radius:4px}
+  body[data-mood="wa"] .fact small{color:#E8CF8E;opacity:1}
+  body[data-mood="wa"] .nx-count{border-radius:8px;width:96px;height:96px;background:#C8442B;box-shadow:inset 0 0 0 3px #C8442B,inset 0 0 0 4px rgba(255,252,246,.6);color:#FFFCF6}
+  body[data-mood="wa"] .nx-count b{color:#FFFCF6}
+  body[data-mood="wa"] .nx-keys span{background:#FFFCF6;color:#6B5F53;border-radius:4px}
+  body[data-mood="wa"] .nx-att .bar{background:rgba(255,255,255,.14)}
   body[data-mood="wa"] .nx-att .bar i{background:#E8CF8E}
   body[data-mood="wa"] .next .actions .btn:not(.glass){background:#FFFCF6;color:#1F2C52}
+  body[data-mood="wa"] .next .actions .btn.glass{background:transparent;box-shadow:inset 0 0 0 1px rgba(232,207,142,.6);color:#F4E9CF}
   body[data-mood="wa"] .btn.primary{background:#C8442B;color:#FFFCF6}
-  body[data-mood="wa"] .btn{border-radius:10px}
-  body[data-mood="wa"] .tabbar{border-radius:14px;background:rgba(255,252,246,.94)}
-  body[data-mood="wa"] .tabbar a{border-radius:10px}
-  body[data-mood="wa"] .tabbar a.on,body[data-mood="wa"] .tab-ind{background:#F6DFD6;border-radius:10px}
+  body[data-mood="wa"] .btn{border-radius:8px}
+  body[data-mood="wa"] .tabbar{border-radius:12px;background:rgba(255,252,246,.94)}
+  body[data-mood="wa"] .tabbar a{border-radius:8px}
+  body[data-mood="wa"] .tabbar a.on,body[data-mood="wa"] .tab-ind{background:#F6DFD6;border-radius:8px}
   body[data-mood="wa"] .tabbar a.on{color:#A8361F}
   body[data-mood="wa"] .logo-mark{background:#C8442B;border-radius:50%;box-shadow:none}
+  body[data-mood="wa"] .att > div{border-radius:8px}
+  body[data-mood="wa"] .att .p{background:#E3ECE2;color:#3E6B4C}body[data-mood="wa"] .att .a{background:#F4E1DB;color:#A8361F}
+  body[data-mood="wa"] .sv-pick a,body[data-mood="wa"] .seg,body[data-mood="wa"] .seg button{border-radius:8px}
+  /* スケジュール（和） */
+  body[data-mood="wa"] .sv-row{border-radius:6px;box-shadow:none;border-color:rgba(70,50,30,.18)}
+  body[data-mood="wa"] .sv-tm{background:var(--card2);border-left:3px solid var(--cc)}
+  body[data-mood="wa"] .sv-tm b,body[data-mood="wa"] .sv-tx h3{font-family:"Zen Old Mincho",serif;letter-spacing:.02em}
+  body[data-mood="wa"] .sv-tx .tg{border-radius:2px;padding:1px 6px}
+  body[data-mood="wa"] .sv-gantt .bl{border-radius:4px}
+  body[data-mood="wa"] .sv-team{border-radius:6px}
+  body[data-mood="wa"] .sc-card{border-radius:6px}body[data-mood="wa"] .sc-ico{border-radius:50%}body[data-mood="wa"] .sc-tag{border-radius:2px}
+  body[data-mood="wa"] .agc,body[data-mood="wa"] .ag-it{border-radius:8px}body[data-mood="wa"] .day{border-radius:6px}
 
   /* ---------- 桜 ---------- */
   body[data-mood="sakura"]{
@@ -1538,32 +1569,44 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   body[data-mood="summer"] .section-title .ic{color:#1E9BE0}
 
   /* ---------- ポップ ---------- */
-  body[data-mood="pop"]{font-synthesis:none;
-    --bg:#FFF6DC;--card:#FFFFFF;--card2:#FFF9EA;--glass:#FFFFFF;--topbg:rgba(255,246,220,.92);
-    --ink:#1D1A22;--ink2:#2E2A33;--muted:#57505F;--line:rgba(29,26,34,.2);--inv:#1D1A22;--inv-ink:#FFF6DC;
-    --peach:#FF5A4E;--peach-soft:#FFE0DC;--lav:#6C5CFF;--lav-soft:#E6E2FF;--mint:#00B894;--mint-soft:#D4F7EE;--lemon:#FFC400;--lemon-soft:#FFF1BF;
-    --rose:#FF4FA3;--rose-soft:#FFDDEE;--sky:#2D8CFF;--sky-soft:#DCEBFF;
-    --shadow:4px 4px 0 #1D1A22;--font-title:"Dela Gothic One","M PLUS Rounded 1c",sans-serif;
-    background:radial-gradient(rgba(29,26,34,.09) 1.3px,transparent 1.6px) 0 0/20px 20px,var(--bg)}
+  /* ---------- ポップ：キャンディ色・丸み・押せそうなボタン（黒いふちは使わない） ---------- */
+  body[data-mood="pop"]{
+    --bg:#FFF7EE;--card:#FFFFFF;--card2:#FFF1E4;--glass:#FFFFFF;--topbg:rgba(255,247,238,.92);
+    --ink:#2A2233;--ink2:#3B3245;--muted:#6A5F72;--line:rgba(42,34,51,.1);--inv:#2A2233;--inv-ink:#FFF7EE;
+    --peach:#FF5E62;--peach-soft:#FFE1DF;--lav:#7B6CFF;--lav-soft:#E9E6FF;--mint:#14B8A6;--mint-soft:#D5F5F0;--lemon:#FFC233;--lemon-soft:#FFF0C7;
+    --rose:#FF4F9A;--rose-soft:#FFE0EE;--sky:#3A86FF;--sky-soft:#DDEAFF;
+    --shadow:0 4px 0 rgba(42,34,51,.06),0 16px 28px -18px rgba(42,34,51,.3);--font-title:"M PLUS Rounded 1c","Zen Maru Gothic",sans-serif;
+    background:radial-gradient(circle at 12px 14px,rgba(255,94,98,.28) 0 3px,transparent 3.5px),radial-gradient(circle at 70px 44px,rgba(58,134,255,.24) 0 3px,transparent 3.5px),radial-gradient(circle at 40px 92px,rgba(255,194,51,.4) 0 3px,transparent 3.5px),radial-gradient(circle at 104px 100px,rgba(20,184,166,.26) 0 3px,transparent 3.5px),radial-gradient(circle at 96px 10px,rgba(123,108,255,.24) 0 2.5px,transparent 3px) 0 0/120px 120px,var(--bg)}
   body[data-mood="pop"] .aurora{display:none}
-  body[data-mood="pop"] h1.page,body[data-mood="pop"] .section-title,body[data-mood="pop"] .next h2,body[data-mood="pop"] .hero h1,body[data-mood="pop"] .nx-count b{font-weight:400;letter-spacing:.02em}
-  body[data-mood="pop"] .card,body[data-mood="pop"] .adm-card{border:2.5px solid #1D1A22;box-shadow:5px 5px 0 #1D1A22;border-radius:18px}
-  body[data-mood="pop"] .btn{border:2px solid #1D1A22;box-shadow:3px 3px 0 #1D1A22;transition:transform .12s,box-shadow .12s}
-  body[data-mood="pop"] .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1D1A22}
-  body[data-mood="pop"] .btn.primary{background:#FF5A4E;color:#fff}
-  body[data-mood="pop"] .top{border-bottom:2.5px solid #1D1A22}
-  body[data-mood="pop"] .top-admin{border:2px solid #1D1A22;box-shadow:3px 3px 0 #1D1A22}
-  body[data-mood="pop"] .tabbar{border:2.5px solid #1D1A22;box-shadow:5px 5px 0 #1D1A22;background:#fff}
-  body[data-mood="pop"] .tabbar a.on,body[data-mood="pop"] .tab-ind{background:#FFC400;color:#1D1A22}
-  body[data-mood="pop"] .next,body[data-mood="pop"] .hero,body[data-mood="pop"] .att-hero,body[data-mood="pop"] .sv-head{background:linear-gradient(135deg,#FF5A4E,#FF7A3D);border:2.5px solid #1D1A22;box-shadow:6px 6px 0 #1D1A22}
-  body[data-mood="pop"] .next::after{background:repeating-radial-gradient(circle,rgba(255,255,255,.22) 0 4px,transparent 4px 12px);border-radius:50%}
-  body[data-mood="pop"] .next .tag,body[data-mood="pop"] .hero .tag{background:#FFC400;color:#1D1A22;border:2px solid #1D1A22}
-  body[data-mood="pop"] .nx-count{background:#FFC400;color:#1D1A22;box-shadow:none;border:2.5px solid #1D1A22;transform:rotate(-6deg)}
-  body[data-mood="pop"] .nx-keys span{border:2px solid #1D1A22;background:#fff}
-  body[data-mood="pop"] .nx-att .bar{background:rgba(0,0,0,.18);border:2px solid #1D1A22;height:12px}
-  body[data-mood="pop"] .nx-att .bar i{background:#FFC400}
-  body[data-mood="pop"] .next .actions .btn.glass{background:#fff;color:#1D1A22}
-  body[data-mood="pop"] .logo-mark{border:2px solid #1D1A22;box-shadow:3px 3px 0 #1D1A22}
+  body[data-mood="pop"] h1.page,body[data-mood="pop"] .section-title,body[data-mood="pop"] .next h2,body[data-mood="pop"] .hero h1,body[data-mood="pop"] .sv-head h1,body[data-mood="pop"] .nx-count b{font-weight:800;letter-spacing:.02em}
+  body[data-mood="pop"] .card,body[data-mood="pop"] .adm-card{border-radius:24px;border:2px solid rgba(42,34,51,.05)}
+  body[data-mood="pop"] .btn{border-radius:999px;box-shadow:0 4px 0 rgba(42,34,51,.12);transition:transform .12s,box-shadow .12s}
+  body[data-mood="pop"] .btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(42,34,51,.12)}
+  body[data-mood="pop"] .btn.primary{background:linear-gradient(135deg,#FF5E62,#FF4F9A);color:#fff;box-shadow:0 4px 0 #D63B6E}
+  body[data-mood="pop"] .btn.primary:active{box-shadow:0 1px 0 #D63B6E}
+  body[data-mood="pop"] .tabbar{border-radius:28px;background:#fff;box-shadow:0 4px 0 rgba(42,34,51,.06),0 18px 30px -16px rgba(42,34,51,.35)}
+  body[data-mood="pop"] .tabbar a.on,body[data-mood="pop"] .tab-ind{background:var(--lemon-soft);color:#2A2233;border-radius:20px}
+  body[data-mood="pop"] .next,body[data-mood="pop"] .hero,body[data-mood="pop"] .att-hero,body[data-mood="pop"] .sv-head{border-radius:28px;background:radial-gradient(circle at 4% 104%,rgba(255,194,51,.9) 0 44px,transparent 45px),radial-gradient(circle at 97% 8%,rgba(20,184,166,.8) 0 14px,transparent 15px),radial-gradient(circle at 60% 6%,rgba(255,255,255,.35) 0 9px,transparent 10px),linear-gradient(135deg,#FF5E62 0%,#FF4F9A 52%,#7B6CFF 100%);box-shadow:0 6px 0 rgba(123,108,255,.25),0 20px 34px -18px rgba(255,79,154,.6)}
+  body[data-mood="pop"] .next::after{display:none}
+  body[data-mood="pop"] .next .tag,body[data-mood="pop"] .hero .tag{background:#fff;color:#FF4F9A}
+  body[data-mood="pop"] .next .meta span,body[data-mood="pop"] .fact,body[data-mood="pop"] .sv-facts span{background:rgba(255,255,255,.24)}
+  body[data-mood="pop"] .nx-count{background:#FFC233;color:#2A2233;box-shadow:0 5px 0 #E0A100;transform:rotate(-6deg)}
+  body[data-mood="pop"] .nx-count b{color:#2A2233}
+  body[data-mood="pop"] .nx-keys span{background:#fff;color:#2A2233}
+  body[data-mood="pop"] .nx-att .bar{background:rgba(255,255,255,.3);height:10px}
+  body[data-mood="pop"] .nx-att .bar i{background:#FFC233}
+  body[data-mood="pop"] .next .actions .btn:not(.glass){background:#fff;color:#FF4F9A;box-shadow:0 4px 0 rgba(42,34,51,.15)}
+  body[data-mood="pop"] .next .actions .btn.glass{background:rgba(255,255,255,.25);color:#fff;box-shadow:0 4px 0 rgba(42,34,51,.12)}
+  body[data-mood="pop"] .logo-mark{background:linear-gradient(135deg,#FF5E62,#7B6CFF);box-shadow:0 3px 0 rgba(123,108,255,.35)}
+  body[data-mood="pop"] .att .p{background:var(--mint-soft);color:#0F7E72}body[data-mood="pop"] .att .a{background:var(--rose-soft);color:#C2306E}
+  /* スケジュール（ポップ） */
+  body[data-mood="pop"] .sv-row{border-radius:22px;border:2px solid color-mix(in srgb,var(--cc) 30%,transparent);box-shadow:0 4px 0 color-mix(in srgb,var(--cc) 22%,transparent)}
+  body[data-mood="pop"] .sv-tm{border-left:none;background:color-mix(in srgb,var(--cc) 16%,#fff)}
+  body[data-mood="pop"] .sv-tx .tg{padding:2px 10px}
+  body[data-mood="pop"] .sv-gantt .bl{border-radius:999px}
+  body[data-mood="pop"] .sv-team{border-radius:24px;box-shadow:0 4px 0 color-mix(in srgb,var(--tc) 35%,transparent)}
+  body[data-mood="pop"] .sc-card{border-radius:22px}
+  body[data-mood="pop"] .ag-it{box-shadow:0 4px 0 color-mix(in srgb,var(--dot) 25%,transparent)}
 
   @media (prefers-reduced-motion:reduce){.mood-fx{display:none!important}.mood-deco{animation:none!important}}
 }
@@ -1623,7 +1666,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     if (m) { var y = new Date().getFullYear(); return { y: y, m: +m[1], d: +m[2], exact: true }; }
     return null;
   }
-  var ICONS = {wheel:'<circle cx="12" cy="12" r="8.2"/><path d="M12 3.8v16.4M3.8 12h16.4M6.2 6.2l11.6 11.6M17.8 6.2 6.2 17.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/>',expand:'<path d="M4.5 9V4.5H9M19.5 9V4.5H15M4.5 15v4.5H9M19.5 15v4.5H15"/>',chat:'<path d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v6a2.5 2.5 0 0 1-2.5 2.5H11l-4 4v-4h0a2.5 2.5 0 0 1-2-2.5z"/><path d="M8.5 8.5h7M8.5 11.5h4.5"/>',todo:'<rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/>',tools:'<path d="M14.5 5.5a4 4 0 0 0 4.8 4.8L11 18.6a2 2 0 0 1-2.8-2.8l8.3-8.3"/><path d="M6 4.5l2.5 2.5M4.5 6 7 8.5M4 4l4 4"/>',flag:'<path d="M6 20V4.5M6 5h10l-2 3.5 2 3.5H6"/>',mic:'<rect x="9" y="4" width="6" height="10" rx="3"/><path d="M6 11.5a6 6 0 0 0 12 0M12 17.5V20M9 20h6"/>',trophy:'<path d="M8 4.5h8v4a4 4 0 0 1-8 0z"/><path d="M8 6H5.5a2.5 2.5 0 0 0 2.6 3.3M16 6h2.5a2.5 2.5 0 0 1-2.6 3.3M12 12.5v3.5M8.5 20h7M9.5 16h5v4h-5z"/>',ball:'<circle cx="12" cy="12" r="7.5"/><path d="M4.8 10c3 .5 5.4 2.6 6.4 7.2M12.5 4.6c-.6 3.4.4 6.7 6.6 8.4M8.5 5.4c3.2 1.6 5.4 5 4 13.9"/>',cup:'<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8.5 3.5c-.6 1 .6 1.8 0 3M12 3.5c-.6 1 .6 1.8 0 3"/>',food:'<path d="M7 4v6a2 2 0 0 0 4 0V4M9 10v10M16.5 4c-2 1-2.8 4-2.8 7h2.8v9"/>',wave:'<path d="M8.5 13V7.2a1.3 1.3 0 0 1 2.6 0V12M11.1 11.5V5.8a1.3 1.3 0 0 1 2.6 0v6M13.7 11.8V7.5a1.3 1.3 0 0 1 2.6 0v6.3c0 3.6-2.2 6.2-5.5 6.2-2.4 0-3.7-1.2-5-3.1L4.3 14a1.3 1.3 0 0 1 2.1-1.5l2.1 1.9"/><path d="M18.5 5.5c1 .8 1.6 1.9 1.7 3.2M17.4 3.3c1.8 1 3 2.8 3.4 4.8"/>',car:'<path d="M5 15.5V12l1.8-4.2A2 2 0 0 1 8.6 6.5h6.8a2 2 0 0 1 1.8 1.3L19 12v3.5a1 1 0 0 1-1 1h-1.5M7.5 16.5H6a1 1 0 0 1-1-1M5 12h14"/><circle cx="8.5" cy="16.5" r="1.8"/><circle cx="15.5" cy="16.5" r="1.8"/>',pin2:'<path d="M9 4h6l-1 5 3 3v1.5H7V12l3-3z"/><path d="M12 13.5V20"/>',edit:'<path d="M4.5 19.5h4l10-10-4-4-10 10z"/><path d="M13 7l4 4"/>',plus:'<path d="M12 5v14M5 12h14"/>',camera:'<path d="M4.5 8.5A1.5 1.5 0 0 1 6 7h2l1.5-2h5L16 7h2a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 18 19H6a1.5 1.5 0 0 1-1.5-1.5z"/><circle cx="12" cy="12.8" r="3.3"/>',trash:'<path d="M5 7h14M10 7V4.5h4V7M7 7l1 12.5h8L17 7"/>',home:'<path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/>',calendar:'<rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 7.8V12l2.8 1.8"/>',pin:'<path d="M12 20.5s6-5.3 6-10.3a6 6 0 1 0-12 0c0 5 6 10.3 6 10.3z"/><circle cx="12" cy="10.2" r="2.2"/>',check:'<circle cx="12" cy="12" r="8.2"/><path d="m8.4 12.3 2.4 2.4 4.9-5"/>',lock:'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',unlock:'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 6.8-1.2"/>',users:'<circle cx="9" cy="9" r="3"/><path d="M3.8 19a5.2 5.2 0 0 1 10.4 0"/><circle cx="16.6" cy="9.6" r="2.4"/><path d="M15.4 14.3a4.4 4.4 0 0 1 5 4.7"/>',person:'<circle cx="12" cy="8.5" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',history:'<path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.8v4.1h4.1M12 8.3V12l2.6 1.6"/>',hourglass:'<path d="M7 4h10M7 20h10M8 4c0 4.2 8 4.6 8 8s-8 3.8-8 8M16 4c0 4.2-8 4.6-8 8s8 3.8 8 8"/>',note:'<path d="M6 4.5h9l3 3V19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1z"/><path d="M8.5 11h7M8.5 14.5h7M8.5 8h4"/>',alert:'<path d="M12 4.5 3.5 19h17z"/><path d="M12 10v4M12 16.8h.01"/>',info:'<circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/>',shuffle:'<path d="M4 7h3.5c4 0 5 10 9 10H20M4 17h3.5c1.6 0 2.7-1.6 3.6-3.4M20 7h-3.5c-1.6 0-2.7 1.6-3.6 3.4M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5"/>',print:'<path d="M7.5 9V4.5h9V9M7.5 17H5.5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><rect x="7.5" y="13.5" width="9" height="6" rx="1"/>',save:'<path d="M5 5.5A1.5 1.5 0 0 1 6.5 4h9l3.5 3.5v11a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 18.5z"/><path d="M8.5 4v4.5h6V4M8 20v-5.5h8V20"/>',dice:'<rect x="4.5" y="4.5" width="15" height="15" rx="4"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/><circle cx="9" cy="15" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',hand:'<path d="M8.5 12.5V6.8a1.4 1.4 0 0 1 2.8 0v4.7M11.3 11.2V5.4a1.4 1.4 0 0 1 2.8 0v5.8M14.1 11.2V6.8a1.4 1.4 0 0 1 2.8 0v6.4c0 4-2.4 6.8-6 6.8-2.6 0-4-1.4-5.4-3.4l-1.7-2.6a1.4 1.4 0 0 1 2.3-1.6l2.4 2.1"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',inbox:'<path d="M4 13.5 6.5 6h11l2.5 7.5V18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.5 2h4l1.5-2H20"/>'};
+  var ICONS = {wheel:'<circle cx="12" cy="12" r="8.2"/><path d="M12 3.8v16.4M3.8 12h16.4M6.2 6.2l11.6 11.6M17.8 6.2 6.2 17.8"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/>',expand:'<path d="M4.5 9V4.5H9M19.5 9V4.5H15M4.5 15v4.5H9M19.5 15v4.5H15"/>',chat:'<path d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v6a2.5 2.5 0 0 1-2.5 2.5H11l-4 4v-4h0a2.5 2.5 0 0 1-2-2.5z"/><path d="M8.5 8.5h7M8.5 11.5h4.5"/>',todo:'<rect x="4.5" y="4.5" width="15" height="15" rx="4"/><path d="m8.5 12.2 2.4 2.4 4.6-5"/>',tools:'<path d="M14.5 5.5a4 4 0 0 0 4.8 4.8L11 18.6a2 2 0 0 1-2.8-2.8l8.3-8.3"/><path d="M6 4.5l2.5 2.5M4.5 6 7 8.5M4 4l4 4"/>',flag:'<path d="M6 20V4.5M6 5h10l-2 3.5 2 3.5H6"/>',mic:'<rect x="9" y="4" width="6" height="10" rx="3"/><path d="M6 11.5a6 6 0 0 0 12 0M12 17.5V20M9 20h6"/>',trophy:'<path d="M8 4.5h8v4a4 4 0 0 1-8 0z"/><path d="M8 6H5.5a2.5 2.5 0 0 0 2.6 3.3M16 6h2.5a2.5 2.5 0 0 1-2.6 3.3M12 12.5v3.5M8.5 20h7M9.5 16h5v4h-5z"/>',ball:'<circle cx="12" cy="12" r="7.5"/><path d="M4.8 10c3 .5 5.4 2.6 6.4 7.2M12.5 4.6c-.6 3.4.4 6.7 6.6 8.4M8.5 5.4c3.2 1.6 5.4 5 4 13.9"/>',cup:'<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M8.5 3.5c-.6 1 .6 1.8 0 3M12 3.5c-.6 1 .6 1.8 0 3"/>',food:'<path d="M7 4v6a2 2 0 0 0 4 0V4M9 10v10M16.5 4c-2 1-2.8 4-2.8 7h2.8v9"/>',wave:'<path d="M8.5 13V7.2a1.3 1.3 0 0 1 2.6 0V12M11.1 11.5V5.8a1.3 1.3 0 0 1 2.6 0v6M13.7 11.8V7.5a1.3 1.3 0 0 1 2.6 0v6.3c0 3.6-2.2 6.2-5.5 6.2-2.4 0-3.7-1.2-5-3.1L4.3 14a1.3 1.3 0 0 1 2.1-1.5l2.1 1.9"/><path d="M18.5 5.5c1 .8 1.6 1.9 1.7 3.2M17.4 3.3c1.8 1 3 2.8 3.4 4.8"/>',car:'<path d="M5 15.5V12l1.8-4.2A2 2 0 0 1 8.6 6.5h6.8a2 2 0 0 1 1.8 1.3L19 12v3.5a1 1 0 0 1-1 1h-1.5M7.5 16.5H6a1 1 0 0 1-1-1M5 12h14"/><circle cx="8.5" cy="16.5" r="1.8"/><circle cx="15.5" cy="16.5" r="1.8"/>',pin2:'<path d="M9 4h6l-1 5 3 3v1.5H7V12l3-3z"/><path d="M12 13.5V20"/>',edit:'<path d="M4.5 19.5h4l10-10-4-4-10 10z"/><path d="M13 7l4 4"/>',plus:'<path d="M12 5v14M5 12h14"/>',camera:'<path d="M4.5 8.5A1.5 1.5 0 0 1 6 7h2l1.5-2h5L16 7h2a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 18 19H6a1.5 1.5 0 0 1-1.5-1.5z"/><circle cx="12" cy="12.8" r="3.3"/>',trash:'<path d="M5 7h14M10 7V4.5h4V7M7 7l1 12.5h8L17 7"/>',home:'<path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z"/>',calendar:'<rect x="4" y="5.5" width="16" height="14.5" rx="3"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',clock:'<circle cx="12" cy="12" r="8"/><path d="M12 7.8V12l2.8 1.8"/>',pin:'<path d="M12 20.5s6-5.3 6-10.3a6 6 0 1 0-12 0c0 5 6 10.3 6 10.3z"/><circle cx="12" cy="10.2" r="2.2"/>',check:'<circle cx="12" cy="12" r="8.2"/><path d="m8.4 12.3 2.4 2.4 4.9-5"/>',lock:'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',unlock:'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 6.8-1.2"/>',users:'<circle cx="9" cy="9" r="3"/><path d="M3.8 19a5.2 5.2 0 0 1 10.4 0"/><circle cx="16.6" cy="9.6" r="2.4"/><path d="M15.4 14.3a4.4 4.4 0 0 1 5 4.7"/>',person:'<circle cx="12" cy="8.5" r="3.4"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',history:'<path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3L4.5 8.9"/><path d="M4.5 4.8v4.1h4.1M12 8.3V12l2.6 1.6"/>',hourglass:'<path d="M7 4h10M7 20h10M8 4c0 4.2 8 4.6 8 8s-8 3.8-8 8M16 4c0 4.2-8 4.6-8 8s8 3.8 8 8"/>',note:'<path d="M6 4.5h9l3 3V19a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1z"/><path d="M8.5 11h7M8.5 14.5h7M8.5 8h4"/>',alert:'<path d="M12 4.5 3.5 19h17z"/><path d="M12 10v4M12 16.8h.01"/>',info:'<circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/>',shuffle:'<path d="M4 7h3.5c4 0 5 10 9 10H20M4 17h3.5c1.6 0 2.7-1.6 3.6-3.4M20 7h-3.5c-1.6 0-2.7 1.6-3.6 3.4M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5"/>',print:'<path d="M7.5 9V4.5h9V9M7.5 17H5.5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><rect x="7.5" y="13.5" width="9" height="6" rx="1"/>',save:'<path d="M5 5.5A1.5 1.5 0 0 1 6.5 4h9l3.5 3.5v11a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 18.5z"/><path d="M8.5 4v4.5h6V4M8 20v-5.5h8V20"/>',dice:'<rect x="4.5" y="4.5" width="15" height="15" rx="4"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/><circle cx="9" cy="15" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',hand:'<path d="M8.5 12.5V6.8a1.4 1.4 0 0 1 2.8 0v4.7M11.3 11.2V5.4a1.4 1.4 0 0 1 2.8 0v5.8M14.1 11.2V6.8a1.4 1.4 0 0 1 2.8 0v6.4c0 4-2.4 6.8-6 6.8-2.6 0-4-1.4-5.4-3.4l-1.7-2.6a1.4 1.4 0 0 1 2.3-1.6l2.4 2.1"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',palette:'<path d="M12 4a8 8 0 1 0 0 16c1.2 0 1.8-.8 1.8-1.7 0-1.2-1-1.6-1-2.6 0-.9.7-1.5 1.7-1.5H17a3 3 0 0 0 3-3C20 7.2 16.4 4 12 4z"/><circle cx="8" cy="11" r="1.1" fill="currentColor"/><circle cx="10.5" cy="7.8" r="1.1" fill="currentColor"/><circle cx="14.6" cy="8" r="1.1" fill="currentColor"/>',inbox:'<path d="M4 13.5 6.5 6h11l2.5 7.5V18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M4 13.5h4.5l1.5 2h4l1.5-2H20"/>'};
   function I(n, cls){ return '<svg class="ic' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[n] || '') + '</svg>'; }
   var ART = {sport:'<circle cx="25" cy="25" r="14"/><path d="M16.5 16.5a12 12 0 0 1 12-3.2"/><path d="M35 35l10.5 10.5" stroke-width="7.5"/><circle cx="49" cy="16" r="4.2"/><path d="M40 9.5c1.6-.8 3.3-1.1 5-.9M55.5 22.5c.7 1.5 1 3.1.8 4.8"/>',fest:'<path d="M32 8v5M26 13h12M24 13c-5 4-7 9-7 15s2 11 7 15h16c5-4 7-9 7-15s-2-11-7-15z"/><path d="M17 28h30M26 43v5h12v-5M32 48v6"/>',party:'<path d="M18 12h14l-2 18a5 5 0 0 1-10 0z"/><path d="M25 35v13M19 48h12"/><path d="M38 16l12 4-5 17a5 5 0 0 1-9.5-3z" /><path d="M41 37l-3 12M34 50l9 2.5"/><path d="M33 7l2-3M37 9l3-2"/>',food:'<circle cx="32" cy="34" r="16"/><circle cx="32" cy="34" r="9"/><path d="M10 12v12a4 4 0 0 0 8 0V12M14 12v40M53 12c-4 2-5 8-5 14h5v26"/>',trip:'<rect x="12" y="14" width="40" height="30" rx="7"/><path d="M12 32h40M24 14v18M40 14v18"/><circle cx="21" cy="47" r="4"/><circle cx="43" cy="47" r="4"/>',flower:'<circle cx="32" cy="30" r="5"/><path d="M32 25c-6-10 6-14 6-6M37 29c11-3 11 9 4 7M35 35c3 10-9 11-6 3M29 35c-8 7-14-4-6-6M27 29c-10-3-5-14 3-7"/><path d="M32 41v14M32 49c4-4 9-4 11-2"/>',tree:'<path d="M32 8 20 26h7L16 42h11l-7 10h24l-7-10h11L37 26h7z"/><path d="M32 52v6"/>',spark:'<path d="M32 10l4.5 13.5L50 28l-13.5 4.5L32 46l-4.5-13.5L14 28l13.5-4.5z"/><path d="M49 44l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>'};
   function A(n){ return '<svg class="art" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ART[n] + '</svg>'; }
@@ -1878,7 +1921,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       + (keys.length ? '<div class="sv-keys">' + keys.map(function(st){ var tx = st.tx.trim(), sp = tx.search(/[\s　]/), t = sp > 0 ? tx.slice(0, sp) : tx, kd = STEP_KINDS.find(function(k){ return k.k.test(t); }) || stepKind(tx); return '<span style="--cc:' + kd.c + ';--cs:' + kd.s + '">' + esc(half(st.tm).replace(/[〜~\-].*$/, '').replace('頃', '')) + ' ' + esc(t) + '</span>'; }).join("") + '</div>' : '');
   }
   // スケジュール専用ページ（スマホでも横にはみ出さない1列。印刷はA4縦1枚）
-  var pStyle = "std"; try { pStyle = localStorage.getItem("portal_print_style") || "std"; } catch (e) {}
+  var pStyle = "mood"; try { pStyle = localStorage.getItem("portal_print_style2") || "mood"; } catch (e) {}
   function viewSchedule(id){
     var list = S.events.filter(function(e){ return parseSchedule(e.schedule).length; });
     if (!list.length) return '<div class="view card empty">スケジュールが入っている行事はまだありません</div>';
@@ -1906,8 +1949,9 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       + '<span>' + I('calendar') + esc(fmtDate(ev)) + '</span>' + (ev.time ? '<span>' + I('clock') + esc(ev.time) + '</span>' : '') + (ev.location ? '<span>' + I('pin') + esc(ev.location) + '</span>' : '') + '</div></div>';
     var link = (ev.notes || "").match(/https?:\/\/\S+\.html/);
     if (vs.length > 1) h += '<div class="sv-var no-print"><span>卓球のやり方</span><div class="seg">' + vs.map(function(v){ return '<button data-sv-var="' + esc(v) + '"' + (v === curV ? ' class="on"' : '') + '>' + esc(v) + '</button>'; }).join("") + '</div></div>';
-    var mk = moodOf(ev), mName = (MOODS.find(function(x){ return x.k === mk; }) || { name: "パステル" }).name;
-    if (mk !== "pastel") h += '<div class="sv-pstyle no-print"><span>印刷の色</span><div class="seg"><button data-sv-pstyle="std"' + (pStyle !== "mood" ? ' class="on"' : '') + '>いつもの色</button><button data-sv-pstyle="mood"' + (pStyle === "mood" ? ' class="on"' : '') + '>雰囲気（' + esc(mName) + '）</button></div></div>';
+    h += moodBar(ev);
+    var mk = moodOf(ev), mName = (MOODS.find(function(x){ return x.k === mk; }) || { name: "ノーマル" }).name;
+    if (mk !== "pastel") h += '<div class="sv-pstyle no-print"><span>印刷の色</span><div class="seg"><button data-sv-pstyle="mood"' + (pStyle === "mood" ? ' class="on"' : '') + '>このスタイル（' + esc(mName) + '）</button><button data-sv-pstyle="std"' + (pStyle !== "mood" ? ' class="on"' : '') + '>ノーマル</button></div></div>';
     h += '<div class="sv-acts"><button class="btn primary" data-sv-print="v">' + I('print') + ' しおり（A4縦）で印刷</button><button class="btn" data-sv-print="h">' + I('print') + ' 横長（A4横）で印刷</button>' + (link ? '<a class="btn" href="' + esc(link[0]) + '" target="_blank" rel="noopener">トーナメント表・ルール</a>' : '') + '</div>';
     if (timed.length > 1) {
       var S0 = timed[0].a, E0 = Math.max.apply(null, timed.map(function(r){ return r.bb; })), W = Math.max(E0 - S0, 1);
@@ -2062,6 +2106,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       + '<div class="fact"><small>DATE</small>' + I('calendar') + ' ' + esc(fmtDate(ev)) + '</div>'
       + (ev.time ? '<div class="fact"><small>TIME</small>' + I('clock') + ' ' + esc(ev.time) + '</div>' : '')
       + (ev.location ? '<div class="fact"><small>PLACE</small>' + I('pin') + ' ' + esc(ev.location) + '</div>' : '') + '</div></div>';
+    h += moodBar(ev);
     h += '<div class="grid2"><div class="card box"><h3>' + I('clock') + ' 当日の流れ</h3>' + (sch.length ? schedLink(sch, ev) : '<div class="empty">まだ決まっていません</div>')
       + (ev.notes ? '<h3 style="margin-top:20px">' + I('note') + ' メモ</h3><div class="notes">' + esc(ev.notes).replace(/https?:\/\/[^\s<]+/g, function(u){ return '<a href="' + u + '" target="_blank" rel="noopener" style="color:#2A62AE;font-weight:800;word-break:break-all">' + u + '</a>'; }) + '</div>' : '') + '</div>';
     h += '<div><div class="card box"><h3>' + I('check') + ' 出欠状況</h3><div class="att"><div class="p"><b>' + c.present + '</b>出席</div><div class="a"><b>' + c.absent + '</b>欠席</div><div class="w"><b>' + c.pending + '</b>未入力</div></div>'
@@ -2255,8 +2300,24 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     seSync();
   }
   // 雰囲気（着せ替え）を選ぶ欄。「自動」は行事名から選ぶ
-  var MOOD_OPTS = [["", "自動", "行事名から選ぶ"], ["pastel", "パステル", "やさしい色"], ["night", "夜のパーティー", "濃い紫・金・星"], ["wa", "和", "和紙・藍・朱"], ["sakura", "桜", "花びらが舞う"], ["summer", "夏", "空色・波"], ["pop", "ポップ", "黒縁・水玉"]];
-  var MOOD_SW = { "": "conic-gradient(#FF9A8B,#F5C64F,#5CC9A7,#6BB8F0,#A08CF0,#FF9A8B)", pastel: "linear-gradient(135deg,#FFE3DD,#ECE7FF)", night: "radial-gradient(circle at 70% 30%,#FF6FAE 0 8%,transparent 9%),linear-gradient(135deg,#251A45,#3A1F5C)", wa: "radial-gradient(circle at 72% 30%,#C8442B 0 22%,transparent 23%),linear-gradient(135deg,#1F2C52,#2E467C)", sakura: "linear-gradient(135deg,#FFD6E3,#E46F98)", summer: "linear-gradient(135deg,#7FD8FF,#14B3C8 60%,#FFE27A)", pop: "radial-gradient(#1D1A22 1.2px,transparent 1.5px) 0 0/8px 8px,#FFC400" };
+  var MOOD_OPTS = [["", "自動", "行事名から選ぶ"], ["pastel", "ノーマル", "いつものパステル"], ["night", "夜のパーティー", "濃い紫・金・星"], ["wa", "和", "和紙・藍・朱"], ["sakura", "桜", "花びらが舞う"], ["summer", "夏", "空色・波"], ["pop", "ポップ", "キャンディ色・丸み"]];
+  var MOOD_SW = { "": "conic-gradient(#FF9A8B,#F5C64F,#5CC9A7,#6BB8F0,#A08CF0,#FF9A8B)", pastel: "linear-gradient(135deg,#FFE3DD,#ECE7FF)", night: "radial-gradient(circle at 70% 30%,#FF6FAE 0 8%,transparent 9%),linear-gradient(135deg,#251A45,#3A1F5C)", wa: "radial-gradient(circle at 72% 30%,#C8442B 0 22%,transparent 23%),linear-gradient(135deg,#1F2C52,#2E467C)", sakura: "linear-gradient(135deg,#FFD6E3,#E46F98)", summer: "linear-gradient(135deg,#7FD8FF,#14B3C8 60%,#FFE27A)", pop: "radial-gradient(circle at 72% 28%,#FFC233 0 22%,transparent 23%),radial-gradient(circle at 26% 78%,#14B8A6 0 14%,transparent 15%),linear-gradient(135deg,#FF5E62,#FF4F9A 55%,#7B6CFF)" };
+  // 行事ページ・スケジュールで、その場でスタイルを切り替える（主催者だけ。押すとすぐ保存）
+  function moodBar(ev){
+    if (!isAdmin() || !S.hasMood) return '';
+    var cur = ev.mood || "", eff = moodOf(ev);
+    return '<div class="mood-bar no-print"><span class="mb-l">' + I('palette') + 'スタイル<small style="font-weight:700">（いま：' + esc(((MOOD_OPTS.find(function(x){ return x[0] === eff; }) || [])[1]) || '') + (cur ? '' : '・自動') + '）</small></span><div class="mb-row" role="radiogroup" aria-label="この行事のスタイル">'
+      + MOOD_OPTS.map(function(o){ var on = o[0] === cur; return '<button type="button" role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + (!o[0] ? ' auto' : '') + '" data-mood-set="' + o[0] + '" data-ev="' + ev.id + '"><i style="background:' + MOOD_SW[o[0]] + '"></i><b>' + (o[0] === "night" ? "夜" : o[1]) + '</b>' + (!o[0] && !cur ? '<small>' + esc(((MOOD_OPTS.find(function(x){ return x[0] === eff; }) || [])[1]) || '') + '</small>' : '') + '</button>'; }).join("")
+      + '</div></div>';
+  }
+  async function setEvMood(id, k){
+    var ev = S.events.find(function(e){ return e.id === id; }); if (!ev) return;
+    var prev = ev.mood || "";
+    ev.mood = k || null; render();
+    var res = await sb.from("ennokai_events").update({ mood: k || null }).eq("id", id);
+    if (res.error) { ev.mood = prev || null; render(); toast("保存できませんでした"); return; }
+    toast((MOOD_OPTS.find(function(x){ return x[0] === k; }) || ["", "自動"])[1] + "にしました");
+  }
   function moodField(ev){
     var cur = ev.mood || "", auto = MOODS.find(function(x){ return x.re.test(ev.name || ""); });
     return '<div class="field mood-f"><span>画面の雰囲気（着せ替え）' + (S.hasMood ? '' : '<em>※ データベースに項目を足すと選べるようになります</em>') + '</span><div class="mood-pick" role="radiogroup">'
@@ -3321,6 +3382,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   document.addEventListener("click", async function(e){
     var t;
     if (seClick(e)) return;
+    if ((t = e.target.closest("[data-mood-set]"))) { setEvMood(t.dataset.ev, t.dataset.moodSet); return; }
     if ((t = e.target.closest("[data-mood-pick]"))) { document.getElementById("ef-mood").value = t.dataset.moodPick; document.querySelectorAll("[data-mood-pick]").forEach(function(b){ var on = b === t; b.classList.toggle("on", on); b.setAttribute("aria-checked", on); }); var nm = document.getElementById("ef-name"); setMood(t.dataset.moodPick || moodOf({ name: nm ? nm.value : "" })); return; }
     if ((t = e.target.closest("[data-checkin]"))) { openCheckin(); return; }
     if ((t = e.target.closest("[data-cal-go]"))) { var g = t.dataset.calGo.split("-"); calY = +g[0]; calM = +g[1]; render(); return; }
@@ -3378,7 +3440,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     if (e.target.closest("[data-saveev]")) { saveEvent(); return; }
     if (e.target.closest("[data-meet-save]")) { saveMeeting(); return; }
     if (e.target.closest("[data-meet-print]")) { window.print(); return; }
-    if ((t = e.target.closest("[data-sv-pstyle]"))) { pStyle = t.dataset.svPstyle; try { localStorage.setItem("portal_print_style", pStyle); } catch (x) {} render(); return; }
+    if ((t = e.target.closest("[data-sv-pstyle]"))) { pStyle = t.dataset.svPstyle; try { localStorage.setItem("portal_print_style2", pStyle); } catch (x) {} render(); return; }
     if ((t = e.target.closest("[data-sv-print]"))) { document.body.dataset.pmode = t.dataset.svPrint; document.body.dataset.pstyle = pStyle; setTimeout(function(){ window.print(); }, 30); return; }
     if ((t = e.target.closest("[data-sv-var]"))) { svVariant = t.dataset.svVar; try { localStorage.setItem("portal_sched_variant", svVariant); } catch (x) {} render(); return; }
     if (e.target.closest("[data-todo-add]")) { readMeetForm(); meetDraft.todos = meetDraft.todos || []; meetDraft.todos.push({ text: "", who: "", done: false }); render(); var ins = document.querySelectorAll("[data-todo-text]"); if (ins.length) ins[ins.length - 1].focus(); return; }
