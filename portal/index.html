@@ -1495,38 +1495,38 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   .mood-deco{position:fixed;left:0;right:0;bottom:0;z-index:0;pointer-events:none}
 
   /* ---------- 夜のパーティー ---------- */
-  body[data-mood="night"]{color-scheme:dark;
+  body:is([data-mood="night"],[data-mood="theater"]){color-scheme:dark;
     --bg:#120E1F;--card:#1E1832;--card2:#272042;--glass:rgba(30,24,50,.74);--topbg:rgba(18,14,31,.72);
     --ink:#F4EEFA;--ink2:#DCD2EA;--muted:#ADA1C0;--line:rgba(255,255,255,.1);--inv:#F5C64F;--inv-ink:#1A1326;
     --peach:#FFB36B;--peach-soft:rgba(255,179,107,.16);--mint:#4FD6B0;--mint-soft:rgba(79,214,176,.16);--lav:#A98BFF;--lav-soft:rgba(169,139,255,.2);
     --sky:#5FB4FF;--sky-soft:rgba(95,180,255,.16);--lemon:#F5C64F;--lemon-soft:rgba(245,198,79,.16);--rose:#FF6FAE;--rose-soft:rgba(255,111,174,.16);
     --shadow:0 18px 40px -22px rgba(0,0,0,.8);--g1:rgba(130,80,255,.3);--g2:rgba(255,120,80,.16);
     --au1:#5B2DFF;--au2:#FF3D8F;--au3:#1F6BFF;--au4:#FFB347}
-  body[data-mood="night"] .aurora i{opacity:.26}
-  body[data-mood="night"] .mood-fx{display:block}
-  body[data-mood="night"] .mood-fx b{position:absolute;width:calc(2px * var(--s));height:calc(2px * var(--s));border-radius:50%;background:#FFF6D8;box-shadow:0 0 6px 1px rgba(255,236,170,.7);animation:twinkle var(--d) ease-in-out var(--dl) infinite}
+  body:is([data-mood="night"],[data-mood="theater"]) .aurora i{opacity:.26}
+  body:is([data-mood="night"],[data-mood="theater"]) .mood-fx{display:block}
+  body:is([data-mood="night"],[data-mood="theater"]) .mood-fx b{position:absolute;width:calc(2px * var(--s));height:calc(2px * var(--s));border-radius:50%;background:#FFF6D8;box-shadow:0 0 6px 1px rgba(255,236,170,.7);animation:twinkle var(--d) ease-in-out var(--dl) infinite}
   @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
-  body[data-mood="night"] h1.page,body[data-mood="night"] .section-title{background:linear-gradient(100deg,#FFE7A8,#F5C64F 45%,#FF9DC8);-webkit-background-clip:text;background-clip:text;color:transparent}
-  body[data-mood="night"] .section-title .ic{color:#F5C64F}
-  body[data-mood="night"] .section-title .btn{color:var(--ink)}
-  body[data-mood="night"] .sv-tm{background:color-mix(in srgb,var(--cc) 16%,transparent)}
-  body[data-mood="night"] .sv-tm b,body[data-mood="night"] .sc-tm,body[data-mood="night"] .sc-tag,body[data-mood="night"] .se-t:not(.empty){color:color-mix(in srgb,var(--cc) 50%,#fff)}
-  body[data-mood="night"] .sc-tag,body[data-mood="night"] .sc-ico,body[data-mood="night"] .se-ico{background:color-mix(in srgb,var(--cc) 24%,transparent);color:color-mix(in srgb,var(--cc) 50%,#fff)}
-  body[data-mood="night"] .sc-ico{box-shadow:0 0 0 5px var(--card)}
-  body[data-mood="night"] .next,body[data-mood="night"] .hero,body[data-mood="night"] .att-hero,body[data-mood="night"] .sv-head{background:radial-gradient(120% 140% at 100% 0%,rgba(255,111,174,.55),transparent 55%),radial-gradient(90% 120% at 0% 100%,rgba(91,45,255,.55),transparent 60%),linear-gradient(135deg,#251A45,#3A1F5C);box-shadow:inset 0 0 0 1px rgba(245,198,79,.35),0 30px 60px -30px rgba(255,111,174,.55)}
-  body[data-mood="night"] .next .tag,body[data-mood="night"] .hero .tag{background:rgba(245,198,79,.18);color:#FFE7A8;box-shadow:inset 0 0 0 1px rgba(245,198,79,.45)}
-  body[data-mood="night"] .nx-count{box-shadow:inset 0 0 0 2px rgba(245,198,79,.75),0 0 30px -6px rgba(245,198,79,.55);background:rgba(20,14,36,.35)}
-  body[data-mood="night"] .nx-count b{background:linear-gradient(180deg,#FFF1C9,#F5C64F);-webkit-background-clip:text;background-clip:text;color:transparent}
-  body[data-mood="night"] .nx-keys span{background:rgba(255,255,255,.1);color:#DCD2EA;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
-  body[data-mood="night"] .nx-keys b{color:#FFE7A8}
-  body[data-mood="night"] .nx-att .bar i{background:linear-gradient(90deg,#F5C64F,#FF9DC8)}
-  body[data-mood="night"] .next .actions .btn:not(.glass){background:#F5C64F;color:#1A1326}
-  body[data-mood="night"] .btn.primary{background:linear-gradient(120deg,#F5C64F,#FF8FBF 60%,#A98BFF);color:#1A1326}
-  body[data-mood="night"] .tabbar a.on,body[data-mood="night"] .tab-ind{background:linear-gradient(135deg,rgba(245,198,79,.28),rgba(169,139,255,.3))}
-  body[data-mood="night"] .tabbar a.on{color:#FFE7A8}
-  body[data-mood="night"] .pill{color:#8FF0D2}
-  body[data-mood="night"] .pill.wait{color:#FFD98A}
-  body[data-mood="night"] .logo-mark{box-shadow:0 0 18px -2px rgba(255,111,174,.7)}
+  body:is([data-mood="night"],[data-mood="theater"]) h1.page,body:is([data-mood="night"],[data-mood="theater"]) .section-title{background:linear-gradient(100deg,#FFE7A8,#F5C64F 45%,#FF9DC8);-webkit-background-clip:text;background-clip:text;color:transparent}
+  body:is([data-mood="night"],[data-mood="theater"]) .section-title .ic{color:#F5C64F}
+  body:is([data-mood="night"],[data-mood="theater"]) .section-title .btn{color:var(--ink)}
+  body:is([data-mood="night"],[data-mood="theater"]) .sv-tm{background:color-mix(in srgb,var(--cc) 16%,transparent)}
+  body:is([data-mood="night"],[data-mood="theater"]) .sv-tm b,body:is([data-mood="night"],[data-mood="theater"]) .sc-tm,body:is([data-mood="night"],[data-mood="theater"]) .sc-tag,body:is([data-mood="night"],[data-mood="theater"]) .se-t:not(.empty){color:color-mix(in srgb,var(--cc) 50%,#fff)}
+  body:is([data-mood="night"],[data-mood="theater"]) .sc-tag,body:is([data-mood="night"],[data-mood="theater"]) .sc-ico,body:is([data-mood="night"],[data-mood="theater"]) .se-ico{background:color-mix(in srgb,var(--cc) 24%,transparent);color:color-mix(in srgb,var(--cc) 50%,#fff)}
+  body:is([data-mood="night"],[data-mood="theater"]) .sc-ico{box-shadow:0 0 0 5px var(--card)}
+  body:is([data-mood="night"],[data-mood="theater"]) .next,body:is([data-mood="night"],[data-mood="theater"]) .hero,body:is([data-mood="night"],[data-mood="theater"]) .att-hero,body:is([data-mood="night"],[data-mood="theater"]) .sv-head{background:radial-gradient(120% 140% at 100% 0%,rgba(255,111,174,.55),transparent 55%),radial-gradient(90% 120% at 0% 100%,rgba(91,45,255,.55),transparent 60%),linear-gradient(135deg,#251A45,#3A1F5C);box-shadow:inset 0 0 0 1px rgba(245,198,79,.35),0 30px 60px -30px rgba(255,111,174,.55)}
+  body:is([data-mood="night"],[data-mood="theater"]) .next .tag,body:is([data-mood="night"],[data-mood="theater"]) .hero .tag{background:rgba(245,198,79,.18);color:#FFE7A8;box-shadow:inset 0 0 0 1px rgba(245,198,79,.45)}
+  body:is([data-mood="night"],[data-mood="theater"]) .nx-count{box-shadow:inset 0 0 0 2px rgba(245,198,79,.75),0 0 30px -6px rgba(245,198,79,.55);background:rgba(20,14,36,.35)}
+  body:is([data-mood="night"],[data-mood="theater"]) .nx-count b{background:linear-gradient(180deg,#FFF1C9,#F5C64F);-webkit-background-clip:text;background-clip:text;color:transparent}
+  body:is([data-mood="night"],[data-mood="theater"]) .nx-keys span{background:rgba(255,255,255,.1);color:#DCD2EA;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+  body:is([data-mood="night"],[data-mood="theater"]) .nx-keys b{color:#FFE7A8}
+  body:is([data-mood="night"],[data-mood="theater"]) .nx-att .bar i{background:linear-gradient(90deg,#F5C64F,#FF9DC8)}
+  body:is([data-mood="night"],[data-mood="theater"]) .next .actions .btn:not(.glass){background:#F5C64F;color:#1A1326}
+  body:is([data-mood="night"],[data-mood="theater"]) .btn.primary{background:linear-gradient(120deg,#F5C64F,#FF8FBF 60%,#A98BFF);color:#1A1326}
+  body:is([data-mood="night"],[data-mood="theater"]) .tabbar a.on,body:is([data-mood="night"],[data-mood="theater"]) .tab-ind{background:linear-gradient(135deg,rgba(245,198,79,.28),rgba(169,139,255,.3))}
+  body:is([data-mood="night"],[data-mood="theater"]) .tabbar a.on{color:#FFE7A8}
+  body:is([data-mood="night"],[data-mood="theater"]) .pill{color:#8FF0D2}
+  body:is([data-mood="night"],[data-mood="theater"]) .pill.wait{color:#FFD98A}
+  body:is([data-mood="night"],[data-mood="theater"]) .logo-mark{box-shadow:0 0 18px -2px rgba(255,111,174,.7)}
 
   /* ---------- 和 ---------- */
   body[data-mood="wa"]{
@@ -2063,77 +2063,77 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
 }
 /* ===== 夜・シアター：映画館の雰囲気（えんじのカーテン・電球の看板・スポットライト・チケット・フィルム） ===== */
 @media screen{
-  body[data-mood="night"]{--bg:#0D090C;--card:#1A1216;--card2:#241920;--glass:rgba(26,18,22,.78);--topbg:rgba(13,9,12,.8);
+  body[data-mood="theater"]{--bg:#0D090C;--card:#1A1216;--card2:#241920;--glass:rgba(26,18,22,.78);--topbg:rgba(13,9,12,.8);
     --ink:#F6EEE6;--ink2:#E2D4C8;--muted:#B7A496;--line:rgba(232,184,74,.16);--inv:#E8B84A;--inv-ink:#1A0E10;
     --peach:#E8B84A;--rose:#E0405E;--rose-soft:rgba(224,64,94,.16);--lav:#C9A6FF;--lav-soft:rgba(201,166,255,.16);
     --au1:#7A0E1F;--au2:#3A0A18;--au3:#4A1030;--au4:#6B4A12;--g1:rgba(160,20,40,.3);--g2:rgba(232,184,74,.12);
     --font-title:"Zen Old Mincho","Hiragino Mincho ProN",serif;
     background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(120% 60% at 50% -10%,#2A0D16,transparent 60%),#0D090C}
-  body[data-mood="night"] .aurora i{opacity:.22}
-  body[data-mood="night"] .mood-fx b{opacity:.5}
+  body[data-mood="theater"] .aurora i{opacity:.22}
+  body[data-mood="theater"] .mood-fx b{opacity:.5}
   /* 天井から2本のスポットライト */
-  body[data-mood="night"] .mood-deco{display:block;inset:0;height:auto;pointer-events:none;
+  body[data-mood="theater"] .mood-deco{display:block;inset:0;height:auto;pointer-events:none;
     background:conic-gradient(from 168deg at 18% -6%,transparent 0deg,rgba(255,226,160,.07) 8deg,rgba(255,226,160,.11) 12deg,rgba(255,226,160,.07) 16deg,transparent 24deg),conic-gradient(from 168deg at 82% -6%,transparent 0deg,rgba(255,226,160,.07) 8deg,rgba(255,226,160,.11) 12deg,rgba(255,226,160,.07) 16deg,transparent 24deg);
     transform-origin:50% 0;animation:spotSway 14s ease-in-out infinite alternate}
   @keyframes spotSway{from{transform:rotate(-1.2deg)}to{transform:rotate(1.2deg)}}
   /* 見出しの箱 = 劇場の舞台：上にカーテンの飾り幕、左右に幕、まわりに電球 */
-  body[data-mood="night"] .next,body[data-mood="night"] .hero,body[data-mood="night"] .sv-head,body[data-mood="night"] .att-hero{background:radial-gradient(70% 90% at 50% 0%,rgba(255,214,140,.28),transparent 70%),radial-gradient(120% 80% at 50% 120%,rgba(160,20,40,.45),transparent 60%),linear-gradient(180deg,#1E0C12,#2B0F18);
+  body[data-mood="theater"] .next,body[data-mood="theater"] .hero,body[data-mood="theater"] .sv-head,body[data-mood="theater"] .att-hero{background:radial-gradient(70% 90% at 50% 0%,rgba(255,214,140,.28),transparent 70%),radial-gradient(120% 80% at 50% 120%,rgba(160,20,40,.45),transparent 60%),linear-gradient(180deg,#1E0C12,#2B0F18);
     box-shadow:inset 0 0 0 1px rgba(232,184,74,.55),inset 0 0 0 5px #160A0E,inset 0 0 0 6px rgba(232,184,74,.3),0 30px 60px -28px rgba(200,30,60,.55);padding-top:44px;padding-left:44px;padding-right:44px}
-  body[data-mood="night"] .hx{display:block;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='26' viewBox='0 0 48 26'%3E%3Cdefs%3E%3ClinearGradient id='v' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%235A0A16'/%3E%3Cstop offset='.6' stop-color='%23A3162E'/%3E%3Cstop offset='1' stop-color='%23C9283F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 0H48V12Q36 26 24 12Q12 26 0 12Z' fill='url%28%23v%29'/%3E%3Cpath d='M0 12Q12 26 24 12Q36 26 48 12' fill='none' stroke='%23E8B84A' stroke-width='1.6'/%3E%3Cg fill='%23E8B84A'%3E%3Ccircle cx='12' cy='20.5' r='1.6'/%3E%3Ccircle cx='36' cy='20.5' r='1.6'/%3E%3C/g%3E%3C/svg%3E") left top/48px 26px repeat-x,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='300' viewBox='0 0 40 300' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='d' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%234A0712'/%3E%3Cstop offset='.25' stop-color='%23B01E36'/%3E%3Cstop offset='.45' stop-color='%236E0C1C'/%3E%3Cstop offset='.7' stop-color='%23C4283F'/%3E%3Cstop offset='1' stop-color='%235A0A16'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 0H40C34 80 30 160 22 300H0Z' fill='url%28%23d%29'/%3E%3Cpath d='M40 0C34 80 30 160 22 300' fill='none' stroke='%23E8B84A' stroke-width='1.2' opacity='.7'/%3E%3C/svg%3E") left top/32px 100% no-repeat,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='300' viewBox='0 0 40 300' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='d' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%235A0A16'/%3E%3Cstop offset='.3' stop-color='%23C4283F'/%3E%3Cstop offset='.55' stop-color='%236E0C1C'/%3E%3Cstop offset='.75' stop-color='%23B01E36'/%3E%3Cstop offset='1' stop-color='%234A0712'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M40 0H0C6 80 10 160 18 300H40Z' fill='url%28%23d%29'/%3E%3Cpath d='M0 0C6 80 10 160 18 300' fill='none' stroke='%23E8B84A' stroke-width='1.2' opacity='.7'/%3E%3C/svg%3E") right top/32px 100% no-repeat,
+  body[data-mood="theater"] .hx{display:block;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='26' viewBox='0 0 48 26'%3E%3Cdefs%3E%3ClinearGradient id='v' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%235A0A16'/%3E%3Cstop offset='.6' stop-color='%23A3162E'/%3E%3Cstop offset='1' stop-color='%23C9283F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 0H48V12Q36 26 24 12Q12 26 0 12Z' fill='url%28%23v%29'/%3E%3Cpath d='M0 12Q12 26 24 12Q36 26 48 12' fill='none' stroke='%23E8B84A' stroke-width='1.6'/%3E%3Cg fill='%23E8B84A'%3E%3Ccircle cx='12' cy='20.5' r='1.6'/%3E%3Ccircle cx='36' cy='20.5' r='1.6'/%3E%3C/g%3E%3C/svg%3E") left top/48px 26px repeat-x,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='300' viewBox='0 0 40 300' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='d' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%234A0712'/%3E%3Cstop offset='.25' stop-color='%23B01E36'/%3E%3Cstop offset='.45' stop-color='%236E0C1C'/%3E%3Cstop offset='.7' stop-color='%23C4283F'/%3E%3Cstop offset='1' stop-color='%235A0A16'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 0H40C34 80 30 160 22 300H0Z' fill='url%28%23d%29'/%3E%3Cpath d='M40 0C34 80 30 160 22 300' fill='none' stroke='%23E8B84A' stroke-width='1.2' opacity='.7'/%3E%3C/svg%3E") left top/32px 100% no-repeat,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='300' viewBox='0 0 40 300' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='d' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%235A0A16'/%3E%3Cstop offset='.3' stop-color='%23C4283F'/%3E%3Cstop offset='.55' stop-color='%236E0C1C'/%3E%3Cstop offset='.75' stop-color='%23B01E36'/%3E%3Cstop offset='1' stop-color='%234A0712'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M40 0H0C6 80 10 160 18 300H40Z' fill='url%28%23d%29'/%3E%3Cpath d='M0 0C6 80 10 160 18 300' fill='none' stroke='%23E8B84A' stroke-width='1.2' opacity='.7'/%3E%3C/svg%3E") right top/32px 100% no-repeat,
     radial-gradient(circle,#FFF6D0 0 2px,rgba(255,206,110,.75) 2.6px,rgba(255,180,80,.18) 4.5px,transparent 6px) left 16px bottom 6px/22px 12px repeat-x,radial-gradient(circle,#FFF6D0 0 2px,rgba(255,206,110,.75) 2.6px,rgba(255,180,80,.18) 4.5px,transparent 6px) 36px 30px/12px 22px repeat-y,radial-gradient(circle,#FFF6D0 0 2px,rgba(255,206,110,.75) 2.6px,rgba(255,180,80,.18) 4.5px,transparent 6px) right 36px top 30px/12px 22px repeat-y}
-  @media (prefers-reduced-motion:no-preference){ body[data-mood="night"] .hx{animation:marquee 1.1s steps(1) infinite} }
+  @media (prefers-reduced-motion:no-preference){ body[data-mood="theater"] .hx{animation:marquee 1.1s steps(1) infinite} }
   @keyframes marquee{50%{background-position:left top,left top,right top,left 27px bottom 6px,36px 41px,right 36px top 41px}}
-  body[data-mood="night"] .next .tag,body[data-mood="night"] .hero .tag{font-size:0;background:linear-gradient(180deg,#F7D77A,#C9952E);color:#1A0E10;box-shadow:0 0 18px -4px rgba(232,184,74,.8);padding:4px 12px}
-  body[data-mood="night"] .next .tag::before{content:"★ NOW SHOWING ★";font-size:11px;letter-spacing:.16em;font-weight:900}
-  body[data-mood="night"] .next[data-today] .tag::before{content:"★ TONIGHT ★"}
-  body[data-mood="night"] .next h2,body[data-mood="night"] .hero h1,body[data-mood="night"] .sv-head h1{color:#FFF1D2;text-shadow:0 0 22px rgba(255,190,90,.45),0 2px 0 rgba(0,0,0,.4);letter-spacing:.06em}
-  body[data-mood="night"] .next .meta span,body[data-mood="night"] .fact,body[data-mood="night"] .sv-facts span{background:rgba(0,0,0,.28);box-shadow:inset 0 0 0 1px rgba(232,184,74,.35);color:#F2E2C4}
+  body[data-mood="theater"] .next .tag,body[data-mood="theater"] .hero .tag{font-size:0;background:linear-gradient(180deg,#F7D77A,#C9952E);color:#1A0E10;box-shadow:0 0 18px -4px rgba(232,184,74,.8);padding:4px 12px}
+  body[data-mood="theater"] .next .tag::before{content:"★ NOW SHOWING ★";font-size:11px;letter-spacing:.16em;font-weight:900}
+  body[data-mood="theater"] .next[data-today] .tag::before{content:"★ TONIGHT ★"}
+  body[data-mood="theater"] .next h2,body[data-mood="theater"] .hero h1,body[data-mood="theater"] .sv-head h1{color:#FFF1D2;text-shadow:0 0 22px rgba(255,190,90,.45),0 2px 0 rgba(0,0,0,.4);letter-spacing:.06em}
+  body[data-mood="theater"] .next .meta span,body[data-mood="theater"] .fact,body[data-mood="theater"] .sv-facts span{background:rgba(0,0,0,.28);box-shadow:inset 0 0 0 1px rgba(232,184,74,.35);color:#F2E2C4}
   /* あと○日 = 半券（チケット） */
-  body[data-mood="night"] .nx-count{border-radius:6px;width:92px;height:104px;transform:rotate(-5deg);background:linear-gradient(180deg,#F7D77A,#D9A63E);color:#2A0F12;
+  body[data-mood="theater"] .nx-count{border-radius:6px;width:92px;height:104px;transform:rotate(-5deg);background:linear-gradient(180deg,#F7D77A,#D9A63E);color:#2A0F12;
     box-shadow:0 10px 24px -10px rgba(0,0,0,.7);-webkit-mask:radial-gradient(circle 7px at 50% 0,transparent 96%,#000) top/100% 51% no-repeat,radial-gradient(circle 7px at 50% 100%,transparent 96%,#000) bottom/100% 51% no-repeat;
     mask:radial-gradient(circle 7px at 50% 0,transparent 96%,#000) top/100% 51% no-repeat,radial-gradient(circle 7px at 50% 100%,transparent 96%,#000) bottom/100% 51% no-repeat}
-  body[data-mood="night"] .nx-count b{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#2A0F12;font-family:"Zen Old Mincho",serif}
-  body[data-mood="night"] .nx-count small{color:#5A2A1A}
-  body[data-mood="night"] .nx-count::after{content:"ADMIT ONE";position:absolute;left:0;right:0;bottom:12px;font-size:8px;font-weight:900;letter-spacing:.2em;color:#7A3A1A;border-top:1px dashed rgba(90,40,20,.5);padding-top:4px;margin:0 10px}
-  body[data-mood="night"] .nx-count{position:relative;padding-bottom:18px}
-  body[data-mood="night"] .btn.primary,body[data-mood="night"] .next .actions .btn:not(.glass){background:linear-gradient(180deg,#F7D77A,#C9952E);color:#1A0E10}
-  body[data-mood="night"] .next .actions .btn.glass{background:rgba(0,0,0,.3);box-shadow:inset 0 0 0 1px rgba(232,184,74,.5);color:#F7E2B0}
-  body[data-mood="night"] .nx-att .bar i{background:linear-gradient(90deg,#C9952E,#F7D77A)}
-  body[data-mood="night"] h1.page,body[data-mood="night"] .section-title{background:linear-gradient(100deg,#FFF1C9,#E8B84A 50%,#C9952E);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.06em}
-  body[data-mood="night"] .section-title .ic{background:linear-gradient(160deg,#8E1428,#C9283F);color:#FFE7A8;box-shadow:0 0 12px -2px rgba(201,40,63,.7)}
+  body[data-mood="theater"] .nx-count b{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#2A0F12;font-family:"Zen Old Mincho",serif}
+  body[data-mood="theater"] .nx-count small{color:#5A2A1A}
+  body[data-mood="theater"] .nx-count::after{content:"ADMIT ONE";position:absolute;left:0;right:0;bottom:12px;font-size:8px;font-weight:900;letter-spacing:.2em;color:#7A3A1A;border-top:1px dashed rgba(90,40,20,.5);padding-top:4px;margin:0 10px}
+  body[data-mood="theater"] .nx-count{position:relative;padding-bottom:18px}
+  body[data-mood="theater"] .btn.primary,body[data-mood="theater"] .next .actions .btn:not(.glass){background:linear-gradient(180deg,#F7D77A,#C9952E);color:#1A0E10}
+  body[data-mood="theater"] .next .actions .btn.glass{background:rgba(0,0,0,.3);box-shadow:inset 0 0 0 1px rgba(232,184,74,.5);color:#F7E2B0}
+  body[data-mood="theater"] .nx-att .bar i{background:linear-gradient(90deg,#C9952E,#F7D77A)}
+  body[data-mood="theater"] h1.page,body[data-mood="theater"] .section-title{background:linear-gradient(100deg,#FFF1C9,#E8B84A 50%,#C9952E);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.06em}
+  body[data-mood="theater"] .section-title .ic{background:linear-gradient(160deg,#8E1428,#C9283F);color:#FFE7A8;box-shadow:0 0 12px -2px rgba(201,40,63,.7)}
   /* カード：ベルベットの上に金の細線 */
-  body[data-mood="night"] .card{background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,rgba(232,184,74,.5),rgba(201,40,63,.25) 50%,rgba(232,184,74,.35)) border-box;border:1px solid transparent}
+  body[data-mood="theater"] .card{background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,rgba(232,184,74,.5),rgba(201,40,63,.25) 50%,rgba(232,184,74,.35)) border-box;border:1px solid transparent}
   /* 行事カード・予定一覧 = チケット（左右に切り欠き＋点線） */
-  body[data-mood="night"] .card.ev,body[data-mood="night"] .ag-it{-webkit-mask:radial-gradient(circle 9px at 0 50%,transparent 95%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,transparent 95%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 9px at 0 50%,transparent 95%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,transparent 95%,#000) right/51% 100% no-repeat}
-  body[data-mood="night"] .card.ev{background:linear-gradient(90deg,transparent calc(100% - 64px),rgba(232,184,74,.5) calc(100% - 64px) calc(100% - 63px),transparent calc(100% - 63px)) ,var(--card)}
+  body[data-mood="theater"] .card.ev,body[data-mood="theater"] .ag-it{-webkit-mask:radial-gradient(circle 9px at 0 50%,transparent 95%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,transparent 95%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 9px at 0 50%,transparent 95%,#000) left/51% 100% no-repeat,radial-gradient(circle 9px at 100% 50%,transparent 95%,#000) right/51% 100% no-repeat}
+  body[data-mood="theater"] .card.ev{background:linear-gradient(90deg,transparent calc(100% - 64px),rgba(232,184,74,.5) calc(100% - 64px) calc(100% - 63px),transparent calc(100% - 63px)) ,var(--card)}
   /* スケジュールの時刻欄 = フィルム（左にスプロケット穴） */
-  body[data-mood="night"] .sv-tm{border-left:none;padding-left:20px;background:repeating-linear-gradient(180deg,rgba(255,240,210,.7) 0 5px,transparent 5px 11px) 4px 3px/5px calc(100% - 6px) no-repeat,linear-gradient(#070405,#070405) 0 0/13px 100% no-repeat,color-mix(in srgb,var(--cc) 14%,#1A1216)}
-  body[data-mood="night"] .sv-row{border-color:rgba(232,184,74,.2)}
-  body[data-mood="night"] .sv-row.now{box-shadow:0 0 0 2px #E8B84A,0 0 24px -4px rgba(232,184,74,.6)}
-  body[data-mood="night"] .tabbar{background:rgba(20,12,16,.92);box-shadow:inset 0 0 0 1px rgba(232,184,74,.25),0 18px 40px -16px #000}
-  body[data-mood="night"] .tabbar a.on,body[data-mood="night"] .tab-ind{background:linear-gradient(180deg,rgba(201,40,63,.45),rgba(120,16,32,.5));box-shadow:inset 0 0 0 1px rgba(232,184,74,.45)}
-  body[data-mood="night"] .tabbar a.on{color:#FFE7A8}
-  body[data-mood="night"] .logo-mark{background:linear-gradient(160deg,#8E1428,#C9283F);box-shadow:0 0 18px -2px rgba(201,40,63,.8),inset 0 0 0 1px rgba(232,184,74,.6)}
-  body[data-mood="night"] .top{box-shadow:0 1px 0 rgba(232,184,74,.18)}
-  body[data-mood="night"] .day.has{background:color-mix(in srgb,#C9283F 18%,var(--card2));border-color:rgba(232,184,74,.4)}
-  @media (max-width:620px){ body[data-mood="night"] .next,body[data-mood="night"] .hero,body[data-mood="night"] .sv-head,body[data-mood="night"] .att-hero{padding-left:46px;padding-right:40px} body[data-mood="night"] .hx{background-size:48px 26px,24px 100%,24px 100%,22px 12px,12px 22px,12px 22px;background-position:left top,left top,right top,left 16px bottom 6px,24px 30px,right 24px top 30px} }
+  body[data-mood="theater"] .sv-tm{border-left:none;padding-left:20px;background:repeating-linear-gradient(180deg,rgba(255,240,210,.7) 0 5px,transparent 5px 11px) 4px 3px/5px calc(100% - 6px) no-repeat,linear-gradient(#070405,#070405) 0 0/13px 100% no-repeat,color-mix(in srgb,var(--cc) 14%,#1A1216)}
+  body[data-mood="theater"] .sv-row{border-color:rgba(232,184,74,.2)}
+  body[data-mood="theater"] .sv-row.now{box-shadow:0 0 0 2px #E8B84A,0 0 24px -4px rgba(232,184,74,.6)}
+  body[data-mood="theater"] .tabbar{background:rgba(20,12,16,.92);box-shadow:inset 0 0 0 1px rgba(232,184,74,.25),0 18px 40px -16px #000}
+  body[data-mood="theater"] .tabbar a.on,body[data-mood="theater"] .tab-ind{background:linear-gradient(180deg,rgba(201,40,63,.45),rgba(120,16,32,.5));box-shadow:inset 0 0 0 1px rgba(232,184,74,.45)}
+  body[data-mood="theater"] .tabbar a.on{color:#FFE7A8}
+  body[data-mood="theater"] .logo-mark{background:linear-gradient(160deg,#8E1428,#C9283F);box-shadow:0 0 18px -2px rgba(201,40,63,.8),inset 0 0 0 1px rgba(232,184,74,.6)}
+  body[data-mood="theater"] .top{box-shadow:0 1px 0 rgba(232,184,74,.18)}
+  body[data-mood="theater"] .day.has{background:color-mix(in srgb,#C9283F 18%,var(--card2));border-color:rgba(232,184,74,.4)}
+  @media (max-width:620px){ body[data-mood="theater"] .next,body[data-mood="theater"] .hero,body[data-mood="theater"] .sv-head,body[data-mood="theater"] .att-hero{padding-left:46px;padding-right:40px} body[data-mood="theater"] .hx{background-size:48px 26px,24px 100%,24px 100%,22px 12px,12px 22px,12px 22px;background-position:left top,left top,right top,left 16px bottom 6px,24px 30px,right 24px top 30px} }
 }
 /* 印刷（夜・シアター）：上はチケット、左右はフィルムの穴 */
 @media print{
-  body[data-pstyle="mood"][data-mood="night"] .svp,body[data-pstyle="mood"][data-mood="night"] .svh{--pa:#9E1B32;--pl:#F8E9EC}
-  body[data-pstyle="mood"][data-mood="night"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="night"] .svh-hd h1,body[data-pstyle="mood"][data-mood="night"] .svp-sec h3,body[data-pstyle="mood"][data-mood="night"] .svp-date b{font-family:"Zen Old Mincho",serif}
-  body[data-pstyle="mood"][data-mood="night"] .svp-head,body[data-pstyle="mood"][data-mood="night"] .svh-hd{background:radial-gradient(70% 120% at 50% 0%,rgba(255,214,140,.35),transparent 70%),linear-gradient(180deg,#2A0D16,#4A1020)!important;box-shadow:inset 0 0 0 1pt rgba(232,184,74,.7)!important;
+  body[data-pstyle="mood"][data-mood="theater"] .svp,body[data-pstyle="mood"][data-mood="theater"] .svh{--pa:#9E1B32;--pl:#F8E9EC}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="theater"] .svh-hd h1,body[data-pstyle="mood"][data-mood="theater"] .svp-sec h3,body[data-pstyle="mood"][data-mood="theater"] .svp-date b{font-family:"Zen Old Mincho",serif}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-head,body[data-pstyle="mood"][data-mood="theater"] .svh-hd{background:radial-gradient(70% 120% at 50% 0%,rgba(255,214,140,.35),transparent 70%),linear-gradient(180deg,#2A0D16,#4A1020)!important;box-shadow:inset 0 0 0 1pt rgba(232,184,74,.7)!important;
     -webkit-mask:radial-gradient(circle 6pt at 0 50%,transparent 95%,#000) left/51% 100% no-repeat,radial-gradient(circle 6pt at 100% 50%,transparent 95%,#000) right/51% 100% no-repeat;mask:radial-gradient(circle 6pt at 0 50%,transparent 95%,#000) left/51% 100% no-repeat,radial-gradient(circle 6pt at 100% 50%,transparent 95%,#000) right/51% 100% no-repeat}
-  body[data-pstyle="mood"][data-mood="night"] .svp-head::after,body[data-pstyle="mood"][data-mood="night"] .svh-hd::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='26' viewBox='0 0 48 26'%3E%3Cdefs%3E%3ClinearGradient id='v' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%235A0A16'/%3E%3Cstop offset='.6' stop-color='%23A3162E'/%3E%3Cstop offset='1' stop-color='%23C9283F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 0H48V12Q36 26 24 12Q12 26 0 12Z' fill='url%28%23v%29'/%3E%3Cpath d='M0 12Q12 26 24 12Q36 26 48 12' fill='none' stroke='%23E8B84A' stroke-width='1.6'/%3E%3Cg fill='%23E8B84A'%3E%3Ccircle cx='12' cy='20.5' r='1.6'/%3E%3Ccircle cx='36' cy='20.5' r='1.6'/%3E%3C/g%3E%3C/svg%3E") left top/24pt 13pt repeat-x}
-  body[data-pstyle="mood"][data-mood="night"] .svp-head{padding-top:14pt}
-  body[data-pstyle="mood"][data-mood="night"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="night"] .svp-date b,body[data-pstyle="mood"][data-mood="night"] .svh-hd h1{color:#FFE9B8}
-  body[data-pstyle="mood"][data-mood="night"] .svp-date{border-left:1.2pt dashed rgba(232,184,74,.7)}
-  body[data-pstyle="mood"][data-mood="night"] .svp-ttl small::before{content:"★ "}
-  body[data-pstyle="mood"][data-mood="night"] .svp::after,body[data-pstyle="mood"][data-mood="night"] .svh::after{background:repeating-linear-gradient(180deg,#fff 0 2.2mm,transparent 2.2mm 4.4mm) left 1mm top 0/2mm 100% no-repeat,repeating-linear-gradient(180deg,#fff 0 2.2mm,transparent 2.2mm 4.4mm) right 1mm top 0/2mm 100% no-repeat,linear-gradient(#E9E2E4,#E9E2E4) left 0 top 0/4mm 100% no-repeat,linear-gradient(#E9E2E4,#E9E2E4) right 0 top 0/4mm 100% no-repeat;inset:0 -7mm}
-  body[data-pstyle="mood"][data-mood="night"] .svp-sec h3 span{background:linear-gradient(160deg,#6E0C1C,#C9283F);color:#FFE7A8}
-  body[data-pstyle="mood"][data-mood="night"] .svp-r.key .svp-t{background:linear-gradient(160deg,#4A1020,#7A1428)}
-  body[data-pstyle="mood"][data-mood="night"] .svp-r.key .svp-t b{color:#FFE9B8!important}
-  body[data-pstyle="mood"][data-mood="night"] .svp-kh{background:linear-gradient(160deg,#4A1020,#7A1428);color:#FFE9B8}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-head::after,body[data-pstyle="mood"][data-mood="theater"] .svh-hd::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='26' viewBox='0 0 48 26'%3E%3Cdefs%3E%3ClinearGradient id='v' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%235A0A16'/%3E%3Cstop offset='.6' stop-color='%23A3162E'/%3E%3Cstop offset='1' stop-color='%23C9283F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 0H48V12Q36 26 24 12Q12 26 0 12Z' fill='url%28%23v%29'/%3E%3Cpath d='M0 12Q12 26 24 12Q36 26 48 12' fill='none' stroke='%23E8B84A' stroke-width='1.6'/%3E%3Cg fill='%23E8B84A'%3E%3Ccircle cx='12' cy='20.5' r='1.6'/%3E%3Ccircle cx='36' cy='20.5' r='1.6'/%3E%3C/g%3E%3C/svg%3E") left top/24pt 13pt repeat-x}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-head{padding-top:14pt}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="theater"] .svp-date b,body[data-pstyle="mood"][data-mood="theater"] .svh-hd h1{color:#FFE9B8}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-date{border-left:1.2pt dashed rgba(232,184,74,.7)}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-ttl small::before{content:"★ "}
+  body[data-pstyle="mood"][data-mood="theater"] .svp::after,body[data-pstyle="mood"][data-mood="theater"] .svh::after{background:repeating-linear-gradient(180deg,#fff 0 2.2mm,transparent 2.2mm 4.4mm) left 1mm top 0/2mm 100% no-repeat,repeating-linear-gradient(180deg,#fff 0 2.2mm,transparent 2.2mm 4.4mm) right 1mm top 0/2mm 100% no-repeat,linear-gradient(#E9E2E4,#E9E2E4) left 0 top 0/4mm 100% no-repeat,linear-gradient(#E9E2E4,#E9E2E4) right 0 top 0/4mm 100% no-repeat;inset:0 -7mm}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-sec h3 span{background:linear-gradient(160deg,#6E0C1C,#C9283F);color:#FFE7A8}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-r.key .svp-t{background:linear-gradient(160deg,#4A1020,#7A1428)}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-r.key .svp-t b{color:#FFE9B8!important}
+  body[data-pstyle="mood"][data-mood="theater"] .svp-kh{background:linear-gradient(160deg,#4A1020,#7A1428);color:#FFE9B8}
 }
 /* ===== 背景の動き（全スタイル共通の粒）と、シック・森の作り直し ===== */
 @media screen{
@@ -2153,7 +2153,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   .mood-fx em.kin{top:-4vh;width:calc(9px * var(--s));height:calc(7px * var(--s));background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 60%,#fff));clip-path:polygon(10% 0,100% 18%,84% 100%,0 76%);opacity:.8;animation:fxConf calc(var(--d) * 1.8) linear var(--dl) infinite}
   body[data-mood="pastel"] .mood-fx,body[data-mood="summer"] .mood-fx,body[data-mood="pop"] .mood-fx,body[data-mood="wa"] .mood-fx,body[data-mood="forest"] .mood-fx,body[data-mood="chic"] .mood-fx{display:block}
   body[data-mood="summer"] .mood-fx em.bub{border-color:rgba(255,255,255,.9)}
-  body[data-mood="night"] .mood-fx em.dust{top:auto;bottom:calc(100vh - var(--y))}
+  body[data-mood="theater"] .mood-fx em.dust{top:auto;bottom:calc(100vh - var(--y))}
 
   /* ---------- シック（作り直し）：大理石・黒の艶・明朝・細い銀線 ---------- */
   body[data-mood="chic"]{--bg:#EFEDE9;--card:#FFFFFF;--card2:#F6F4F1;--ink:#121212;--ink2:#2B2B2B;--muted:#5E5E5E;--line:rgba(0,0,0,.1);
@@ -2206,6 +2206,96 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   body[data-pstyle="mood"][data-mood="chic"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="chic"] .svh-hd h1,body[data-pstyle="mood"][data-mood="chic"] .svp-sec h3,body[data-pstyle="mood"][data-mood="chic"] .svp-date b{font-family:"Zen Old Mincho",serif;letter-spacing:.1em}
   body[data-pstyle="mood"][data-mood="forest"] .svp-head,body[data-pstyle="mood"][data-mood="forest"] .svh-hd{background:linear-gradient(170deg,#3E6B45,#1F3B2A 70%,#16301F)!important}
   body[data-pstyle="mood"][data-mood="forest"] .svp-head::after,body[data-pstyle="mood"][data-mood="forest"] .svh-hd::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 300' preserveAspectRatio='xMidYMax slice'%3E%3Cpath d='M0 219l24 34h-10l19 27h-11l18 20h-97l18-20h-11l19-27h-10z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M52 203l29 41h-12l23 32h-14l21 24h-116l21-24h-14l23-32h-12z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M104 190l33 46h-13l26 36h-15l24 28h-132l24-28h-15l26-36h-13z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M156 182l35 50h-14l28 39h-17l26 30h-142l26-30h-17l28-39h-14z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M208 196l31 44h-12l25 34h-15l23 26h-125l23-26h-15l25-34h-12z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M260 193l32 45h-13l26 35h-15l24 27h-128l24-27h-15l26-35h-13z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M312 195l32 44h-13l25 35h-15l23 26h-126l23-26h-15l25-35h-13z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M364 184l35 49h-14l28 38h-16l26 29h-139l26-29h-16l28-38h-14z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M416 192l32 45h-13l26 36h-15l24 27h-130l24-27h-15l26-36h-13z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M468 212l26 37h-11l21 29h-12l19 22h-106l19-22h-12l21-29h-11z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M520 197l31 43h-12l25 34h-14l23 26h-124l23-26h-14l25-34h-12z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M572 214l26 36h-10l21 28h-12l19 22h-103l19-22h-12l21-28h-10z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M624 218l25 34h-10l20 27h-11l18 20h-98l18-20h-11l20-27h-10z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M676 212l26 37h-11l21 29h-12l19 22h-106l19-22h-12l21-29h-11z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M728 189l33 47h-13l27 37h-16l24 28h-133l24-28h-16l27-37h-13z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M780 207l28 39h-11l22 31h-13l20 23h-112l20-23h-13l22-31h-11z' fill='rgba%28255,255,255,.10%29'/%3E%3Cpath d='M20 154l44 61h-18l35 48h-20l32 36h-175l32-36h-20l35-48h-18z' fill='rgba%2810,30,18,.45%29'/%3E%3Cpath d='M110 127l52 73h-21l42 57h-24l38 43h-208l38-43h-24l42-57h-21z' fill='rgba%2810,30,18,.45%29'/%3E%3Cpath d='M200 143l47 66h-19l38 52h-22l35 39h-188l35-39h-22l38-52h-19z' fill='rgba%2810,30,18,.45%29'/%3E%3Cpath d='M290 121l54 75h-21l43 59h-25l39 45h-215l39-45h-25l43-59h-21z' fill='rgba%2810,30,18,.45%29'/%3E%3Cpath d='M380 130l51 71h-20l41 56h-24l37 42h-204l37-42h-24l41-56h-20z' fill='rgba%2810,30,18,.45%29'/%3E%3Cpath d='M470 116l55 77h-22l44 61h-26l40 46h-221l40-46h-26l44-61h-22z' fill='rgba%2810,30,18,.45%29'/%3E%3Cpath d='M560 151l45 63h-18l36 49h-21l33 37h-179l33-37h-21l36-49h-18z' fill='rgba%2810,30,18,.45%29'/%3E%3Cpath d='M650 144l47 66h-19l37 51h-22l34 39h-187l34-39h-22l37-51h-19z' fill='rgba%2810,30,18,.45%29'/%3E%3Cpath d='M740 138l49 68h-19l39 53h-23l36 40h-194l36-40h-23l39-53h-19z' fill='rgba%2810,30,18,.45%29'/%3E%3C/svg%3E") center bottom/500px 60pt repeat-x}
+}
+/* ===== 夜のパーティー（作り込み）・新春・レトロ喫茶 ===== */
+@media screen{
+  /* 夜のパーティー：ネオンのライトが回る・シャンパンの泡・ミラーボール */
+  body[data-mood="night"] .mood-deco{display:block;inset:-20vh -20vw;height:auto;opacity:.55;background:conic-gradient(from 0deg at 50% 0%,transparent 0deg,rgba(255,111,174,.18) 8deg,transparent 16deg,transparent 60deg,rgba(124,92,255,.2) 68deg,transparent 76deg,transparent 140deg,rgba(95,180,255,.16) 148deg,transparent 156deg,transparent 220deg,rgba(255,111,174,.16) 228deg,transparent 236deg,transparent 290deg,rgba(245,198,79,.14) 298deg,transparent 306deg);animation:clubSpin 26s linear infinite}
+  @keyframes clubSpin{to{transform:rotate(360deg)}}
+  body[data-mood="night"] .next,body[data-mood="night"] .hero,body[data-mood="night"] .sv-head,body[data-mood="night"] .att-hero{background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.14) 45%,transparent 55%) 0 0/250% 100% no-repeat,radial-gradient(120% 140% at 100% 0%,rgba(255,111,174,.6),transparent 55%),radial-gradient(90% 120% at 0% 100%,rgba(91,45,255,.6),transparent 60%),linear-gradient(135deg,#2A1B4F,#43205F);
+    box-shadow:inset 0 0 0 1px rgba(245,198,79,.4),0 0 0 1px rgba(255,111,174,.25),0 30px 60px -30px rgba(255,111,174,.6);animation:partyShine 6s ease-in-out infinite}
+  @keyframes partyShine{0%{background-position:130% 0,0 0,0 0,0 0}60%,100%{background-position:-130% 0,0 0,0 0,0 0}}
+  body[data-mood="night"] .hx{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 150'%3E%3Cpath d='M60 0V34' stroke='%23E8D9FF' stroke-width='1.2' opacity='.7'/%3E%3Cdefs%3E%3CradialGradient id='g' cx='.35' cy='.3' r='.8'%3E%3Cstop offset='0' stop-color='%23FFFFFF'/%3E%3Cstop offset='.35' stop-color='%23E3D6F7'/%3E%3Cstop offset='.75' stop-color='%239A7FD0'/%3E%3Cstop offset='1' stop-color='%235B3F8F'/%3E%3C/radialGradient%3E%3CclipPath id='c'%3E%3Ccircle cx='60' cy='70' r='34'/%3E%3C/clipPath%3E%3C/defs%3E%3Ccircle cx='60' cy='70' r='34' fill='url%28%23g%29'/%3E%3Cg clip-path='url%28%23c%29' stroke='%234A2F7A' stroke-width='.8' opacity='.45' fill='none'%3E%3Cpath d='M20 36H100'/%3E%3Cpath d='M20 44H100'/%3E%3Cpath d='M20 52H100'/%3E%3Cpath d='M20 60H100'/%3E%3Cpath d='M20 68H100'/%3E%3Cpath d='M20 76H100'/%3E%3Cpath d='M20 84H100'/%3E%3Cpath d='M20 92H100'/%3E%3Cpath d='M20 100H100'/%3E%3Cpath d='M20 108H100'/%3E%3Cellipse cx='60' cy='70' rx='6' ry='34'/%3E%3Cellipse cx='60' cy='70' rx='14' ry='34'/%3E%3Cellipse cx='60' cy='70' rx='22' ry='34'/%3E%3Cellipse cx='60' cy='70' rx='30' ry='34'/%3E%3C/g%3E%3Cg fill='%23fff'%3E%3Ccircle cx='48' cy='56' r='3'/%3E%3Ccircle cx='70' cy='64' r='1.6'/%3E%3Ccircle cx='54' cy='84' r='1.4'/%3E%3C/g%3E%3Cg fill='%23FFE7A8'%3E%3Cpath d='M100 40l2 6 6 2-6 2-2 6-2-6-6-2 6-2z'/%3E%3Cpath d='M18 104l1.5 4.5 4.5 1.5-4.5 1.5-1.5 4.5-1.5-4.5-4.5-1.5 4.5-1.5z'/%3E%3C/g%3E%3C/svg%3E") right 112px top -2px/96px 120px no-repeat;opacity:.95}
+  body[data-mood="night"] .sv-head .hx,body[data-mood="night"] .hero .hx,body[data-mood="night"] .att-hero .hx{display:none}
+  @media (prefers-reduced-motion:no-preference){ body[data-mood="night"] .hx{animation:hxGlow 3.2s ease-in-out infinite} }
+  body[data-mood="night"] .nx-count{animation:neonPulse 2.8s ease-in-out infinite}
+  @keyframes neonPulse{0%,100%{box-shadow:inset 0 0 0 2px rgba(245,198,79,.75),0 0 24px -6px rgba(245,198,79,.5)}50%{box-shadow:inset 0 0 0 2px rgba(255,157,200,.95),0 0 34px -2px rgba(255,111,174,.75)}}
+  body[data-mood="night"] h1.page,body[data-mood="night"] .section-title{filter:drop-shadow(0 0 10px rgba(255,111,174,.35))}
+  body[data-mood="night"] .next h2,body[data-mood="night"] .hero h1,body[data-mood="night"] .sv-head h1{text-shadow:0 0 16px rgba(255,111,174,.6),0 0 2px rgba(255,255,255,.4)}
+  body[data-mood="night"] .tabbar{box-shadow:inset 0 0 0 1px rgba(255,111,174,.25),0 0 30px -10px rgba(124,92,255,.6)}
+
+  /* ---------- 新春：紅白と金・扇・梅・水引 ---------- */
+  body[data-mood="newyear"]{--bg:#FBF5EA;--card:#FFFDF8;--card2:#F8F0E2;--topbg:rgba(251,245,234,.88);--ink:#2A1A16;--ink2:#47302A;--muted:#6E5850;--line:rgba(90,40,30,.12);--inv:#B3122E;--inv-ink:#FFF7EA;
+    --peach:#C8102E;--peach-soft:#FADDE2;--rose:#D9365A;--rose-soft:#FBE0E7;--lemon:#C9A23A;--lemon-soft:#F6EBCB;--lav:#8A5A3A;--lav-soft:#F1E3D8;--mint:#3E7A5A;--mint-soft:#DDEDE3;--sky:#3A6EA5;--sky-soft:#DDE8F4;
+    --font-title:"Zen Old Mincho","Hiragino Mincho ProN",serif;--g1:#F9D9DF;--g2:#F6E7C2;--au1:#FFC9D3;--au2:#FFE7A8;--au3:#FFD9C2;--au4:#FFF1C9}
+  body[data-mood="newyear"] .mood-fx{display:block}
+  body[data-mood="newyear"] .mood-deco{display:block;height:70px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cg fill='none' stroke-width='2'%3E%3Cpath d='M0 14C80 4 120 30 200 20S320 4 400 14' stroke='%23E2B54E'/%3E%3Cpath d='M0 22C80 12 120 38 200 28S320 12 400 22' stroke='%23FFFFFF' opacity='.8'/%3E%3Cpath d='M0 30C80 20 120 46 200 36S320 20 400 30' stroke='%23E2B54E' opacity='.8'/%3E%3C/g%3E%3C/svg%3E") left bottom/100% 40px no-repeat;opacity:.7}
+  body[data-mood="newyear"] .next,body[data-mood="newyear"] .hero,body[data-mood="newyear"] .sv-head,body[data-mood="newyear"] .att-hero{background:radial-gradient(70% 100% at 100% 0%,rgba(255,215,106,.35),transparent 60%),linear-gradient(140deg,#8E0B22,#C8102E 60%,#D9365A);box-shadow:inset 0 0 0 1px rgba(242,210,122,.8),inset 0 0 0 5px #A80F28,inset 0 0 0 6px rgba(242,210,122,.45),0 26px 50px -26px rgba(200,16,46,.6);border-radius:14px}
+  body[data-mood="newyear"] .hx{display:block;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 150'%3E%3Cg transform='translate%28160 130%29'%3E%3Cpath d='M0 0L95.3 -55.0A110 110 0 0 1 81.7 -73.6Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L81.7 -73.6A110 110 0 0 1 64.7 -89.0Z' fill='%23F2D27A' opacity='.9'/%3E%3Cpath d='M0 0L64.7 -89.0A110 110 0 0 1 44.7 -100.5Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L44.7 -100.5A110 110 0 0 1 22.9 -107.6Z' fill='%23F2D27A' opacity='.9'/%3E%3Cpath d='M0 0L22.9 -107.6A110 110 0 0 1 0.0 -110.0Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L0.0 -110.0A110 110 0 0 1 -22.9 -107.6Z' fill='%23F2D27A' opacity='.9'/%3E%3Cpath d='M0 0L-22.9 -107.6A110 110 0 0 1 -44.7 -100.5Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L-44.7 -100.5A110 110 0 0 1 -64.7 -89.0Z' fill='%23F2D27A' opacity='.9'/%3E%3Cpath d='M0 0L-64.7 -89.0A110 110 0 0 1 -81.7 -73.6Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L-81.7 -73.6A110 110 0 0 1 -95.3 -55.0Z' fill='%23F2D27A' opacity='.9'/%3E%3Ccircle r='40' fill='%23B3122E'/%3E%3Cpath d='M-110 0A110 110 0 0 1 110 0' fill='none' stroke='%23FFF3D0' stroke-width='1.5'/%3E%3C/g%3E%3Cg transform='translate%2840 40%29 scale%281.2%29'%3E%3Cg fill='%23FFFFFF'%3E%3Ccircle cx='0.0' cy='-8.0' r='6.5'/%3E%3Ccircle cx='7.6' cy='-2.5' r='6.5'/%3E%3Ccircle cx='4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-7.6' cy='-2.5' r='6.5'/%3E%3C/g%3E%3Ccircle r='3.6' fill='%23FFD76A'/%3E%3C/g%3E%3Cg transform='translate%2870 20%29 scale%280.8%29'%3E%3Cg fill='%23FFD0DC'%3E%3Ccircle cx='0.0' cy='-8.0' r='6.5'/%3E%3Ccircle cx='7.6' cy='-2.5' r='6.5'/%3E%3Ccircle cx='4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-7.6' cy='-2.5' r='6.5'/%3E%3C/g%3E%3Ccircle r='3.6' fill='%23FFD76A'/%3E%3C/g%3E%3Cg transform='translate%2824 82%29 scale%280.9%29'%3E%3Cg fill='%23FFD0DC'%3E%3Ccircle cx='0.0' cy='-8.0' r='6.5'/%3E%3Ccircle cx='7.6' cy='-2.5' r='6.5'/%3E%3Ccircle cx='4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-7.6' cy='-2.5' r='6.5'/%3E%3C/g%3E%3Ccircle r='3.6' fill='%23FFD76A'/%3E%3C/g%3E%3C/svg%3E") right -22px bottom -14px/150px 102px no-repeat,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cg fill='none' stroke-width='2'%3E%3Cpath d='M0 14C80 4 120 30 200 20S320 4 400 14' stroke='%23E2B54E'/%3E%3Cpath d='M0 22C80 12 120 38 200 28S320 12 400 22' stroke='%23FFFFFF' opacity='.8'/%3E%3Cpath d='M0 30C80 20 120 46 200 36S320 20 400 30' stroke='%23E2B54E' opacity='.8'/%3E%3C/g%3E%3C/svg%3E") left 0 top 10px/100% 26px no-repeat}
+  body[data-mood="newyear"] .next::after,body[data-mood="newyear"] .hero::before{display:none}
+  body[data-mood="newyear"] .next .tag,body[data-mood="newyear"] .hero .tag{background:#F2D27A;color:#7A0A1C}
+  body[data-mood="newyear"] .next .tag::before{content:"謹賀新年 ・ "}
+  body[data-mood="newyear"] .nx-count{background:#FFFDF8;color:#B3122E;box-shadow:0 0 0 4px rgba(242,210,122,.9),0 8px 20px -8px rgba(0,0,0,.4)}
+  body[data-mood="newyear"] .nx-count b{color:#B3122E;font-family:"Zen Old Mincho",serif}
+  body[data-mood="newyear"] .next h2,body[data-mood="newyear"] .hero h1,body[data-mood="newyear"] .sv-head h1{color:#FFF7EA;letter-spacing:.08em}
+  body[data-mood="newyear"] .next .meta span,body[data-mood="newyear"] .fact,body[data-mood="newyear"] .sv-facts span{background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1px rgba(242,210,122,.5)}
+  body[data-mood="newyear"] .btn.primary,body[data-mood="newyear"] .next .actions .btn:not(.glass){background:linear-gradient(180deg,#F2D27A,#C9A23A);color:#5A0815}
+  body[data-mood="newyear"] h1.page{color:#B3122E;letter-spacing:.08em}
+  body[data-mood="newyear"] .section-title{letter-spacing:.06em}
+  body[data-mood="newyear"] .section-title .ic{width:32px;height:32px;padding:6px;border-radius:50%;background:#C8102E;color:#FFF3D0;box-shadow:0 0 0 2px #F2D27A}
+  body[data-mood="newyear"] .card:not(.next):not(.hero){box-shadow:inset 0 3px 0 #C8102E,inset 0 5px 0 #F2D27A,var(--shadow);border-radius:12px}
+  body[data-mood="newyear"] .tabbar a.on,body[data-mood="newyear"] .tab-ind{background:#FADDE2}body[data-mood="newyear"] .tabbar a.on{color:#A80F28}
+  body[data-mood="newyear"] .logo-mark{background:#C8102E;box-shadow:0 0 0 2px #F2D27A}
+  body[data-mood="newyear"] .sv-tm{border-left-color:#C8102E}
+
+  /* ---------- レトロ喫茶：クリーム・茶・からし・れんが・青緑のしま ---------- */
+  body[data-mood="retro"]{--bg:#F4EAD5;--card:#FFF9EC;--card2:#F7EEDB;--topbg:rgba(244,234,213,.9);--ink:#3A2419;--ink2:#4F3426;--muted:#7A5E4C;--line:rgba(74,47,35,.16);--inv:#4A2F23;--inv-ink:#FFF4DE;
+    --peach:#D2572B;--peach-soft:#F8DCCB;--lemon:#E0A526;--lemon-soft:#F8E8BE;--mint:#2E8A87;--mint-soft:#D3ECE9;--rose:#B23A2A;--rose-soft:#F4D8D1;--lav:#7A4E8A;--lav-soft:#EADDF0;--sky:#2E7A9A;--sky-soft:#D5E8F0;
+    --font-title:"Zen Maru Gothic","M PLUS Rounded 1c",sans-serif;--shadow:4px 4px 0 rgba(74,47,35,.14);--g1:#F6D7B8;--g2:#E9E1C4;--au1:#F2C38A;--au2:#F6E0A8;--au3:#BFE0D8;--au4:#F3C7B4;
+    background:radial-gradient(rgba(74,47,35,.07) 1px,transparent 1.4px) 0 0/14px 14px,var(--bg)}
+  body[data-mood="retro"] .aurora{display:none}
+  body[data-mood="retro"] .mood-fx{display:block}
+  body[data-mood="retro"] .mood-deco{display:block;height:28px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40' preserveAspectRatio='none'%3E%3Crect y='0' width='100' height='10' fill='%232E8A87'/%3E%3Crect y='10' width='100' height='10' fill='%23E0A526'/%3E%3Crect y='20' width='100' height='10' fill='%23D2572B'/%3E%3Crect y='30' width='100' height='10' fill='%23B23A2A'/%3E%3C/svg%3E") left bottom/100% 28px no-repeat}
+  body[data-mood="retro"] .next,body[data-mood="retro"] .hero,body[data-mood="retro"] .sv-head,body[data-mood="retro"] .att-hero{background:linear-gradient(160deg,#5A3A2A,#3A2419);box-shadow:inset 0 0 0 2px #E0A526,4px 4px 0 rgba(74,47,35,.25);border-radius:22px}
+  body[data-mood="retro"] .hx{display:block;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 160'%3E%3Cg transform='translate%28170 170%29' fill='none' stroke-width='14'%3E%3Ccircle r='140' stroke='%232E8A87'/%3E%3Ccircle r='124' stroke='%23E0A526'/%3E%3Ccircle r='108' stroke='%23D2572B'/%3E%3Ccircle r='92' stroke='%23B23A2A'/%3E%3C/g%3E%3Ccircle cx='170' cy='170' r='66' fill='%23F4EAD5' opacity='.15'/%3E%3C/svg%3E") right -10px bottom -8px/150px 110px no-repeat}
+  body[data-mood="retro"] .next::after,body[data-mood="retro"] .hero::before{display:none}
+  body[data-mood="retro"] .next h2,body[data-mood="retro"] .hero h1,body[data-mood="retro"] .sv-head h1{color:#FFF4DE;font-weight:900;letter-spacing:.04em;text-shadow:3px 3px 0 rgba(210,87,43,.55)}
+  body[data-mood="retro"] .next .tag,body[data-mood="retro"] .hero .tag{background:#E0A526;color:#3A2419;border-radius:6px}
+  body[data-mood="retro"] .next .meta span,body[data-mood="retro"] .fact,body[data-mood="retro"] .sv-facts span{background:rgba(255,244,222,.12);box-shadow:inset 0 0 0 1px rgba(224,165,38,.5);color:#FFF4DE}
+  body[data-mood="retro"] .nx-count{background:#FFF4DE;color:#3A2419;border-radius:50%;box-shadow:0 0 0 4px #D2572B,0 0 0 8px #E0A526}
+  body[data-mood="retro"] .nx-count b{color:#B23A2A}
+  body[data-mood="retro"] .btn{border-radius:14px;box-shadow:3px 3px 0 rgba(74,47,35,.2)}
+  body[data-mood="retro"] .btn.primary,body[data-mood="retro"] .next .actions .btn:not(.glass){background:#D2572B;color:#FFF4DE}
+  body[data-mood="retro"] .next .actions .btn.glass{background:rgba(255,244,222,.12);color:#FFF4DE}
+  body[data-mood="retro"] h1.page{color:#4A2F23}
+  body[data-mood="retro"] .section-title .ic{width:32px;height:32px;padding:6px;border-radius:10px;background:#2E8A87;color:#FFF4DE;box-shadow:2px 2px 0 #E0A526}
+  body[data-mood="retro"] .card:not(.next):not(.hero){border:1.5px solid rgba(74,47,35,.22);border-radius:16px;box-shadow:4px 4px 0 rgba(74,47,35,.12)}
+  body[data-mood="retro"] .tabbar{border:1.5px solid rgba(74,47,35,.25);box-shadow:4px 4px 0 rgba(74,47,35,.15);background:#FFF9EC}
+  body[data-mood="retro"] .tabbar a.on,body[data-mood="retro"] .tab-ind{background:#F8E8BE}body[data-mood="retro"] .tabbar a.on{color:#B23A2A}
+  body[data-mood="retro"] .logo-mark{background:#D2572B;box-shadow:2px 2px 0 #E0A526}
+}
+@media print{
+  body[data-pstyle="mood"][data-mood="newyear"] .svp,body[data-pstyle="mood"][data-mood="newyear"] .svh{--pa:#B3122E;--pl:#FBE6EA}
+  body[data-pstyle="mood"][data-mood="newyear"] .svp-head,body[data-pstyle="mood"][data-mood="newyear"] .svh-hd{background:linear-gradient(140deg,#8E0B22,#C8102E 60%,#D9365A)!important;box-shadow:inset 0 0 0 1pt #F2D27A!important}
+  body[data-pstyle="mood"][data-mood="newyear"] .svp-head::after,body[data-pstyle="mood"][data-mood="newyear"] .svh-hd::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 150'%3E%3Cg transform='translate%28160 130%29'%3E%3Cpath d='M0 0L95.3 -55.0A110 110 0 0 1 81.7 -73.6Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L81.7 -73.6A110 110 0 0 1 64.7 -89.0Z' fill='%23F2D27A' opacity='.9'/%3E%3Cpath d='M0 0L64.7 -89.0A110 110 0 0 1 44.7 -100.5Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L44.7 -100.5A110 110 0 0 1 22.9 -107.6Z' fill='%23F2D27A' opacity='.9'/%3E%3Cpath d='M0 0L22.9 -107.6A110 110 0 0 1 0.0 -110.0Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L0.0 -110.0A110 110 0 0 1 -22.9 -107.6Z' fill='%23F2D27A' opacity='.9'/%3E%3Cpath d='M0 0L-22.9 -107.6A110 110 0 0 1 -44.7 -100.5Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L-44.7 -100.5A110 110 0 0 1 -64.7 -89.0Z' fill='%23F2D27A' opacity='.9'/%3E%3Cpath d='M0 0L-64.7 -89.0A110 110 0 0 1 -81.7 -73.6Z' fill='%23E2B54E' opacity='.9'/%3E%3Cpath d='M0 0L-81.7 -73.6A110 110 0 0 1 -95.3 -55.0Z' fill='%23F2D27A' opacity='.9'/%3E%3Ccircle r='40' fill='%23B3122E'/%3E%3Cpath d='M-110 0A110 110 0 0 1 110 0' fill='none' stroke='%23FFF3D0' stroke-width='1.5'/%3E%3C/g%3E%3Cg transform='translate%2840 40%29 scale%281.2%29'%3E%3Cg fill='%23FFFFFF'%3E%3Ccircle cx='0.0' cy='-8.0' r='6.5'/%3E%3Ccircle cx='7.6' cy='-2.5' r='6.5'/%3E%3Ccircle cx='4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-7.6' cy='-2.5' r='6.5'/%3E%3C/g%3E%3Ccircle r='3.6' fill='%23FFD76A'/%3E%3C/g%3E%3Cg transform='translate%2870 20%29 scale%280.8%29'%3E%3Cg fill='%23FFD0DC'%3E%3Ccircle cx='0.0' cy='-8.0' r='6.5'/%3E%3Ccircle cx='7.6' cy='-2.5' r='6.5'/%3E%3Ccircle cx='4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-7.6' cy='-2.5' r='6.5'/%3E%3C/g%3E%3Ccircle r='3.6' fill='%23FFD76A'/%3E%3C/g%3E%3Cg transform='translate%2824 82%29 scale%280.9%29'%3E%3Cg fill='%23FFD0DC'%3E%3Ccircle cx='0.0' cy='-8.0' r='6.5'/%3E%3Ccircle cx='7.6' cy='-2.5' r='6.5'/%3E%3Ccircle cx='4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-4.7' cy='6.5' r='6.5'/%3E%3Ccircle cx='-7.6' cy='-2.5' r='6.5'/%3E%3C/g%3E%3Ccircle r='3.6' fill='%23FFD76A'/%3E%3C/g%3E%3C/svg%3E") right 60pt bottom -4pt/120pt 82pt no-repeat}
+  body[data-pstyle="mood"][data-mood="newyear"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="newyear"] .svh-hd h1,body[data-pstyle="mood"][data-mood="newyear"] .svp-sec h3,body[data-pstyle="mood"][data-mood="newyear"] .svp-date b,body[data-pstyle="mood"][data-mood="newyear"] .svp-t b,body[data-pstyle="mood"][data-mood="newyear"] .svp-x h4{font-family:"Zen Old Mincho",serif}
+  body[data-pstyle="mood"][data-mood="newyear"] .svp-sec h3{color:#B3122E}
+  body[data-pstyle="mood"][data-mood="newyear"] .svp-sec h3 span{background:#C8102E;box-shadow:0 0 0 1pt #F2D27A}
+  body[data-pstyle="mood"][data-mood="newyear"] .svp-sec h3::after{border-bottom:1.6pt double #C9A23A}
+  body[data-pstyle="mood"][data-mood="newyear"] .svp::after,body[data-pstyle="mood"][data-mood="newyear"] .svh::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cg fill='none' stroke-width='2'%3E%3Cpath d='M0 14C80 4 120 30 200 20S320 4 400 14' stroke='%23E2B54E'/%3E%3Cpath d='M0 22C80 12 120 38 200 28S320 12 400 22' stroke='%23FFFFFF' opacity='.8'/%3E%3Cpath d='M0 30C80 20 120 46 200 36S320 20 400 30' stroke='%23E2B54E' opacity='.8'/%3E%3C/g%3E%3C/svg%3E") left bottom/100% 10mm no-repeat}
+  body[data-pstyle="mood"][data-mood="retro"] .svp,body[data-pstyle="mood"][data-mood="retro"] .svh{--pa:#B23A2A;--pl:#FBEEDB}
+  body[data-pstyle="mood"][data-mood="retro"] .svp-head,body[data-pstyle="mood"][data-mood="retro"] .svh-hd{background:linear-gradient(160deg,#5A3A2A,#3A2419)!important;box-shadow:inset 0 0 0 1.5pt #E0A526!important;border-radius:12pt!important}
+  body[data-pstyle="mood"][data-mood="retro"] .svp-head::after,body[data-pstyle="mood"][data-mood="retro"] .svh-hd::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 160'%3E%3Cg transform='translate%28170 170%29' fill='none' stroke-width='14'%3E%3Ccircle r='140' stroke='%232E8A87'/%3E%3Ccircle r='124' stroke='%23E0A526'/%3E%3Ccircle r='108' stroke='%23D2572B'/%3E%3Ccircle r='92' stroke='%23B23A2A'/%3E%3C/g%3E%3Ccircle cx='170' cy='170' r='66' fill='%23F4EAD5' opacity='.15'/%3E%3C/svg%3E") right 56pt bottom 0/130pt 95pt no-repeat}
+  body[data-pstyle="mood"][data-mood="retro"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="retro"] .svh-hd h1,body[data-pstyle="mood"][data-mood="retro"] .svp-sec h3,body[data-pstyle="mood"][data-mood="retro"] .svp-date b{font-family:"Zen Maru Gothic",sans-serif;font-weight:900}
+  body[data-pstyle="mood"][data-mood="retro"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="retro"] .svp-date b,body[data-pstyle="mood"][data-mood="retro"] .svh-hd h1{color:#FFF4DE}
+  body[data-pstyle="mood"][data-mood="retro"] .svp-sec h3{color:#B23A2A}
+  body[data-pstyle="mood"][data-mood="retro"] .svp-sec h3 span{background:#2E8A87}
+  body[data-pstyle="mood"][data-mood="retro"] .svp::after,body[data-pstyle="mood"][data-mood="retro"] .svh::after{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 40' preserveAspectRatio='none'%3E%3Crect y='0' width='100' height='10' fill='%232E8A87'/%3E%3Crect y='10' width='100' height='10' fill='%23E0A526'/%3E%3Crect y='20' width='100' height='10' fill='%23D2572B'/%3E%3Crect y='30' width='100' height='10' fill='%23B23A2A'/%3E%3C/svg%3E") left bottom/100% 6mm no-repeat}
+}
+@media print{
+  body[data-pstyle="mood"] .svp-head::after,body[data-pstyle="mood"] .svh-hd::after{opacity:.45}
+  body[data-pstyle="mood"][data-mood="xmas"] .svp-head::after,body[data-pstyle="mood"][data-mood="xmas"] .svh-hd::after,body[data-pstyle="mood"][data-mood="theater"] .svp-head::after,body[data-pstyle="mood"][data-mood="theater"] .svh-hd::after{opacity:1}
+  body[data-pstyle="mood"] .svp-date,body[data-pstyle="mood"] .svp-ttl,body[data-pstyle="mood"] .svp-qr{position:relative;z-index:1}
 }
 </style>
 </head>
@@ -2518,6 +2608,8 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   }
   // スケジュール専用ページ（スマホでも横にはみ出さない1列。印刷はA4縦1枚）
   var pStyle = "mood"; try { pStyle = localStorage.getItem("portal_print_style2") || "mood"; } catch (e) {}
+  // ⌘P など、ボタン以外から印刷したときも選んでいるスタイルで
+  window.addEventListener("beforeprint", function(){ document.body.dataset.pstyle = pStyle; });
   function viewSchedule(id){
     var list = S.events.filter(function(e){ return parseSchedule(e.schedule).length; });
     if (!list.length) return '<div class="view card empty">スケジュールが入っている行事はまだありません</div>';
@@ -2894,26 +2986,27 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     seSync();
   }
   // 雰囲気（着せ替え）を選ぶ欄。「自動」は行事名から選ぶ
-  var MOOD_OPTS = [["", "自動", "行事名から選ぶ"], ["pastel", "ノーマル", "いつものパステル"], ["night", "夜・シアター", "映画館・カーテン・電球"], ["wa", "和", "和紙・藍・朱"], ["sakura", "桜", "花びらが舞う"], ["summer", "夏", "空色・波"], ["pop", "ポップ", "キャンディ色・丸み"], ["autumn", "紅葉", "朱色・葉が舞う"], ["snow", "冬", "雪が降る・氷の青"], ["xmas", "クリスマス", "赤と緑・電飾"], ["forest", "森", "朝の光・霧・ほたる"], ["chic", "シック", "大理石・黒の艶"], ["gold", "ゴールド", "黒と金・式典に"]];
-  var MOOD_SW = { "": "conic-gradient(#FF9A8B,#F5C64F,#5CC9A7,#6BB8F0,#A08CF0,#FF9A8B)", pastel: "linear-gradient(135deg,#FFE3DD,#ECE7FF)", night: "radial-gradient(circle at 50% 0%,rgba(255,214,140,.7) 0 18%,transparent 40%),linear-gradient(90deg,#8E1428 0 22%,#1E0C12 22% 78%,#8E1428 78%)", wa: "radial-gradient(circle at 72% 30%,#C8442B 0 22%,transparent 23%),linear-gradient(135deg,#1F2C52,#2E467C)", sakura: "linear-gradient(135deg,#FFD6E3,#E46F98)", summer: "linear-gradient(135deg,#7FD8FF,#14B3C8 60%,#FFE27A)", pop: "radial-gradient(circle at 72% 28%,#FFC233 0 22%,transparent 23%),radial-gradient(circle at 26% 78%,#14B8A6 0 14%,transparent 15%),linear-gradient(135deg,#FF5E62,#FF4F9A 55%,#7B6CFF)", autumn: "radial-gradient(circle at 70% 30%,#FFD580 0 16%,transparent 17%),linear-gradient(135deg,#B8402F,#E5932E)", snow: "radial-gradient(circle at 30% 30%,#fff 0 7%,transparent 8%),radial-gradient(circle at 68% 62%,#fff 0 6%,transparent 7%),linear-gradient(140deg,#24497E,#8DBBEB)", xmas: "radial-gradient(circle at 70% 30%,#C8323C 0 14%,transparent 15%),radial-gradient(circle at 34% 64%,#FFD678 0 8%,transparent 9%),linear-gradient(140deg,#0F3D2A,#2E8B57)", forest: "conic-gradient(from 200deg at 90% 0%,transparent,rgba(255,240,180,.6) 10deg,transparent 22deg),linear-gradient(180deg,#8FB27A 0 35%,#3E6B45 36% 65%,#1F3B2A 66%)", chic: "linear-gradient(120deg,transparent 40%,rgba(255,255,255,.5) 50%,transparent 60%),linear-gradient(135deg,#0B0B0C 0 50%,#EFEDE9 51%)", gold: "radial-gradient(circle at 70% 30%,#FFE9A8 0 10%,transparent 11%),linear-gradient(140deg,#14120E,#3A2F14 60%,#D4AF37)" };
+  var MOOD_OPTS = [["", "自動", "行事名から選ぶ"], ["pastel", "ノーマル", "いつものパステル"], ["night", "夜のパーティー", "濃い紫・金・星"], ["theater", "シアター", "映画館・カーテン・電球"], ["wa", "和", "和紙・藍・朱"], ["sakura", "桜", "花びらが舞う"], ["summer", "夏", "空色・波"], ["pop", "ポップ", "キャンディ色・丸み"], ["autumn", "紅葉", "朱色・葉が舞う"], ["snow", "冬", "雪が降る・氷の青"], ["xmas", "クリスマス", "赤と緑・電飾"], ["newyear", "新春", "紅白・金・扇と梅"], ["retro", "レトロ喫茶", "クリーム・茶・しま"], ["gold", "ゴールド", "黒と金・式典に"]];
+  var MOOD_SW = { "": "conic-gradient(#FF9A8B,#F5C64F,#5CC9A7,#6BB8F0,#A08CF0,#FF9A8B)", pastel: "linear-gradient(135deg,#FFE3DD,#ECE7FF)", night: "radial-gradient(circle at 70% 30%,#FF6FAE 0 8%,transparent 9%),linear-gradient(135deg,#251A45,#3A1F5C)", theater: "radial-gradient(circle at 50% 0%,rgba(255,214,140,.7) 0 18%,transparent 40%),linear-gradient(90deg,#8E1428 0 22%,#1E0C12 22% 78%,#8E1428 78%)", wa: "radial-gradient(circle at 72% 30%,#C8442B 0 22%,transparent 23%),linear-gradient(135deg,#1F2C52,#2E467C)", sakura: "linear-gradient(135deg,#FFD6E3,#E46F98)", summer: "linear-gradient(135deg,#7FD8FF,#14B3C8 60%,#FFE27A)", pop: "radial-gradient(circle at 72% 28%,#FFC233 0 22%,transparent 23%),radial-gradient(circle at 26% 78%,#14B8A6 0 14%,transparent 15%),linear-gradient(135deg,#FF5E62,#FF4F9A 55%,#7B6CFF)", autumn: "radial-gradient(circle at 70% 30%,#FFD580 0 16%,transparent 17%),linear-gradient(135deg,#B8402F,#E5932E)", snow: "radial-gradient(circle at 30% 30%,#fff 0 7%,transparent 8%),radial-gradient(circle at 68% 62%,#fff 0 6%,transparent 7%),linear-gradient(140deg,#24497E,#8DBBEB)", xmas: "radial-gradient(circle at 70% 30%,#C8323C 0 14%,transparent 15%),radial-gradient(circle at 34% 64%,#FFD678 0 8%,transparent 9%),linear-gradient(140deg,#0F3D2A,#2E8B57)", _f: "conic-gradient(from 200deg at 90% 0%,transparent,rgba(255,240,180,.6) 10deg,transparent 22deg),linear-gradient(180deg,#8FB27A 0 35%,#3E6B45 36% 65%,#1F3B2A 66%)", _c: "linear-gradient(120deg,transparent 40%,rgba(255,255,255,.5) 50%,transparent 60%),linear-gradient(135deg,#0B0B0C 0 50%,#EFEDE9 51%)", gold: "radial-gradient(circle at 70% 30%,#FFE9A8 0 10%,transparent 11%),linear-gradient(140deg,#14120E,#3A2F14 60%,#D4AF37)" , newyear: "radial-gradient(circle at 70% 30%,#F2D27A 0 14%,transparent 15%),radial-gradient(circle at 32% 66%,#fff 0 10%,transparent 11%),linear-gradient(140deg,#8E0B22,#D9365A)", retro: "radial-gradient(circle at 100% 100%,#3A2419 0 30%,#B23A2A 31% 42%,#D2572B 43% 54%,#E0A526 55% 66%,#2E8A87 67% 78%,#F4EAD5 79%)"};
   // 行事ページ・スケジュールで、その場でスタイルを切り替える（主催者だけ。押すとすぐ保存）
   function moodBar(ev){
     if (!isAdmin() || !S.hasMood) return '';
     var cur = ev.mood || "", eff = moodOf(ev);
     return '<div class="mood-bar no-print"><span class="mb-l">' + I('palette') + 'スタイル<small style="font-weight:700">（いま：' + esc(((MOOD_OPTS.find(function(x){ return x[0] === eff; }) || [])[1]) || '') + (cur ? '' : '・自動') + '）</small></span><div class="mb-row" role="radiogroup" aria-label="この行事のスタイル">'
-      + MOOD_OPTS.map(function(o){ var on = o[0] === cur; return '<button type="button" role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + (!o[0] ? ' auto' : '') + '" data-mood-set="' + o[0] + '" data-ev="' + ev.id + '"><i style="background:' + MOOD_SW[o[0]] + '"></i><b>' + (o[0] === "night" ? "シアター" : o[1]) + '</b>' + (!o[0] && !cur ? '<small>' + esc(((MOOD_OPTS.find(function(x){ return x[0] === eff; }) || [])[1]) || '') + '</small>' : '') + '</button>'; }).join("")
+      + MOOD_OPTS.map(function(o){ var on = o[0] === cur; return '<button type="button" role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + (!o[0] ? ' auto' : '') + '" data-mood-set="' + o[0] + '" data-ev="' + ev.id + '"><i style="background:' + MOOD_SW[o[0]] + '"></i><b>' + (o[0] === "night" ? "夜" : o[1]) + '</b>' + (!o[0] && !cur ? '<small>' + esc(((MOOD_OPTS.find(function(x){ return x[0] === eff; }) || [])[1]) || '') + '</small>' : '') + '</button>'; }).join("")
       + '</div></div>';
   }
   async function setEvMood(id, k){
     var ev = S.events.find(function(e){ return e.id === id; }); if (!ev) return;
     var prev = ev.mood || "";
+    pStyle = "mood"; try { localStorage.setItem("portal_print_style2", "mood"); } catch (x) {}
     ev.mood = k || null; render();
     var res = await sb.from("ennokai_events").update({ mood: k || null }).eq("id", id);
     if (res.error) { ev.mood = prev || null; render(); toast("保存できませんでした"); return; }
     toast((MOOD_OPTS.find(function(x){ return x[0] === k; }) || ["", "自動"])[1] + "にしました");
   }
   // 見る人だけの着せ替え（主催者でない人用。端末に保存）
-  function myMood(){ if (isAdmin()) return ""; try { var v = localStorage.getItem("portal_my_mood") || ""; return /^(pastel|night|wa|sakura|summer|pop|autumn|snow|xmas|forest|chic|gold)$/.test(v) ? v : ""; } catch (e) { return ""; } }
+  function myMood(){ if (isAdmin()) return ""; try { var v = localStorage.getItem("portal_my_mood") || ""; return /^(pastel|night|theater|wa|sakura|summer|pop|autumn|snow|xmas|newyear|retro|gold)$/.test(v) ? v : ""; } catch (e) { return ""; } }
   // 右上の「スタイル」ボタン → 選ぶシート
   function openMoodSheet(){
     var old = document.querySelector(".msh"); if (old) { old.remove(); return; }
@@ -2926,6 +3019,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       if (b) {
         var k = b.dataset.msh;
         w.querySelectorAll("[data-msh]").forEach(function(x){ x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", x === b); });
+        pStyle = "mood"; try { localStorage.setItem("portal_print_style2", "mood"); } catch (x) {}
         if (adm) { await setEvMood(ev.id, k); }
         else { try { if (k) localStorage.setItem("portal_my_mood", k); else localStorage.removeItem("portal_my_mood"); } catch (x) {} render(); }
         return;
@@ -2946,6 +3040,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     var payload = { name: g("name"), date: g("date"), time: g("time"), location: g("location"), schedule: document.getElementById("ef-schedule").value.replace(/\s+$/, ""), notes: document.getElementById("ef-notes").value.replace(/\s+$/, "") };
     if (!payload.name) { toast("行事名を入れてください"); return; }
     if (S.hasMood) payload.mood = document.getElementById("ef-mood").value || null;
+    if (S.hasMood) { pStyle = "mood"; try { localStorage.setItem("portal_print_style2", "mood"); } catch (x) {} }
     var res = id === "new" ? await sb.from("ennokai_events").insert(Object.assign({ checkin_required: true }, payload)).select().single() : await sb.from("ennokai_events").update(payload).eq("id", id).select().single();
     if (res.error) { toast("保存できませんでした"); return; }
     toast("保存しました");
@@ -3968,22 +4063,24 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     { k: "pop", re: /スポーツ|運動|大会|体育|ボウリング|ボーリング|ゴルフ|卓球|バスケ|バドミントン|レク|ゲーム大会/, name: "ポップ" },
     { k: "xmas", re: /クリスマス|X'?mas/i, name: "クリスマス" },
     { k: "gold", re: /表彰|式典|周年|記念|総会|授賞/, name: "ゴールド" },
-    { k: "night", re: /忘年|新年会|飲み|宴|懇親|歓迎|送別|パーティ|夜|ナイト|映画|シアター/, name: "夜・シアター" },
+    { k: "theater", re: /映画|シアター|上映/, name: "シアター" },
+    { k: "night", re: /忘年|新年会|飲み|宴|懇親|歓迎|送別|パーティ|夜|ナイト/, name: "夜のパーティー" },
     { k: "snow", re: /雪|スキー|スノー|冬/, name: "冬" },
-    { k: "forest", re: /ハイキング|登山|山|森|キャンプ/, name: "森" },
+    { k: "newyear", re: /新年|新春|正月|初詣|賀詞/, name: "新春" },
+    { k: "retro", re: /喫茶|カフェ|レトロ|昭和|スナック|カラオケ/, name: "レトロ喫茶" },
     { k: "autumn", re: /紅葉|もみじ|ハロウィン/, name: "紅葉" },
     { k: "sakura", re: /花見|桜|さくら|春/, name: "桜" },
     { k: "summer", re: /BBQ|バーベキュー|夏|海|花火|ビア|キャンプ|プール|川/i, name: "夏" },
     { k: "wa", re: /祭|まつり|松茸|紅葉|月見|和食|茶会|初詣|秋|旅館|温泉/, name: "和" }
   ];
-  function moodOf(ev){ if (!ev) return "pastel"; if (ev.mood && /^(pastel|night|wa|sakura|summer|pop|autumn|snow|xmas|forest|chic|gold)$/.test(ev.mood)) return ev.mood; var t = ev.name + " " + (ev.notes || ""), m = MOODS.find(function(x){ return x.re.test(ev.name); }) || MOODS.find(function(x){ return x.re.test(t); }); return m ? m.k : "pastel"; }
+  function moodOf(ev){ if (!ev) return "pastel"; if (ev.mood && /^(pastel|night|theater|wa|sakura|summer|pop|autumn|snow|xmas|newyear|retro|gold)$/.test(ev.mood)) return ev.mood; var t = ev.name + " " + (ev.notes || ""), m = MOODS.find(function(x){ return x.re.test(ev.name); }) || MOODS.find(function(x){ return x.re.test(t); }); return m ? m.k : "pastel"; }
   function setMood(k){
     var FXN = { sakura: 14, night: 40, autumn: 14, snow: 36, xmas: 22, gold: 26 };
     var fxEl = document.getElementById("moodFx");
     if (document.body.dataset.mood === k && fxEl && fxEl.dataset.k === k) return;
     document.body.dataset.mood = k;
     try { localStorage.setItem("portal_mood", k); } catch (e) {}
-    var tc = { pastel: "#FFF7F2", night: "#0D090C", wa: "#F3ECDF", sakura: "#FFF4F7", summer: "#EEF9FF", pop: "#FFF7EE", autumn: "#FFF5EA", snow: "#EAF1F8", xmas: "#FBF6EE", forest: "#F1F3EA", chic: "#F3F2EF", gold: "#0E0D0B" }[k];
+    var tc = { pastel: "#FFF7F2", night: "#120E1F", theater: "#0D090C", wa: "#F3ECDF", sakura: "#FFF4F7", summer: "#EEF9FF", pop: "#FFF7EE", autumn: "#FFF5EA", snow: "#EAF1F8", xmas: "#FBF6EE", newyear: "#FBF5EA", retro: "#F4EAD5", gold: "#0E0D0B" }[k];
     var mt = document.querySelector('meta[name="theme-color"]'); if (mt) mt.setAttribute("content", tc);
     var fx2 = document.getElementById("moodFx");
     if (fx2) {
@@ -3994,10 +4091,10 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       if ((k === "snow" || k === "xmas") && !noMotion()) for (var q = 0, nq = FXN[k]; q < nq; q++) { var sf = document.createElement("s"); sf.style.cssText = "--x:" + (Math.random() * 100).toFixed(1) + "vw;--d:" + (8 + Math.random() * 10).toFixed(1) + "s;--dl:-" + (Math.random() * 18).toFixed(1) + "s;--s:" + (.5 + Math.random() * .9).toFixed(2) + ";--sw:" + (Math.random() * 10 - 5).toFixed(1) + "vw"; fx2.appendChild(sf); }
       if (k === "gold") for (var g = 0; g < 26; g++) { var gs = document.createElement("b"); gs.style.cssText = "left:" + (Math.random() * 100).toFixed(1) + "vw;top:" + (Math.random() * 100).toFixed(1) + "vh;--d:" + (2.5 + Math.random() * 4).toFixed(1) + "s;--dl:-" + (Math.random() * 6).toFixed(1) + "s;--s:" + (.5 + Math.random()).toFixed(2); fx2.appendChild(gs); }
       // 背景の動き（スタイルごとの粒）：bub=泡 dust=ほこり kin=金箔 bok=玉ボケ conf=紙吹雪 ff=ほたる rise=立ちのぼる光
-      var EX = { pastel: [["bub", 12, ["#FFB7A8", "#C9B8FF", "#9FE3CF", "#FFE08A"]]], night: [["dust", 24, ["#FFE7B0"]]], wa: [["kin", 14, ["#D9B35A", "#E8CF8E", "#C8442B"]]], sakura: [["bok", 9, ["#FFC2D6", "#F2D6FF", "#FFE3EC"]]], summer: [["bub", 16, ["#FFFFFF", "#BFEFFF"]]], pop: [["conf", 24, ["#FF5E62", "#FFC233", "#14B8A6", "#7B6CFF", "#3A86FF", "#FF4F9A"]]], autumn: [["dust", 14, ["#FFD580", "#FFB27A"]]], snow: [["bok", 7, ["#FFFFFF", "#DCEBFF"]]], xmas: [["bok", 12, ["#FF6B6B", "#FFD45A", "#6BE29A", "#5AB4FF"]]], forest: [["ff", 22, ["#E9F59A", "#FFF3B0", "#C8F08F"]]], chic: [["dust", 16, ["#FFFFFF", "#CFCFCF"]]], gold: [["rise", 22, ["#FFE9A8", "#D4AF37", "#FFF6D8"]]] };
+      var EX = { pastel: [["bub", 12, ["#FFB7A8", "#C9B8FF", "#9FE3CF", "#FFE08A"]]], theater: [["dust", 24, ["#FFE7B0"]]], wa: [["kin", 14, ["#D9B35A", "#E8CF8E", "#C8442B"]]], sakura: [["bok", 9, ["#FFC2D6", "#F2D6FF", "#FFE3EC"]]], summer: [["bub", 16, ["#FFFFFF", "#BFEFFF"]]], pop: [["conf", 24, ["#FF5E62", "#FFC233", "#14B8A6", "#7B6CFF", "#3A86FF", "#FF4F9A"]]], autumn: [["dust", 14, ["#FFD580", "#FFB27A"]]], snow: [["bok", 7, ["#FFFFFF", "#DCEBFF"]]], xmas: [["bok", 12, ["#FF6B6B", "#FFD45A", "#6BE29A", "#5AB4FF"]]], newyear: [["kin", 14, ["#E2B54E", "#F2D27A", "#E8577A"]]], retro: [["dust", 12, ["#E0A526", "#D2572B"]]], night: [["rise", 16, ["#F5C64F", "#FFE7A8", "#FF9DC8"]]], gold: [["rise", 22, ["#FFE9A8", "#D4AF37", "#FFF6D8"]]] };
       if (!noMotion()) (EX[k] || []).forEach(function(spec){ for (var n = 0; n < spec[1]; n++) { var em = document.createElement("em"); em.className = spec[0]; em.style.cssText = "--x:" + (Math.random() * 100).toFixed(1) + "vw;--y:" + (Math.random() * 100).toFixed(1) + "vh;--d:" + (6 + Math.random() * 12).toFixed(1) + "s;--dl:-" + (Math.random() * 18).toFixed(1) + "s;--s:" + (.5 + Math.random()).toFixed(2) + ";--sw:" + (Math.random() * 16 - 8).toFixed(1) + "vw;--c:" + spec[2][n % spec[2].length]; fx2.appendChild(em); } });
       fx2.dataset.k = k;
-      if (k === "night") for (var j = 0; j < 40; j++) { var st = document.createElement("b"); st.style.cssText = "left:" + (Math.random() * 100).toFixed(1) + "vw;top:" + (Math.random() * 100).toFixed(1) + "vh;--d:" + (2 + Math.random() * 4).toFixed(1) + "s;--dl:-" + (Math.random() * 6).toFixed(1) + "s;--s:" + (.5 + Math.random()).toFixed(2); fx2.appendChild(st); }
+      if (k === "night" || k === "theater") for (var j = 0; j < 40; j++) { var st = document.createElement("b"); st.style.cssText = "left:" + (Math.random() * 100).toFixed(1) + "vw;top:" + (Math.random() * 100).toFixed(1) + "vh;--d:" + (2 + Math.random() * 4).toFixed(1) + "s;--dl:-" + (Math.random() * 6).toFixed(1) + "s;--s:" + (.5 + Math.random()).toFixed(2); fx2.appendChild(st); }
     }
   }
   // 入力欄の中でスクロールしないよう、文章の量に合わせて高さを伸ばす
