@@ -197,7 +197,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .m.pend{background:var(--card);border:2px dashed #E7D9A6}
 .pool .members,.pend-box .members{flex-direction:row;flex-wrap:wrap}
 .pool .m,.pend-box .m{min-height:44px}
-.pool{margin-top:16px;padding:16px;border-radius:24px;border:2.5px dashed var(--line);background:rgba(255,255,255,.7)}
+.pool{margin-top:16px;padding:16px;border-radius:24px;border:2.5px dashed var(--line);background:var(--card2)}
 .pend-box{margin-top:14px;padding:16px;border-radius:24px;border:2.5px dashed #EAD9A0;background:var(--card2)}
 .pool.drop,.pend-box.drop{border-color:var(--lav)}
 .pool.target,.pend-box.target{border-color:var(--peach)}
@@ -289,7 +289,7 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .se-head > span{font-size:.8125rem;font-weight:800;color:var(--muted)}
 .se-head .seg button{min-height:40px}
 .se-note{font-size:.8125rem;color:var(--muted);font-weight:700;line-height:1.6}
-.se-tpls{display:grid;gap:8px;padding:14px;border-radius:18px;border:2px dashed var(--line);background:rgba(255,255,255,.7)}
+.se-tpls{display:grid;gap:8px;padding:14px;border-radius:18px;border:2px dashed var(--line);background:var(--card2)}
 .se-tpls b{font-size:.8125rem}
 .se-tpls div{display:flex;gap:8px;flex-wrap:wrap}
 .se-tpls button{min-height:44px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font:inherit;font-weight:800;font-size:.9375rem;color:var(--ink);cursor:pointer;touch-action:manipulation}
@@ -310,9 +310,9 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
 .se-pick{flex:none;min-height:46px;padding:0 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font:inherit;font-weight:800;font-size:.8125rem;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:4px}
 .se-main input.se-sub{font-size:.9375rem;font-weight:600;min-height:42px}
 .se-warn{font-size:.75rem;font-weight:800;color:#B3261E}
-.se-add{min-height:48px;border-radius:16px;border:2px dashed var(--line);background:rgba(255,255,255,.7);font:inherit;font-weight:800;font-size:.9375rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.se-add{min-height:48px;border-radius:16px;border:2px dashed var(--line);background:var(--card2);font:inherit;font-weight:800;font-size:.9375rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
 .se-add:hover{border-color:var(--lav)}
-.se-prev{padding:14px;border-radius:20px;background:linear-gradient(135deg,rgba(255,236,228,.6),rgba(238,234,254,.6));border:1px solid var(--line)}
+.se-prev{padding:14px;border-radius:20px;background:linear-gradient(135deg,var(--peach-soft),var(--lav-soft));border:1px solid var(--line)}
 .se-prev > b{display:block;font-size:.8125rem;color:var(--muted);margin-bottom:4px}
 .se-prev .empty{padding:12px 0}
 /* 時刻・候補を選ぶシート */
@@ -1328,6 +1328,55 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
 ::view-transition-group(ev-hero){animation-duration:.45s;animation-timing-function:cubic-bezier(.16,1,.3,1)}
 @media (prefers-reduced-motion:reduce){.nx-att .bar i{animation:none}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
 @media print{.next,.hero{view-transition-name:none}}
+.mood-f > span{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.mood-f em{font-style:normal;font-weight:700;color:#B3261E;font-size:.75rem}
+.mood-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px}
+.mood-pick button{display:grid;grid-template-columns:36px 1fr;grid-template-rows:auto auto;column-gap:8px;align-items:center;text-align:left;min-height:56px;padding:8px 12px 8px 8px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font:inherit}
+.mood-pick button i{grid-row:1 / 3;width:36px;height:36px;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.mood-pick button b{font-size:.8125rem;font-weight:800;line-height:1.3}
+.mood-pick button small{font-size:.6875rem;color:var(--muted);font-weight:700;line-height:1.3}
+.mood-pick button.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}
+.mood-pick button:disabled{opacity:.55;cursor:not-allowed}
+
+/* 印刷の色を雰囲気に合わせる（body[data-pstyle="mood"]）。紙は白のまま、見出し・札・書体を雰囲気に */
+.sv-pstyle{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0 0}
+.sv-pstyle > span{font-size:.8125rem;font-weight:800;color:var(--muted)}
+.sv-pstyle .seg button{min-height:40px}
+@media print{
+  body[data-pstyle="mood"][data-mood="night"] .svp-head,body[data-pstyle="mood"][data-mood="night"] .svh-hd{background:radial-gradient(120% 140% at 100% 0%,rgba(255,111,174,.55),transparent 55%),radial-gradient(90% 120% at 0% 100%,rgba(91,45,255,.6),transparent 60%),linear-gradient(135deg,#1E1538,#3A1F5C)!important}
+  body[data-pstyle="mood"][data-mood="night"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="night"] .svp-date b,body[data-pstyle="mood"][data-mood="night"] .svh-hd h1{color:#FFE7A8}
+  body[data-pstyle="mood"][data-mood="night"] .svh-hd .meta span.k{background:#F5C64F;color:#1A1326}
+  body[data-pstyle="mood"][data-mood="night"] .svp-kh,body[data-pstyle="mood"][data-mood="night"] .svp-sec h3 span{background:linear-gradient(160deg,#2A1D4D,#4B2370);color:#FFE7A8}
+  body[data-pstyle="mood"][data-mood="night"] .svp-keys > div{border-color:#C9A04A}
+  body[data-pstyle="mood"][data-mood="night"] .svp-qr{box-shadow:0 0 0 1.5pt #C9A04A}
+
+  body[data-pstyle="mood"][data-mood="wa"] .svp,body[data-pstyle="mood"][data-mood="wa"] .svh,body[data-pstyle="mood"][data-mood="wa"] .sv-teams-sec{--font-title:"Zen Old Mincho","Hiragino Mincho ProN",serif}
+  body[data-pstyle="mood"][data-mood="wa"] .svp-head,body[data-pstyle="mood"][data-mood="wa"] .svh-hd{border-radius:6px;background:radial-gradient(circle at 88% -10%,#C8442B 0 46pt,transparent 47pt),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24'%3E%3Cg fill='%2328396A' stroke='%23D9B35A' stroke-opacity='.35' stroke-width='1'%3E%3Cg id='w'%3E%3Ccircle r='22'/%3E%3Ccircle r='16'/%3E%3Ccircle r='10'/%3E%3Ccircle r='4'/%3E%3C/g%3E%3Cuse href='%23w' x='48'/%3E%3Cuse href='%23w' x='24' y='12'/%3E%3Cuse href='%23w' y='24'/%3E%3Cuse href='%23w' x='48' y='24'/%3E%3C/g%3E%3C/svg%3E") right bottom/36px 18px,linear-gradient(135deg,#1F2C52,#2E467C)!important}
+  body[data-pstyle="mood"][data-mood="wa"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="wa"] .svh-hd h1{letter-spacing:.12em}
+  body[data-pstyle="mood"][data-mood="wa"] .svp-kh,body[data-pstyle="mood"][data-mood="wa"] .svp-sec h3 span{background:#C8442B;border-radius:3pt}
+  body[data-pstyle="mood"][data-mood="wa"] .svp-r,body[data-pstyle="mood"][data-mood="wa"] .svp-keys > div,body[data-pstyle="mood"][data-mood="wa"] .svh-it,body[data-pstyle="mood"][data-mood="wa"] .svp-memo{border-radius:4pt}
+  body[data-pstyle="mood"][data-mood="wa"] .svh-hd .meta span.k{color:#1F2C52}
+
+  body[data-pstyle="mood"][data-mood="sakura"] .svp-head,body[data-pstyle="mood"][data-mood="sakura"] .svh-hd{background:radial-gradient(14pt 10pt at 82% 30%,rgba(255,255,255,.55) 60%,transparent 62%),radial-gradient(10pt 7pt at 74% 70%,rgba(255,255,255,.45) 60%,transparent 62%),radial-gradient(8pt 6pt at 92% 78%,rgba(255,255,255,.4) 60%,transparent 62%),linear-gradient(135deg,#E46F98,#C77DD8 70%,#9A84E8)!important}
+  body[data-pstyle="mood"][data-mood="sakura"] .svp-kh,body[data-pstyle="mood"][data-mood="sakura"] .svp-sec h3 span{background:linear-gradient(160deg,#E46F98,#B48CE6)}
+
+  body[data-pstyle="mood"][data-mood="summer"] .svp-head,body[data-pstyle="mood"][data-mood="summer"] .svh-hd{background:radial-gradient(70% 120% at 94% 0%,rgba(255,226,122,.95),transparent 55%),linear-gradient(135deg,#1488D8,#14B3C8 65%,#3CCB9B)!important}
+  body[data-pstyle="mood"][data-mood="summer"] .svp-kh,body[data-pstyle="mood"][data-mood="summer"] .svp-sec h3 span{background:linear-gradient(160deg,#1488D8,#14B3C8)}
+
+  body[data-pstyle="mood"][data-mood="pop"] .svp,body[data-pstyle="mood"][data-mood="pop"] .svh,body[data-pstyle="mood"][data-mood="pop"] .sv-teams-sec{--font-title:"Dela Gothic One","M PLUS Rounded 1c",sans-serif;font-synthesis:none}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-ttl h1,body[data-pstyle="mood"][data-mood="pop"] .svh-hd h1,body[data-pstyle="mood"][data-mood="pop"] .svp-date b,body[data-pstyle="mood"][data-mood="pop"] .svp-sec h3,body[data-pstyle="mood"][data-mood="pop"] .sv-teams-h h2{font-weight:400}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-head,body[data-pstyle="mood"][data-mood="pop"] .svh-hd{background:linear-gradient(135deg,#FF5A4E,#FF7A3D)!important;border:2pt solid #1D1A22!important;box-shadow:3pt 3pt 0 #1D1A22!important}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-kh{background:#FFC400;color:#1D1A22;border:2pt solid #1D1A22}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-sec h3 span{background:#1D1A22;color:#FFC400}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-keys > div{border:2pt solid #1D1A22;box-shadow:2.5pt 2.5pt 0 #1D1A22}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-r{border:1.2pt solid #1D1A22}
+  body[data-pstyle="mood"][data-mood="pop"] .svp.dense .svp-foot{min-height:6mm}
+  body[data-pstyle="mood"][data-mood="pop"] .svp.dense .svp-list,body[data-pstyle="mood"][data-mood="pop"] .svp.dense .svp-sec{gap:1.2pt}
+  body[data-pstyle="mood"][data-mood="pop"] .svp-t b,body[data-pstyle="mood"][data-mood="pop"] .svh-it .t b{font-family:"M PLUS Rounded 1c",sans-serif;font-weight:800}
+  body[data-pstyle="mood"][data-mood="pop"] .svh-it{box-shadow:inset 0 0 0 1.2pt #1D1A22}
+  body[data-pstyle="mood"][data-mood="pop"] .svh-hd .meta span.k{border:1.5pt solid #1D1A22}
+  body[data-pstyle="mood"][data-mood="pop"] .sv-team{border-color:#1D1A22!important;box-shadow:3pt 3pt 0 #1D1A22}
+}
 /* ===== 着せ替え（行事ごとの雰囲気）：body[data-mood]。画面だけ（印刷はいつもの色） ===== */
 .mood-fx,.mood-deco{display:none}
 @media screen{
@@ -1572,7 +1621,8 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     S.roster = (r.data || []).map(function(x){ return { id: x.id, name: x.name, gender: x.gender || null, eventId: x.event_id || null, position: x.position || null }; });
     S.hasPosition = !!(r.data && r.data.length && Object.prototype.hasOwnProperty.call(r.data[0], "position"));
     S.hasGender = !!(r.data && r.data.length && Object.prototype.hasOwnProperty.call(r.data[0], "gender"));
-    S.events = (e.data || []).map(function(x){ return { id: x.id, name: x.name, date: x.date || "", location: x.location || "", time: x.time || "", schedule: x.schedule || "", notes: x.notes || "" }; });
+    S.events = (e.data || []).map(function(x){ return { id: x.id, name: x.name, date: x.date || "", location: x.location || "", time: x.time || "", schedule: x.schedule || "", notes: x.notes || "", mood: x.mood || "" }; });
+    S.hasMood = (e.data || []).some(function(x){ return "mood" in x; });
     S.att = {};
     (a.data || []).forEach(function(x){ (S.att[x.event_id] = S.att[x.event_id] || {})[x.person_id] = x.status; });
     S.passwordHash = st.data ? st.data.password_hash : null;
@@ -1733,6 +1783,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       + (keys.length ? '<div class="sv-keys">' + keys.map(function(st){ var tx = st.tx.trim(), sp = tx.search(/[\s　]/), t = sp > 0 ? tx.slice(0, sp) : tx, kd = STEP_KINDS.find(function(k){ return k.k.test(t); }) || stepKind(tx); return '<span style="--cc:' + kd.c + ';--cs:' + kd.s + '">' + esc(half(st.tm).replace(/[〜~\-].*$/, '').replace('頃', '')) + ' ' + esc(t) + '</span>'; }).join("") + '</div>' : '');
   }
   // スケジュール専用ページ（スマホでも横にはみ出さない1列。印刷はA4縦1枚）
+  var pStyle = "std"; try { pStyle = localStorage.getItem("portal_print_style") || "std"; } catch (e) {}
   function viewSchedule(id){
     var list = S.events.filter(function(e){ return parseSchedule(e.schedule).length; });
     if (!list.length) return '<div class="view card empty">スケジュールが入っている行事はまだありません</div>';
@@ -1760,6 +1811,8 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       + '<span>' + I('calendar') + esc(fmtDate(ev)) + '</span>' + (ev.time ? '<span>' + I('clock') + esc(ev.time) + '</span>' : '') + (ev.location ? '<span>' + I('pin') + esc(ev.location) + '</span>' : '') + '</div></div>';
     var link = (ev.notes || "").match(/https?:\/\/\S+\.html/);
     if (vs.length > 1) h += '<div class="sv-var no-print"><span>卓球のやり方</span><div class="seg">' + vs.map(function(v){ return '<button data-sv-var="' + esc(v) + '"' + (v === curV ? ' class="on"' : '') + '>' + esc(v) + '</button>'; }).join("") + '</div></div>';
+    var mk = moodOf(ev), mName = (MOODS.find(function(x){ return x.k === mk; }) || { name: "パステル" }).name;
+    if (mk !== "pastel") h += '<div class="sv-pstyle no-print"><span>印刷の色</span><div class="seg"><button data-sv-pstyle="std"' + (pStyle !== "mood" ? ' class="on"' : '') + '>いつもの色</button><button data-sv-pstyle="mood"' + (pStyle === "mood" ? ' class="on"' : '') + '>雰囲気（' + esc(mName) + '）</button></div></div>';
     h += '<div class="sv-acts"><button class="btn primary" data-sv-print="v">' + I('print') + ' しおり（A4縦）で印刷</button><button class="btn" data-sv-print="h">' + I('print') + ' 横長（A4横）で印刷</button>' + (link ? '<a class="btn" href="' + esc(link[0]) + '" target="_blank" rel="noopener">トーナメント表・ルール</a>' : '') + '</div>';
     if (timed.length > 1) {
       var S0 = timed[0].a, E0 = Math.max.apply(null, timed.map(function(r){ return r.bb; })), W = Math.max(E0 - S0, 1);
@@ -1936,6 +1989,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       + f('行事名', 'name', '例：秋のスポーツ大会')
       + '<div class="two"><label class="field">日付<span style="display:flex;gap:8px"><input type="text" id="ef-date" value="' + esc(ev.date) + '" placeholder="例：2026年10月31日" style="flex:1;min-width:0"><input type="date" id="ef-datepick" aria-label="カレンダーから選ぶ" style="width:52px;padding:10px 6px"></span></label>' + f('時間', 'time', '例：10:00〜') + '</div>'
       + f('場所', 'location', '例：岩見沢総合体育館')
+      + moodField(ev)
       + seField(ev)
       + '<label class="field">メモ<textarea id="ef-notes" style="min-height:110px">' + esc(ev.notes) + '</textarea></label>'
       + '<div class="edit-actions">' + (isNew ? '<span></span>' : '<button class="btn danger" data-delev="' + ev.id + '">' + I('trash') + ' この行事を削除</button>') + '<button class="btn primary" data-saveev>' + I('save') + ' 保存する</button></div></div></div>';
@@ -2105,11 +2159,21 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     if (f === "t") { var kd = seKind(r.t); row.style.setProperty("--cc", kd.c); row.style.setProperty("--cs", kd.s); row.querySelector(".se-ico").innerHTML = I(kd.ic); }
     seSync();
   }
+  // 雰囲気（着せ替え）を選ぶ欄。「自動」は行事名から選ぶ
+  var MOOD_OPTS = [["", "自動", "行事名から選ぶ"], ["pastel", "パステル", "やさしい色"], ["night", "夜のパーティー", "濃い紫・金・星"], ["wa", "和", "和紙・藍・朱"], ["sakura", "桜", "花びらが舞う"], ["summer", "夏", "空色・波"], ["pop", "ポップ", "黒縁・水玉"]];
+  var MOOD_SW = { "": "conic-gradient(#FF9A8B,#F5C64F,#5CC9A7,#6BB8F0,#A08CF0,#FF9A8B)", pastel: "linear-gradient(135deg,#FFE3DD,#ECE7FF)", night: "radial-gradient(circle at 70% 30%,#FF6FAE 0 8%,transparent 9%),linear-gradient(135deg,#251A45,#3A1F5C)", wa: "radial-gradient(circle at 72% 30%,#C8442B 0 22%,transparent 23%),linear-gradient(135deg,#1F2C52,#2E467C)", sakura: "linear-gradient(135deg,#FFD6E3,#E46F98)", summer: "linear-gradient(135deg,#7FD8FF,#14B3C8 60%,#FFE27A)", pop: "radial-gradient(#1D1A22 1.2px,transparent 1.5px) 0 0/8px 8px,#FFC400" };
+  function moodField(ev){
+    var cur = ev.mood || "", auto = MOODS.find(function(x){ return x.re.test(ev.name || ""); });
+    return '<div class="field mood-f"><span>画面の雰囲気（着せ替え）' + (S.hasMood ? '' : '<em>※ データベースに項目を足すと選べるようになります</em>') + '</span><div class="mood-pick" role="radiogroup">'
+      + MOOD_OPTS.map(function(o){ return '<button type="button" role="radio" aria-checked="' + (o[0] === cur) + '" class="' + (o[0] === cur ? 'on' : '') + '" data-mood-pick="' + o[0] + '"' + (S.hasMood ? '' : ' disabled') + '><i style="background:' + MOOD_SW[o[0]] + '"></i><b>' + o[1] + '</b><small>' + (o[0] === "" ? (auto ? '今は「' + auto.name + '」' : '今は「パステル」') : o[2]) + '</small></button>'; }).join('')
+      + '</div><input type="hidden" id="ef-mood" value="' + esc(cur) + '"></div>';
+  }
   async function saveEvent(){
     var box = document.querySelector("[data-edit]"), id = box.dataset.edit;
     var g = function(k){ return document.getElementById("ef-" + k).value.trim(); };
     var payload = { name: g("name"), date: g("date"), time: g("time"), location: g("location"), schedule: document.getElementById("ef-schedule").value.replace(/\s+$/, ""), notes: document.getElementById("ef-notes").value.replace(/\s+$/, "") };
     if (!payload.name) { toast("行事名を入れてください"); return; }
+    if (S.hasMood) payload.mood = document.getElementById("ef-mood").value || null;
     var res = id === "new" ? await sb.from("ennokai_events").insert(Object.assign({ checkin_required: true }, payload)).select().single() : await sb.from("ennokai_events").update(payload).eq("id", id).select().single();
     if (res.error) { toast("保存できませんでした"); return; }
     toast("保存しました");
@@ -3135,7 +3199,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     { k: "summer", re: /BBQ|バーベキュー|夏|海|花火|ビア|キャンプ|プール|川/i, name: "夏" },
     { k: "wa", re: /祭|まつり|松茸|紅葉|月見|和食|茶会|初詣|秋|旅館|温泉/, name: "和" }
   ];
-  function moodOf(ev){ if (!ev) return "pastel"; var t = ev.name + " " + (ev.notes || ""), m = MOODS.find(function(x){ return x.re.test(ev.name); }) || MOODS.find(function(x){ return x.re.test(t); }); return m ? m.k : "pastel"; }
+  function moodOf(ev){ if (!ev) return "pastel"; if (ev.mood && /^(pastel|night|wa|sakura|summer|pop)$/.test(ev.mood)) return ev.mood; var t = ev.name + " " + (ev.notes || ""), m = MOODS.find(function(x){ return x.re.test(ev.name); }) || MOODS.find(function(x){ return x.re.test(t); }); return m ? m.k : "pastel"; }
   function setMood(k){
     if (document.body.dataset.mood === k && document.getElementById("moodFx").childNodes.length === (k === "sakura" ? 14 : k === "night" ? 40 : 0)) return;
     document.body.dataset.mood = k;
@@ -3162,6 +3226,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   document.addEventListener("click", async function(e){
     var t;
     if (seClick(e)) return;
+    if ((t = e.target.closest("[data-mood-pick]"))) { document.getElementById("ef-mood").value = t.dataset.moodPick; document.querySelectorAll("[data-mood-pick]").forEach(function(b){ var on = b === t; b.classList.toggle("on", on); b.setAttribute("aria-checked", on); }); var nm = document.getElementById("ef-name"); setMood(t.dataset.moodPick || moodOf({ name: nm ? nm.value : "" })); return; }
     if ((t = e.target.closest("[data-checkin]"))) { openCheckin(); return; }
     if ((t = e.target.closest("[data-cal]"))) {
       var d = +t.dataset.cal;
@@ -3216,7 +3281,8 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     if (e.target.closest("[data-saveev]")) { saveEvent(); return; }
     if (e.target.closest("[data-meet-save]")) { saveMeeting(); return; }
     if (e.target.closest("[data-meet-print]")) { window.print(); return; }
-    if ((t = e.target.closest("[data-sv-print]"))) { document.body.dataset.pmode = t.dataset.svPrint; setTimeout(function(){ window.print(); }, 30); return; }
+    if ((t = e.target.closest("[data-sv-pstyle]"))) { pStyle = t.dataset.svPstyle; try { localStorage.setItem("portal_print_style", pStyle); } catch (x) {} render(); return; }
+    if ((t = e.target.closest("[data-sv-print]"))) { document.body.dataset.pmode = t.dataset.svPrint; document.body.dataset.pstyle = pStyle; setTimeout(function(){ window.print(); }, 30); return; }
     if ((t = e.target.closest("[data-sv-var]"))) { svVariant = t.dataset.svVar; try { localStorage.setItem("portal_sched_variant", svVariant); } catch (x) {} render(); return; }
     if (e.target.closest("[data-todo-add]")) { readMeetForm(); meetDraft.todos = meetDraft.todos || []; meetDraft.todos.push({ text: "", who: "", done: false }); render(); var ins = document.querySelectorAll("[data-todo-text]"); if (ins.length) ins[ins.length - 1].focus(); return; }
     if ((t = e.target.closest("[data-todo-done]"))) { readMeetForm(); var td = meetDraft.todos[+t.dataset.todoDone]; td.done = !td.done; render(); return; }
