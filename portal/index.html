@@ -85,31 +85,82 @@ h1.page{font-family:var(--font-title);font-size:1.75rem;font-weight:900;margin:.
 .pill.wait{background:var(--lemon-soft);color:#8A6508}
 
 /* ---------- calendar ---------- */
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
 .cal-head h2{font-family:var(--font-title);font-size:1.375rem;font-weight:900;margin:0}
-.cal-nav{display:flex;gap:6px}
-.cal-nav button{width:40px;height:40px;border-radius:14px;border:none;background:var(--card);box-shadow:var(--shadow);cursor:pointer;font-size:1.0625rem}
-.cal{padding:14px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
-.day{min-width:0}
-.dow{text-align:center;font-size:.6875rem;font-weight:800;color:var(--muted);padding:4px 0}
-.dow.sun{color:#C9415E}.dow.sat{color:#2F6FC4}
-.day{min-height:84px;border-radius:16px;padding:6px;background:var(--card2);border:1px solid transparent;display:flex;flex-direction:column;gap:4px}
-.day.out{opacity:.35}
-.day.today{border-color:var(--peach);background:#FFF1EC}
-.day .n{font-size:.75rem;font-weight:800}
-.day.sun .n{color:#C9415E}.day.sat .n{color:#2F6FC4}
-.chip{display:block;font-size:.6875rem;font-weight:800;line-height:1.3;padding:4px 6px;border-radius:9px;text-decoration:none;color:var(--ink);background:var(--soft,#FFE3DD);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.chip.mt{background:var(--card);border:1.5px dashed var(--dot,#A08CF0);color:#6B6274;padding:2px 6px}
-.chip.mt .ic{width:12px;height:12px;vertical-align:-2px;color:var(--dot,#A08CF0)}
-.cal-legend{display:flex;gap:16px;justify-content:flex-end;margin-top:10px;font-size:.75rem;font-weight:800;color:var(--muted)}
+.cal-head h2 small{display:block;font-family:inherit;font-size:.75rem;font-weight:800;color:var(--muted);letter-spacing:.04em;margin-top:2px}
+.cal-nav{display:flex;gap:8px}
+.cal-nav button{min-width:40px;height:40px;padding:0 12px;border-radius:14px;border:none;background:var(--card);color:var(--ink);box-shadow:var(--shadow);cursor:pointer;font-size:1.0625rem;font-weight:800;font-family:inherit}
+.cal-nav button[data-cal="0"]{font-size:.8125rem}
+.cal{padding:12px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dow{text-align:center;font-size:.75rem;font-weight:800;color:var(--muted);padding:4px 0}
+.dow.sun{color:#E0577A}.dow.sat{color:#4A86D8}
+.day{min-width:0;min-height:88px;border-radius:12px;padding:4px;background:var(--card2);border:1.5px solid transparent;display:flex;flex-direction:column;gap:4px;position:relative}
+.day.has{background:color-mix(in srgb,var(--dot,#FF9A8B) 16%,var(--card2));border-color:color-mix(in srgb,var(--dot,#FF9A8B) 45%,transparent);cursor:pointer}
+.day.out{opacity:.3}
+.day.past:not(.today){opacity:.6}
+.day.today{border-color:var(--peach)}
+.day .n{font-size:.75rem;font-weight:800;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;line-height:1}
+.day.today .n{background:var(--peach);color:#fff}
+.day.sun .n{color:#E0577A}.day.sat .n{color:#4A86D8}
+.day.today.sun .n,.day.today.sat .n{color:#fff}
+.chip{display:flex;align-items:flex-start;gap:4px;font-size:.75rem;font-weight:800;line-height:1.3;padding:4px 6px;border-radius:8px;text-decoration:none;color:var(--ink);background:color-mix(in srgb,var(--dot,#FF9A8B) 30%,var(--card));box-shadow:inset 3px 0 0 var(--dot,#FF9A8B);min-width:0}
+.chip .art{width:14px;height:14px;flex:none;color:color-mix(in srgb,var(--dot) 70%,var(--ink));margin-top:1px}
+.chip .tx{min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
+.chip.mt{background:transparent;border:1.5px dashed var(--dot,#A08CF0);box-shadow:none;color:var(--ink2,var(--ink));padding:2px 4px;font-size:.6875rem}
+.chip.mt .ic{width:12px;height:12px;flex:none;margin-top:1px;color:var(--dot,#A08CF0)}
+.cal-legend{display:flex;gap:16px;justify-content:flex-end;margin-top:12px;font-size:.75rem;font-weight:800;color:var(--muted)}
 .cal-legend span{display:inline-flex;align-items:center;gap:6px}
 .cal-legend i{display:inline-block;width:18px;height:10px;border-radius:5px}
-.lg-ev{background:#FFE3DD}
-.lg-mt{background:var(--card);border:1.5px dashed #A08CF0}
+.lg-ev{background:color-mix(in srgb,#FF9A8B 45%,var(--card));box-shadow:inset 3px 0 0 #FF9A8B}
+.lg-mt{border:1.5px dashed #A08CF0}
+/* この月の予定（一覧） */
+.agc{margin-top:16px;padding:16px}
+.agc h3{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:1.0625rem}
+.agc h3 .ic{width:20px;height:20px;color:var(--peach)}
+.agc h3 .cnt{margin-left:auto;font-size:.75rem;font-weight:800;color:var(--muted)}
+.ag-g{display:grid;grid-template-columns:48px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid color-mix(in srgb,var(--ink) 10%,transparent);scroll-margin:96px;border-radius:12px;transition:background-color .2s}
+.ag-g:first-of-type{border-top:none;padding-top:0}
+.ag-g.flash{animation:agFlash 1.4s ease-out}
+@keyframes agFlash{0%,40%{background:color-mix(in srgb,var(--peach) 22%,transparent)}100%{background:transparent}}
+.ag-date{text-align:center;line-height:1.1;padding-top:4px}
+.ag-date b{display:block;font-size:1.75rem;font-weight:900;font-family:var(--font-title)}
+.ag-date small{font-size:.75rem;font-weight:800;color:var(--muted)}
+.ag-date.sun b,.ag-date.sun small{color:#E0577A}.ag-date.sat b,.ag-date.sat small{color:#4A86D8}
+.ag-items{display:flex;flex-direction:column;gap:8px;min-width:0}
+.ag-it{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;text-decoration:none;color:var(--ink);background:color-mix(in srgb,var(--dot,#FF9A8B) 18%,var(--card));border:1.5px solid color-mix(in srgb,var(--dot,#FF9A8B) 40%,transparent);min-height:56px;transition:transform .15s ease-out}
+.ag-it:active{transform:scale(.98)}
+.ag-it.mt{background:transparent;border-style:dashed}
+.ag-it.past{opacity:.6}
+.ag-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--dot,#FF9A8B);color:#fff}
+.ag-ic .art{width:26px;height:26px}
+.ag-ic .ic{width:22px;height:22px}
+.ag-it.mt .ag-ic{background:color-mix(in srgb,var(--dot,#A08CF0) 22%,var(--card));color:var(--dot,#A08CF0)}
+.ag-tx{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
+.ag-k{font-size:.6875rem;font-weight:800;color:var(--muted);letter-spacing:.04em}
+.ag-t{font-size:1rem;font-weight:900;line-height:1.3;word-break:auto-phrase}
+.ag-m{font-size:.75rem;font-weight:700;color:var(--ink2,var(--muted));display:flex;flex-wrap:wrap;gap:4px 12px}
+.ag-m .ic{width:14px;height:14px;vertical-align:-2px;margin-right:2px}
+.ag-badge{flex:none;font-size:.75rem;font-weight:900;padding:4px 8px;border-radius:999px;background:var(--card);color:var(--ink);white-space:nowrap}
+.ag-badge.hot{background:var(--peach);color:#fff}
+.ag-empty{text-align:center;padding:16px 0 4px;color:var(--muted);font-weight:700;font-size:.875rem}
+.ag-empty button{margin-top:12px;min-height:44px;padding:8px 16px;border-radius:14px;border:none;background:var(--card2);color:var(--ink);font:inherit;font-weight:800;cursor:pointer;box-shadow:var(--shadow)}
+.ag-empty button .ic{width:16px;height:16px;vertical-align:-3px;margin-left:4px}
+@media (max-width:620px){
+  .cal{padding:8px}.cal-grid{gap:3px}
+  .day{min-height:72px;padding:2px;border-radius:10px;gap:2px;border-width:1px}
+  .day .n{width:22px;height:22px;font-size:.6875rem}
+  .chip{padding:2px 1px 2px 3px;font-size:.6875rem;line-height:1.25;letter-spacing:-.02em;border-radius:6px;box-shadow:inset 2px 0 0 var(--dot,#FF9A8B)}
+  .chip .tx{-webkit-line-clamp:3}
+  .cal .chip .art{display:none}
+  .chip.mt{padding:1px;font-size:.6875rem;justify-content:center;text-align:center}
+  .chip.mt .ic{display:none}
+  .ag-g{grid-template-columns:40px minmax(0,1fr);gap:8px}
+  .ag-date b{font-size:1.5rem}
+  .ag-it{gap:10px;padding:10px}
+}
 .tbd{margin-top:14px;padding:16px 16px}
 .tbd h3{margin:0 0 8px;font-size:.9375rem}
-@media (max-width:620px){.day{min-height:62px;padding:4px}.chip{font-size:0;padding:0;height:8px;border-radius:4px;background:var(--dot,#FF9A8B)}.chip.mt{background:var(--card);border:1.5px dashed var(--dot,#A08CF0);height:8px;padding:0}.chip.mt .ic{display:none}}
 
 /* ---------- event detail ---------- */
 .back{display:inline-flex;align-items:center;gap:4px;text-decoration:none;font-weight:800;font-size:.8125rem;color:var(--muted);margin-bottom:10px}
@@ -946,8 +997,6 @@ select:focus,input:focus{outline:none;border-color:var(--lav);box-shadow:0 0 0 4
   .top-admin,.btn.sm,.seg button{min-height:40px}
   .top-admin{padding:8px 14px}
 }
-/* スマホのカレンダー: 予定の小さな点は見た目そのまま、押せる範囲だけ上下に広げる */
-@media (max-width:620px){.chip{position:relative;overflow:visible;color:transparent}.chip>*{display:none}.chip::after{content:"";position:absolute;inset:-6px -2px}}
 
 /* ---------- スケジュール（専用ページ・A4で印刷） ---------- */
 .sv-head{position:relative;overflow:hidden;border-radius:24px;padding:24px 24px;color:#fff;background:linear-gradient(130deg,var(--c1),var(--c2));box-shadow:var(--shadow)}
@@ -1710,21 +1759,54 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       var p = m.date.split("-");
       if (+p[0] === calY && +p[1] === calM) (meetByDay[+p[2]] = meetByDay[+p[2]] || []).push(m);
     });
-    var today = new Date();
-    var h = '<div class="view"><div class="cal-head"><h2>' + calY + '年 ' + calM + '月</h2><div class="cal-nav"><button data-cal="-1" aria-label="前の月">‹</button><button data-cal="0" aria-label="今月">●</button><button data-cal="1" aria-label="次の月">›</button></div></div>';
-    h += '<div class="card cal"><div class="cal-grid">' + ["日","月","火","水","木","金","土"].map(function(w, k){ return '<div class="dow' + (k === 0 ? ' sun' : k === 6 ? ' sat' : '') + '">' + w + '</div>'; }).join("");
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var WD = ["日","月","火","水","木","金","土"];
+    function dAway(d){ return Math.round((new Date(calY, calM - 1, d) - today) / 86400000); }
+    function hm(t){ var x = half(t || "").match(/\d{1,2}[:：]\d{2}/); return x ? x[0].replace("：", ":") : ""; }
+    function mtHref(m){ var ev = evById[m.event_id]; return isAdmin() ? '#/meeting/' + m.id : (ev ? '#/event/' + ev.id : '#/'); }
+    var nItems = 0; Object.keys(byDay).forEach(function(k){ nItems += byDay[k].length; }); Object.keys(meetByDay).forEach(function(k){ nItems += meetByDay[k].length; });
+    var h = '<div class="view"><div class="cal-head"><h2>' + calY + '年 ' + calM + '月<small>' + (nItems ? 'この月の予定 ' + nItems + '件' : 'この月の予定はありません') + '</small></h2><div class="cal-nav"><button data-cal="-1" aria-label="前の月">‹</button><button data-cal="0" aria-label="今月">今月</button><button data-cal="1" aria-label="次の月">›</button></div></div>';
+    h += '<div class="card cal"><div class="cal-grid">' + WD.map(function(w, k){ return '<div class="dow' + (k === 0 ? ' sun' : k === 6 ? ' sat' : '') + '">' + w + '</div>'; }).join("");
     cells.forEach(function(c, k){
-      var isToday = !c.out && today.getFullYear() === calY && today.getMonth() + 1 === calM && today.getDate() === c.d;
-      h += '<div class="day' + (c.out ? ' out' : '') + (isToday ? ' today' : '') + (k % 7 === 0 ? ' sun' : k % 7 === 6 ? ' sat' : '') + '"><span class="n">' + c.d + '</span>'
-        + (!c.out && byDay[c.d] ? byDay[c.d].map(function(ev){ var th = theme(ev); return '<a class="chip" href="#/event/' + ev.id + '" style="--soft:' + th.soft + ';--dot:' + th.dot + '">' + th.e + ' ' + esc(ev.name) + '</a>'; }).join("") : '')
-        + (!c.out && meetByDay[c.d] ? meetByDay[c.d].map(function(m){
-            var ev = evById[m.event_id], th = ev ? theme(ev) : { dot: "#A08CF0" };
-            var href = isAdmin() ? '#/meeting/' + m.id : (ev ? '#/event/' + ev.id : '#/');
-            var hm = half(m.time || "").match(/\d{1,2}[:：]\d{2}/);
-            return '<a class="chip mt" href="' + href + '" style="--dot:' + th.dot + '" title="打ち合わせ' + (ev ? '（' + esc(ev.name) + '）' : '') + (m.time ? '　' + esc(m.time) : '') + (m.place ? '　' + esc(m.place) : '') + '">' + I('chat') + ' 打合せ' + (hm ? ' ' + hm[0].replace("：", ":") : '') + '</a>';
-          }).join("") : '') + '</div>';
+      var away = c.out ? null : dAway(c.d), evs = (!c.out && byDay[c.d]) || [], mts = (!c.out && meetByDay[c.d]) || [];
+      var has = evs.length || mts.length, firstDot = evs.length ? theme(evs[0]).dot : (mts.length ? ((evById[mts[0].event_id] && theme(evById[mts[0].event_id]).dot) || "#A08CF0") : "");
+      h += '<div class="day' + (c.out ? ' out' : '') + (away === 0 ? ' today' : '') + (away !== null && away < 0 ? ' past' : '') + (has ? ' has' : '') + (k % 7 === 0 ? ' sun' : k % 7 === 6 ? ' sat' : '') + '"' + (has ? ' data-cal-day="' + c.d + '" style="--dot:' + firstDot + '"' : '') + '><span class="n">' + c.d + '</span>'
+        + evs.map(function(ev){ var th = theme(ev); return '<a class="chip" href="#/event/' + ev.id + '" style="--dot:' + th.dot + '" title="' + esc(ev.name) + '">' + th.e + '<span class="tx">' + esc(ev.name) + '</span></a>'; }).join("")
+        + mts.map(function(m){
+            var ev = evById[m.event_id], th = ev ? theme(ev) : { dot: "#A08CF0" }, t = hm(m.time);
+            return '<a class="chip mt" href="' + mtHref(m) + '" style="--dot:' + th.dot + '" title="打ち合わせ' + (ev ? '（' + esc(ev.name) + '）' : '') + (m.time ? '　' + esc(m.time) : '') + (m.place ? '　' + esc(m.place) : '') + '">' + I('chat') + '<span class="tx">打合せ' + (t ? ' ' + t : '') + '</span></a>';
+          }).join("") + '</div>';
     });
     h += '</div><div class="cal-legend"><span><i class="lg-ev"></i>行事</span><span><i class="lg-mt"></i>打ち合わせ</span></div></div>';
+    // この月の予定を日付順の一覧で
+    var days2 = Object.keys(byDay).concat(Object.keys(meetByDay)).map(Number).filter(function(d, i, a){ return a.indexOf(d) === i; }).sort(function(x, y){ return x - y; });
+    function badge(away){ return away === 0 ? '<span class="ag-badge hot">今日</span>' : away === 1 ? '<span class="ag-badge hot">明日</span>' : away > 0 ? '<span class="ag-badge' + (away <= 7 ? ' hot' : '') + '">あと' + away + '日</span>' : '<span class="ag-badge">終了</span>'; }
+    h += '<div class="card agc"><h3>' + I('note') + calM + '月の予定<span class="cnt">' + nItems + '件</span></h3>';
+    if (days2.length) {
+      days2.forEach(function(d){
+        var dow = new Date(calY, calM - 1, d).getDay(), away = dAway(d);
+        h += '<div class="ag-g" id="ag-' + d + '"><div class="ag-date' + (dow === 0 ? ' sun' : dow === 6 ? ' sat' : '') + '"><b>' + d + '</b><small>' + WD[dow] + '</small></div><div class="ag-items">';
+        (byDay[d] || []).forEach(function(ev){
+          var th = theme(ev), cn = counts(ev);
+          h += '<a class="ag-it' + (away < 0 ? ' past' : '') + '" href="#/event/' + ev.id + '" style="--dot:' + th.dot + '"><span class="ag-ic">' + th.e + '</span><span class="ag-tx"><span class="ag-k">行事</span><span class="ag-t">' + esc(ev.name) + '</span><span class="ag-m">'
+            + (ev.time ? '<span>' + I('clock') + esc(ev.time) + '</span>' : '') + (ev.location ? '<span>' + I('pin') + esc(ev.location) + '</span>' : '') + (cn.total ? '<span>' + I('users') + '出席 ' + cn.present + '名</span>' : '')
+            + '</span></span>' + badge(away) + '</a>';
+        });
+        (meetByDay[d] || []).forEach(function(m){
+          var ev = evById[m.event_id], th = ev ? theme(ev) : { dot: "#A08CF0" };
+          h += '<a class="ag-it mt' + (away < 0 ? ' past' : '') + '" href="' + mtHref(m) + '" style="--dot:' + th.dot + '"><span class="ag-ic">' + I('chat') + '</span><span class="ag-tx"><span class="ag-k">打ち合わせ</span><span class="ag-t">' + (ev ? esc(ev.name) + 'の打ち合わせ' : '打ち合わせ') + '</span><span class="ag-m">'
+            + (m.time ? '<span>' + I('clock') + esc(m.time) + '</span>' : '') + (m.place ? '<span>' + I('pin') + esc(m.place) + '</span>' : '')
+            + '</span></span>' + badge(away) + '</a>';
+        });
+        h += '</div></div>';
+      });
+    } else {
+      // 次に予定がある月へ飛べるボタン
+      var cur = calY * 100 + calM, nx = null;
+      S.events.forEach(function(ev){ var pd = parseDate(ev.date); if (pd && pd.exact && daysUntil(pd) >= 0) { var k2 = pd.y * 100 + pd.m; if (k2 !== cur && (!nx || pd.y * 10000 + pd.m * 100 + pd.d < nx.k)) nx = { k: pd.y * 10000 + pd.m * 100 + pd.d, pd: pd, ev: ev }; } });
+      h += '<div class="ag-empty">この月の予定はありません' + (nx ? '<br><button data-cal-go="' + nx.pd.y + '-' + nx.pd.m + '">次の予定：' + nx.pd.m + '月' + nx.pd.d + '日 ' + esc(nx.ev.name) + I('arrow') + '</button>' : '') + '</div>';
+    }
+    h += '</div>';
     if (monthOnly.length) h += '<div class="card tbd"><h3>' + I('calendar') + ' ' + calM + '月中（日にち調整中）</h3><div class="list">' + monthOnly.map(evCard).join("") + '</div></div>';
     if (tbd.length) h += '<div class="card tbd"><h3>' + I('hourglass') + ' 日程調整中</h3><div class="list">' + tbd.map(evCard).join("") + '</div></div>';
     return h + '</div>';
@@ -3228,6 +3310,8 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     if (seClick(e)) return;
     if ((t = e.target.closest("[data-mood-pick]"))) { document.getElementById("ef-mood").value = t.dataset.moodPick; document.querySelectorAll("[data-mood-pick]").forEach(function(b){ var on = b === t; b.classList.toggle("on", on); b.setAttribute("aria-checked", on); }); var nm = document.getElementById("ef-name"); setMood(t.dataset.moodPick || moodOf({ name: nm ? nm.value : "" })); return; }
     if ((t = e.target.closest("[data-checkin]"))) { openCheckin(); return; }
+    if ((t = e.target.closest("[data-cal-go]"))) { var g = t.dataset.calGo.split("-"); calY = +g[0]; calM = +g[1]; render(); return; }
+    if (!e.target.closest("a") && (t = e.target.closest("[data-cal-day]"))) { var gEl = document.getElementById("ag-" + t.dataset.calDay); if (gEl) { gEl.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }); gEl.classList.remove("flash"); void gEl.offsetWidth; gEl.classList.add("flash"); } return; }
     if ((t = e.target.closest("[data-cal]"))) {
       var d = +t.dataset.cal;
       if (d === 0) { var n = new Date(); calY = n.getFullYear(); calM = n.getMonth() + 1; }
