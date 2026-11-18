@@ -114,6 +114,16 @@ h1.page{font-family:var(--font-title);font-size:1.75rem;font-weight:900;margin:.
 .cal-legend i{display:inline-block;width:18px;height:10px;border-radius:5px}
 .lg-ev{background:color-mix(in srgb,#FF9A8B 45%,var(--card));box-shadow:inset 3px 0 0 #FF9A8B}
 .lg-mt{border:1.5px dashed #A08CF0}
+/* カレンダー画面は横幅いっぱい・高さも画面に合わせる */
+main:has(.calv){max-width:1600px}
+.calv .day{min-height:max(88px,calc((100dvh - 330px) / 6))}
+@media (min-width:1100px){
+  .calv{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px;align-items:start}
+  .cal-side{position:sticky;top:88px;max-height:calc(100dvh - 200px);overflow:auto;border-radius:24px}
+  .cal-side .agc{margin-top:0}
+  .calv .cal-head{margin-bottom:12px}
+}
+@media (min-width:1400px){.calv{grid-template-columns:minmax(0,1fr) 400px}}
 /* この月の予定（一覧） */
 .agc{margin-top:16px;padding:16px}
 .agc h3{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:1.0625rem}
@@ -147,7 +157,10 @@ h1.page{font-family:var(--font-title);font-size:1.75rem;font-weight:900;margin:.
 .ag-empty button{margin-top:12px;min-height:44px;padding:8px 16px;border-radius:14px;border:none;background:var(--card2);color:var(--ink);font:inherit;font-weight:800;cursor:pointer;box-shadow:var(--shadow)}
 .ag-empty button .ic{width:16px;height:16px;vertical-align:-3px;margin-left:4px}
 @media (max-width:620px){
-  .cal{padding:8px}.cal-grid{gap:3px}
+  main:has(.calv){padding-left:8px;padding-right:8px}
+  .calv .cal-head{padding:0 8px}
+  .cal{padding:6px 4px}.cal-grid{gap:3px}
+  .calv .day{min-height:max(72px,calc((100dvh - 330px) / 6))}
   .day{min-height:72px;padding:2px;border-radius:10px;gap:2px;border-width:1px}
   .day .n{width:22px;height:22px;font-size:.6875rem}
   .chip{padding:2px 1px 2px 3px;font-size:.6875rem;line-height:1.25;letter-spacing:-.02em;border-radius:6px;box-shadow:inset 2px 0 0 var(--dot,#FF9A8B)}
@@ -1765,7 +1778,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     function hm(t){ var x = half(t || "").match(/\d{1,2}[:：]\d{2}/); return x ? x[0].replace("：", ":") : ""; }
     function mtHref(m){ var ev = evById[m.event_id]; return isAdmin() ? '#/meeting/' + m.id : (ev ? '#/event/' + ev.id : '#/'); }
     var nItems = 0; Object.keys(byDay).forEach(function(k){ nItems += byDay[k].length; }); Object.keys(meetByDay).forEach(function(k){ nItems += meetByDay[k].length; });
-    var h = '<div class="view"><div class="cal-head"><h2>' + calY + '年 ' + calM + '月<small>' + (nItems ? 'この月の予定 ' + nItems + '件' : 'この月の予定はありません') + '</small></h2><div class="cal-nav"><button data-cal="-1" aria-label="前の月">‹</button><button data-cal="0" aria-label="今月">今月</button><button data-cal="1" aria-label="次の月">›</button></div></div>';
+    var h = '<div class="view calv"><div class="cal-main"><div class="cal-head"><h2>' + calY + '年 ' + calM + '月<small>' + (nItems ? 'この月の予定 ' + nItems + '件' : 'この月の予定はありません') + '</small></h2><div class="cal-nav"><button data-cal="-1" aria-label="前の月">‹</button><button data-cal="0" aria-label="今月">今月</button><button data-cal="1" aria-label="次の月">›</button></div></div>';
     h += '<div class="card cal"><div class="cal-grid">' + WD.map(function(w, k){ return '<div class="dow' + (k === 0 ? ' sun' : k === 6 ? ' sat' : '') + '">' + w + '</div>'; }).join("");
     cells.forEach(function(c, k){
       var away = c.out ? null : dAway(c.d), evs = (!c.out && byDay[c.d]) || [], mts = (!c.out && meetByDay[c.d]) || [];
@@ -1777,7 +1790,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
             return '<a class="chip mt" href="' + mtHref(m) + '" style="--dot:' + th.dot + '" title="打ち合わせ' + (ev ? '（' + esc(ev.name) + '）' : '') + (m.time ? '　' + esc(m.time) : '') + (m.place ? '　' + esc(m.place) : '') + '">' + I('chat') + '<span class="tx">打合せ' + (t ? ' ' + t : '') + '</span></a>';
           }).join("") + '</div>';
     });
-    h += '</div><div class="cal-legend"><span><i class="lg-ev"></i>行事</span><span><i class="lg-mt"></i>打ち合わせ</span></div></div>';
+    h += '</div><div class="cal-legend"><span><i class="lg-ev"></i>行事</span><span><i class="lg-mt"></i>打ち合わせ</span></div></div></div><div class="cal-side">';
     // この月の予定を日付順の一覧で
     var days2 = Object.keys(byDay).concat(Object.keys(meetByDay)).map(Number).filter(function(d, i, a){ return a.indexOf(d) === i; }).sort(function(x, y){ return x - y; });
     function badge(away){ return away === 0 ? '<span class="ag-badge hot">今日</span>' : away === 1 ? '<span class="ag-badge hot">明日</span>' : away > 0 ? '<span class="ag-badge' + (away <= 7 ? ' hot' : '') + '">あと' + away + '日</span>' : '<span class="ag-badge">終了</span>'; }
@@ -1809,7 +1822,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     h += '</div>';
     if (monthOnly.length) h += '<div class="card tbd"><h3>' + I('calendar') + ' ' + calM + '月中（日にち調整中）</h3><div class="list">' + monthOnly.map(evCard).join("") + '</div></div>';
     if (tbd.length) h += '<div class="card tbd"><h3>' + I('hourglass') + ' 日程調整中</h3><div class="list">' + tbd.map(evCard).join("") + '</div></div>';
-    return h + '</div>';
+    return h + '</div></div>';
   }
 
   // 当日の流れに「【ダブルス】10:05〜…」のような印付きの行があれば、選んだパターン（なければ最初の印）の行だけを使う
