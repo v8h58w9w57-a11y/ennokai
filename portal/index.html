@@ -1460,6 +1460,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
 </style>
 </head>
 <body>
+<script>try{var m0=localStorage.getItem("portal_mood");if(m0)document.body.dataset.mood=m0;}catch(e){}</script>
 <div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div id="moodFx" class="mood-fx" aria-hidden="true"></div><div class="mood-deco" aria-hidden="true"></div>
 <header class="top">
   <a class="logo" href="#/"><span class="logo-mark"><svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12.5" cy="14" r="6"/><circle cx="19.5" cy="14" r="6"/><path d="M16 22v4"/></svg></span><span><b>親睦会</b><small>FRIENDSHIP CLUB</small></span></a>
@@ -3136,8 +3137,9 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   ];
   function moodOf(ev){ if (!ev) return "pastel"; var t = ev.name + " " + (ev.notes || ""), m = MOODS.find(function(x){ return x.re.test(ev.name); }) || MOODS.find(function(x){ return x.re.test(t); }); return m ? m.k : "pastel"; }
   function setMood(k){
-    if (document.body.dataset.mood === k) return;
+    if (document.body.dataset.mood === k && document.getElementById("moodFx").childNodes.length === (k === "sakura" ? 14 : k === "night" ? 40 : 0)) return;
     document.body.dataset.mood = k;
+    try { localStorage.setItem("portal_mood", k); } catch (e) {}
     var tc = { pastel: "#FFF7F2", night: "#120E1F", wa: "#F3ECDF", sakura: "#FFF4F7", summer: "#EEF9FF", pop: "#FFF8E1" }[k];
     var mt = document.querySelector('meta[name="theme-color"]'); if (mt) mt.setAttribute("content", tc);
     var fx2 = document.getElementById("moodFx");
