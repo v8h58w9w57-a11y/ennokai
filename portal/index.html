@@ -3253,14 +3253,13 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     var doneN = inEv.length - open.length, pct = inEv.length ? Math.round(doneN / inEv.length * 100) : 0;
     var defEv = tkEv || (upcoming()[0] || {}).id || "";
     var nx = S.events.find(function(e){ return e.id === defEv; }), nxPd = nx ? parseDate(nx.date) : null, eve = nxPd && nxPd.exact ? isoOf(new Date(nxPd.y, nxPd.m - 1, nxPd.d - 1)) : "";
-    var names = []; S.roster.forEach(function(p){ if (names.indexOf(p.name) < 0) names.push(p.name); });
     var h = '<div class="tk-sum card"><div class="tk-num"><b>' + open.length + '</b><span>残り</span></div><div class="tk-num' + (late ? ' late' : '') + '"><b>' + late + '</b><span>期限切れ</span></div><div class="tk-num"><b>' + week + '</b><span>7日以内</span></div>'
       + '<div class="tk-prog"><span>完了 ' + doneN + ' / ' + inEv.length + '</span><i><em style="width:' + pct + '%"></em></i></div></div>';
     h += '<div class="tk-chips" role="tablist"><button class="' + (!tkEv ? 'on' : '') + '" data-tk-ev="">すべての行事</button>' + evs.map(function(e){ var th = theme(e), n = all.filter(function(x){ return x.ev === e.id && !x.done; }).length; return '<button class="' + (tkEv === e.id ? 'on' : '') + '" data-tk-ev="' + e.id + '" style="--dot:' + th.dot + '"><i></i>' + esc(e.name) + (n ? '<small>' + n + '</small>' : '') + '</button>'; }).join("") + '</div>';
     // 追加フォーム
     h += '<div class="card tk-add"><input type="text" id="tkTitle" placeholder="やることを入力（例：景品を買う）" autocomplete="off">'
       + '<div class="tk-add-row"><label>行事<select id="tkEvSel"><option value="">（行事なし）</option>' + evs.map(function(e){ return '<option value="' + e.id + '"' + (e.id === defEv ? ' selected' : '') + '>' + esc(e.name) + '</option>'; }).join("") + '</select></label>'
-      + '<label>担当<input type="text" id="tkWhoIn" list="tkNames" placeholder="だれが"></label><datalist id="tkNames">' + names.map(function(n){ return '<option value="' + esc(n) + '">'; }).join("") + '</datalist>'
+      + '<label>担当<select id="tkWhoIn">' + tkWhoOpts("") + '</select></label>'
       + '<label>期限<input type="date" id="tkDue"></label></div>'
       + '<div class="tk-quick"><span>期限：</span><button data-tk-q="' + today + '">今日</button><button data-tk-q="' + isoOf(new Date(Date.now() + 86400000)) + '">明日</button><button data-tk-q="' + isoOf(new Date(Date.now() + 7 * 86400000)) + '">1週間後</button>' + (eve && eve >= today ? '<button data-tk-q="' + eve + '">行事の前日</button>' : '') + '<button data-tk-q="">なし</button>'
       + '<button class="btn primary sm" data-tk-add>' + I('plus') + ' 追加</button></div></div>';
@@ -3284,11 +3283,17 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     if (!any) h += '<div class="card empty tk-empty">' + (tkTab === "done" ? 'まだ完了したタスクはありません' : 'やることはありません 🎉') + '</div>';
     return h + '</div>';
   }
+  // 担当者は決まった3人から選ぶ（前に入れた別の名前はそのまま残す）
+  var TK_WHO = ["髙橋", "齊藤", "伊藤"];
+  function tkWhoOpts(cur){
+    var list = TK_WHO.slice(); if (cur && list.indexOf(cur) < 0) list.push(cur);
+    return '<option value="">（未定）</option>' + list.map(function(n){ return '<option value="' + esc(n) + '"' + (n === cur ? ' selected' : '') + '>' + esc(n) + '</option>'; }).join("");
+  }
   function tkRow(x){
     var ev = S.events.find(function(e){ return e.id === x.ev; }), th = ev ? theme(ev) : null, du = dueLabel(x.due, x.raw);
     if (tkEdit === x.id && x.kind === "task") {
       return '<div class="tk-row editing card"><input type="text" id="tkEtTitle" value="' + esc(x.title) + '"><div class="tk-add-row"><label>行事<select id="tkEtEv"><option value="">（行事なし）</option>' + sortedEvents().map(function(e){ return '<option value="' + e.id + '"' + (e.id === x.ev ? ' selected' : '') + '>' + esc(e.name) + '</option>'; }).join("") + '</select></label>'
-        + '<label>担当<input type="text" id="tkEtWho" list="tkNames" value="' + esc(x.who) + '"></label><label>期限<input type="date" id="tkEtDue" value="' + esc(x.due || '') + '"></label></div>'
+        + '<label>担当<select id="tkEtWho">' + tkWhoOpts(x.who) + '</select></label><label>期限<input type="date" id="tkEtDue" value="' + esc(x.due || '') + '"></label></div>'
         + '<label class="tk-note">メモ<textarea id="tkEtNote" rows="2">' + esc(x.note) + '</textarea></label>'
         + '<div class="tk-ed-act"><button class="btn danger sm" data-tk-del="' + x.id + '">' + I('trash') + ' 削除</button><span></span><button class="btn sm" data-tk-cancel>やめる</button><button class="btn primary sm" data-tk-save="' + x.id + '">' + I('save') + ' 保存</button></div></div>';
     }
