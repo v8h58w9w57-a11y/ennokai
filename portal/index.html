@@ -2353,6 +2353,42 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
 .tk-row.editing{flex-direction:column;align-items:stretch;padding:16px;border-left-width:4px}
 .tk-ed-act{display:flex;gap:8px;align-items:center}.tk-ed-act span{flex:1}
 .tk-empty{margin-top:16px;text-align:center;padding:32px}
+
+/* ---------- ホームの準備の状況・打ち合わせの入力補助 ---------- */
+.hm-tk{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.hm-sum{display:grid;grid-template-columns:repeat(3,auto) 1fr;gap:16px;align-items:center}
+.hm-list{display:flex;flex-direction:column}
+.hm-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px dashed var(--line)}
+.hm-row .tk-chk{border-color:var(--dot,#D6CEDB)}
+.hm-t{flex:1;min-width:0;text-decoration:none;color:var(--ink)}
+.hm-t b{display:block;font-size:.9375rem;font-weight:900;line-height:1.4;word-break:auto-phrase}
+.hm-t small{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px;font-size:.75rem;font-weight:800;color:var(--muted)}
+.hm-t small span{display:inline-flex;align-items:center;gap:4px}
+.hm-t small .ic{width:12px;height:12px}
+.hm-more{align-self:flex-end;font-size:.8125rem;font-weight:800;color:var(--lav);text-decoration:none;padding:8px 0 0}
+.hm-none{margin:0;font-size:.875rem;font-weight:700;color:var(--muted)}
+.hm-meet{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:16px;background:var(--card2);color:var(--ink);text-decoration:none}
+.hm-meet>.ic{width:22px;height:22px;color:var(--peach);flex:none}
+.hm-meet span{flex:1;min-width:0;display:flex;flex-direction:column}
+.hm-meet small{font-size:.75rem;font-weight:800;color:var(--muted)}
+.hm-meet b{font-size:1rem;font-weight:900}
+.hm-meet em{font-style:normal;font-size:.8125rem;font-weight:700;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hm-meet i{font-style:normal;font-size:1.375rem;color:var(--muted)}
+@media (max-width:560px){.hm-sum{grid-template-columns:repeat(3,1fr)}.hm-sum .tk-prog{grid-column:1/-1}.hm-tk{padding:16px}}
+.mf-fw{display:flex;flex-direction:column;gap:8px;min-width:0}
+.mf-chips{display:flex;flex-wrap:wrap;gap:6px}
+.mf-chips button{display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:4px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:.75rem;font-weight:800;cursor:pointer}
+.mf-chips button .ic{width:14px;height:14px}
+.mf-chips button.on{background:var(--inv);color:var(--inv-ink);border-color:var(--inv)}
+.mf-carry{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:var(--card);border:1.5px dashed #F3D9B8;font-size:.8125rem;font-weight:700}
+.mf-carry .ic{width:16px;height:16px;color:#D98A2B}
+.mf-carry span{flex:1;min-width:0}
+.mf-tip{margin:0;font-size:.75rem;font-weight:700;color:var(--muted)}
+.todo-row select.todo-who{width:110px;flex:none;min-height:40px;padding:0 8px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);font:inherit;font-size:.875rem;font-weight:700;color:var(--ink)}
+.todo-row .todo-due[type=date]{width:150px;height:40px}
+.mf-todo .todo-row{display:grid;grid-template-columns:34px 1fr 1fr 34px;gap:8px}.mf-todo .todo-row input[data-todo-text]{grid-column:2/4;height:40px}.mf-todo .todo-row .todo-del{grid-column:4;grid-row:1}.mf-todo .todo-row .todo-who{grid-column:2;width:100%}.mf-todo .todo-row .todo-due{grid-column:3;width:100%;min-width:0}
+@media print{.mf-todo select.todo-who:has(option[value=""]:checked){color:transparent}.mf-todo .todo-row{grid-template-columns:24px 1fr 80px 90px 0}.mf-todo .todo-row input[data-todo-text]{grid-column:2}.mf-todo .todo-row .todo-who{grid-column:3;grid-row:1}.mf-todo .todo-row .todo-due{grid-column:4;grid-row:1}}
+@media print{.meet-view select.todo-who{appearance:none;-webkit-appearance:none;border:none;background:none;padding:0;min-height:0}.mf-fw{gap:0}}
 </style>
 </head>
 <body>
@@ -2525,10 +2561,43 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     } else {
       h += '<div class="card empty">予定されている行事はまだありません</div>';
     }
+    h += homeTasks();
     h += '<div class="section-title">' + I('calendar') + ' これからの行事' + (isAdmin() ? '<a class="btn sm" href="#/edit/new" style="margin-left:auto">' + I('plus') + ' 行事を追加</a>' : '') + '</div>';
     h += ups.length > 1 ? '<div class="list">' + ups.slice(1).map(evCard).join("") + '</div>' : '<div class="card empty slim">ほかの予定はまだありません</div>';
     var past = sortedEvents().filter(function(ev){ return ups.indexOf(ev) < 0; }).reverse();
     if (past.length) h += '<div class="section-title">' + I('history') + ' これまでの行事</div><div class="list">' + past.map(evCard).join("") + '</div>';
+    return h + '</div>';
+  }
+  // ホームの「準備の状況」（主催者だけ）：タスクと打ち合わせのやること、次の打ち合わせ
+  function homeTasks(){
+    if (!isAdmin() || !(S.hasTasks || S.hasMeetings)) return "";
+    var today = todayISO(), all = allTasks(), open = all.filter(function(x){ return !x.done; });
+    var late = open.filter(function(x){ return x.due && x.due < today; }).length;
+    var week = open.filter(function(x){ return x.due && x.due >= today && dayDiff(x.due) <= 7; }).length;
+    var doneN = all.length - open.length, pct = all.length ? Math.round(doneN / all.length * 100) : 0;
+    var top = open.slice().sort(function(a, b){ return (a.due || "9999").localeCompare(b.due || "9999"); }).slice(0, 4);
+    var h = '<div class="section-title">' + I('todo') + ' 準備の状況<a class="btn sm" href="#/admin/tasks" style="margin-left:auto">タスク管理 ›</a></div><div class="card hm-tk">';
+    h += '<div class="hm-sum"><div class="tk-num"><b data-count="' + open.length + '">' + open.length + '</b><span>残り</span></div><div class="tk-num' + (late ? ' late' : '') + '"><b>' + late + '</b><span>期限切れ</span></div><div class="tk-num"><b>' + week + '</b><span>7日以内</span></div>'
+      + '<div class="tk-prog"><span>完了 ' + doneN + ' / ' + all.length + '</span><i><em style="width:' + pct + '%"></em></i></div></div>';
+    if (top.length) {
+      h += '<div class="hm-list">' + top.map(function(x){
+        var ev = S.events.find(function(e){ return e.id === x.ev; }), th = ev ? theme(ev) : null, du = dueLabel(x.due, x.raw);
+        return '<div class="hm-row"' + (th ? ' style="--dot:' + th.dot + '"' : '') + '><button class="todo-chk tk-chk" data-tk-done="' + esc(x.id) + '" aria-label="完了にする"></button>'
+          + '<a class="hm-t" href="' + (x.kind === "meet" ? '#/meeting/' + x.mid : '#/admin/tasks') + '"><b>' + esc(x.title) + '</b><small>'
+          + (ev ? '<span class="tk-ev"><i></i>' + esc(ev.name) + '</span>' : '') + (x.who ? '<span>' + I('person') + esc(x.who) + '</span>' : '<span>担当 未定</span>')
+          + (du ? '<span class="tk-due ' + du.c + '">' + esc(du.t) + '</span>' : '') + '</small></a></div>';
+      }).join("") + (open.length > top.length ? '<a class="hm-more" href="#/admin/tasks">ほか ' + (open.length - top.length) + '件を見る ›</a>' : '') + '</div>';
+    } else {
+      h += '<p class="hm-none">' + (all.length ? 'やることは全部終わっています 🎉' : 'まだやることは登録されていません') + '</p>';
+    }
+    var nm = (S.meetings || []).filter(function(m){ return m.date && m.date >= today; }).sort(function(a, b){ return a.date.localeCompare(b.date); })[0];
+    if (nm) {
+      var mev = S.events.find(function(e){ return e.id === nm.event_id; });
+      h += '<a class="hm-meet" href="#/meeting/' + nm.id + '">' + I('chat') + '<span><small>次の打ち合わせ' + (nm.date === today ? '（今日）' : '') + '</small><b>' + esc(fmtMeetDate(nm)) + (nm.time ? '　' + esc(nm.time) : '') + '</b>' + (nm.place || mev ? '<em>' + esc([nm.place, mev ? mev.name : ""].filter(Boolean).join("・")) + '</em>' : '') + '</span><i>›</i></a>';
+    } else {
+      var nx = upcoming()[0];
+      if (nx && S.hasMeetings) h += '<a class="hm-meet add" href="#/meeting/new/' + nx.id + '">' + I('plus') + '<span><small>次の打ち合わせは未定</small><b>打ち合わせを追加</b><em>' + esc(nx.name) + '</em></span><i>›</i></a>';
+    }
     return h + '</div>';
   }
   function evCard(ev){
@@ -3153,18 +3222,27 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     var m = isNew ? null : (S.meetings || []).find(function(x){ return x.id === id; });
     if (!isNew && !m) return '<div class="view card empty">打ち合わせが見つかりませんでした</div>';
     if (!meetDraft || meetDraft._key !== (isNew ? "new:" + evIdForNew : id)) {
-      meetDraft = isNew ? { _key: "new:" + evIdForNew, event_id: evIdForNew, date: todayISO(), time: "", place: "", attendees: "", content: "", decisions: "", todos: [], extra: {} } : JSON.parse(JSON.stringify(m));
+      var pv = isNew ? (meetingsOf(evIdForNew).slice(-1)[0] || (S.meetings || []).slice().sort(function(a, b){ return (b.date || "").localeCompare(a.date || ""); })[0]) : null;
+      meetDraft = isNew ? { _key: "new:" + evIdForNew, event_id: evIdForNew, date: todayISO(), time: pv ? pv.time || "" : "", place: pv ? pv.place || "" : "", attendees: pv ? pv.attendees || "" : "", content: "", decisions: "", todos: [], extra: {} } : JSON.parse(JSON.stringify(m));
       meetDraft.extra = meetDraft.extra || {}; meetDraft.extra.agenda = meetDraft.extra.agenda || [];
       meetDraft._key = isNew ? "new:" + evIdForNew : id;
     }
     var d = meetDraft, ev = S.events.find(function(e){ return e.id === d.event_id; });
     var th = ev ? theme(ev) : FALLBACK[0];
-    var f = function(label, key, ph, type){ return '<label class="field">' + label + '<input type="' + (type || 'text') + '" data-mf="' + key + '" value="' + esc(d[key] || '') + '" placeholder="' + esc(ph || '') + '"></label>'; };
+    var f = function(label, key, ph, type, chips){ return '<div class="mf-fw"><label class="field">' + label + '<input type="' + (type || 'text') + '" data-mf="' + key + '" value="' + esc(d[key] || '') + '" placeholder="' + esc(ph || '') + '"></label>' + (chips || '') + '</div>'; };
+    // よく使う時間・場所（前の打ち合わせから）と出席者のボタン
+    var pick = function(key, def){ var out = []; (S.meetings || []).slice().sort(function(a, b){ return (b.date || "").localeCompare(a.date || ""); }).forEach(function(m){ var v = (m[key] || "").trim(); if (v && out.indexOf(v) < 0) out.push(v); }); (def || []).forEach(function(v){ if (out.indexOf(v) < 0) out.push(v); }); return out.slice(0, 4); };
+    var setChips = function(key, list){ return list.length ? '<div class="mf-chips no-print">' + list.map(function(v){ return '<button type="button" class="' + ((d[key] || "") === v ? 'on' : '') + '" data-mf-set="' + key + '" data-v="' + esc(v) + '">' + esc(v) + '</button>'; }).join("") + '</div>' : ''; };
+    var attNow = (d.attendees || "").split(/[・、,，\s]+/).filter(Boolean);
+    var attChips = '<div class="mf-chips no-print">' + TK_WHO.map(function(n){ return '<button type="button" class="' + (attNow.indexOf(n) >= 0 ? 'on' : '') + '" data-mf-who="' + esc(n) + '">' + (attNow.indexOf(n) >= 0 ? I('check') : '') + esc(n) + '</button>'; }).join("") + '</div>';
+    // 前回の打ち合わせで終わっていない「やること」
+    var prevM = meetingsOf(d.event_id).filter(function(m){ return m.id !== d.id && (!d.date || !m.date || m.date <= d.date); }).slice(-1)[0];
+    var carry = prevM ? (prevM.todos || []).filter(function(t){ return !t.done && (t.text || "").trim() && (d.extra && d.extra.confirm || "").indexOf(t.text.trim()) < 0; }) : [];
     var todos = (d.todos || []).map(function(t, i){
       return '<div class="todo-row' + (t.done ? ' done' : '') + '"><button class="todo-chk" data-todo-done="' + i + '" aria-label="完了">' + (t.done ? I('check') : '') + '</button>'
         + '<input type="text" data-todo-text="' + i + '" value="' + esc(t.text || '') + '" placeholder="やること">'
-        + '<input type="text" class="todo-who" data-todo-who="' + i + '" value="' + esc(t.who || '') + '" placeholder="担当">'
-        + '<input type="text" class="todo-due" data-todo-due="' + i + '" value="' + esc(t.due || '') + '" placeholder="いつまで">'
+        + '<select class="todo-who" data-todo-who="' + i + '" aria-label="担当">' + tkWhoOpts(t.who || '').replace('（未定）', '担当') + '</select>'
+        + (!t.due || /^\d{4}-\d{2}-\d{2}$/.test(t.due) ? '<input type="date" class="todo-due" data-todo-due="' + i + '" value="' + esc(t.due || '') + '" aria-label="期限">' : '<input type="text" class="todo-due" data-todo-due="' + i + '" value="' + esc(t.due) + '" placeholder="いつまで">')
         + '<button class="todo-del" data-todo-del="' + i + '" aria-label="削除">' + I('trash') + '</button></div>';
     }).join("");
     var x = d.extra || {};
@@ -3181,13 +3259,15 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       + '<div class="meet-head mh-compact" style="--c1:' + th.c1 + ';--c2:' + th.c2 + '"><h1>' + (isNew ? '打ち合わせを追加' : esc(fmtMeetDate(d)) + 'の打ち合わせ') + '</h1><p>' + (ev ? esc(ev.name) : '') + '</p>' + '<span class="mh-acts no-print">' + (isNew ? '' : '<button class="btn sm" data-meet-print>' + I('print') + ' 印刷</button><button class="btn sm danger" data-meet-del="' + d.id + '">' + I('trash') + ' 削除</button>') + '<button class="btn primary" data-meet-save>' + I('save') + ' 保存する</button></span>' + '</div>'
       + (noExtra ? '<div class="warn no-print">「打ち合わせで確認すること」を保存するには、データベースの更新（SQLを1回実行）が必要です。</div>' : '')
       + '<div class="card panel edit-form meet-form mf2">'
-      + '<div class="mf-top">' + f('日付', 'date', '', 'date') + f('時間', 'time', '例：17:30〜') + f('場所', 'place', '例：休憩室') + f('出席者', 'attendees', '例：髙橋・齊藤・伊藤') + '</div>'
+      + '<div class="mf-top">' + f('日付', 'date', '', 'date') + f('時間', 'time', '例：17:30〜', '', setChips('time', pick('time', ['12:00〜', '17:30〜']))) + f('場所', 'place', '例：休憩室', '', setChips('place', pick('place', ['休憩室']))) + f('出席者', 'attendees', '例：髙橋・齊藤・伊藤', '', attChips) + '</div>'
       + '<div class="mf-cols">'
       + '<div class="mf-col pre"><label class="field"><span class="mf-h">' + I('note') + '打ち合わせで確認すること<small>事前に入力しておく</small></span>'
+      + (carry.length ? '<div class="mf-carry no-print">' + I('history') + '<span>前回（' + esc(fmtMeetDate(prevM)) + '）の終わっていないやること <b>' + carry.length + '件</b></span><button type="button" class="btn sm" data-mf-carry="' + prevM.id + '">確認することに入れる</button></div>' : '')
       + '<textarea data-mx="confirm" class="mf-big" placeholder="・種目と時間割の最終確認&#10;・乗り合わせの担当は誰にするか&#10;・景品の予算と買い出し&#10;・当日の役割分担">' + esc(x.confirm || '') + '</textarea></label></div>'
       + '<div class="mf-col rec">'
       + '<label class="field"><span class="mf-h">' + I('chat') + '話し合った内容</span><textarea data-mf="content" placeholder="・種目について&#10;・チーム分けについて">' + esc(d.content || '') + '</textarea></label>'
       + '<label class="field"><span class="mf-h">' + I('check') + '決まったこと</span><textarea data-mf="decisions" placeholder="・卓球はダブルスで行う&#10;・昼食はレストラン コロナ">' + esc(d.decisions || '') + '</textarea></label>'
+      + '<p class="mf-tip no-print">文の行は「・」が自動で付きます。やることの欄で Enter を押すと次の行が増えます。⌘S（Ctrl+S）で保存</p>'
       + '<div class="field mf-todo"><span class="mf-h">' + I('todo') + 'やること（担当・期限つき）<button class="btn sm no-print" data-todo-add style="margin-left:auto">' + I('plus') + ' 追加</button></span><div class="todos">' + (todos || '<span class="hint" style="margin:0">まだありません</span>') + '</div></div>'
       + '</div></div>'
       + '</div></div>';
@@ -3198,7 +3278,8 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     document.querySelectorAll("[data-todo-who]").forEach(function(el){ meetDraft.todos[+el.dataset.todoWho].who = el.value; });
     document.querySelectorAll("[data-todo-due]").forEach(function(el){ meetDraft.todos[+el.dataset.todoDue].due = el.value; });
     meetDraft.extra = meetDraft.extra || {}; meetDraft.extra.agenda = meetDraft.extra.agenda || [];
-    document.querySelectorAll("[data-mx]").forEach(function(el){ meetDraft.extra[el.dataset.mx] = el.value; });
+    document.querySelectorAll("[data-mx]").forEach(function(el){ meetDraft.extra[el.dataset.mx] = el.value.trim() === "・" ? "" : el.value; });
+    ["content", "decisions"].forEach(function(k){ if ((meetDraft[k] || "").trim() === "・") meetDraft[k] = ""; });
     document.querySelectorAll("[data-ag-text]").forEach(function(el){ meetDraft.extra.agenda[+el.dataset.agText].text = el.value; });
     document.querySelectorAll("[data-ag-who]").forEach(function(el){ meetDraft.extra.agenda[+el.dataset.agWho].who = el.value; });
   }
@@ -4368,6 +4449,9 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     if (e.target.closest("[data-unsel]")) { selected = null; render(); return; }
     if (e.target.closest("[data-saveev]")) { saveEvent(); return; }
     if (e.target.closest("[data-meet-save]")) { saveMeeting(); return; }
+    if ((t = e.target.closest("[data-mf-set]"))) { readMeetForm(); meetDraft[t.dataset.mfSet] = meetDraft[t.dataset.mfSet] === t.dataset.v ? "" : t.dataset.v; render(); return; }
+    if ((t = e.target.closest("[data-mf-who]"))) { readMeetForm(); var an = (meetDraft.attendees || "").split(/[・、,，\s]+/).filter(Boolean), ai2 = an.indexOf(t.dataset.mfWho); if (ai2 >= 0) an.splice(ai2, 1); else an.push(t.dataset.mfWho); an.sort(function(a, b){ var x = TK_WHO.indexOf(a), y = TK_WHO.indexOf(b); return (x < 0 ? 99 : x) - (y < 0 ? 99 : y); }); meetDraft.attendees = an.join("・"); render(); return; }
+    if ((t = e.target.closest("[data-mf-carry]"))) { readMeetForm(); var pm = (S.meetings || []).find(function(m){ return m.id === t.dataset.mfCarry; }); if (pm) { var cur = (meetDraft.extra.confirm || "").replace(/\s+$/, ""); var add = (pm.todos || []).filter(function(x){ return !x.done && (x.text || "").trim() && cur.indexOf(x.text.trim()) < 0; }).map(function(x){ return "・" + x.text.trim() + (x.who ? "（" + x.who + "）" : ""); }); meetDraft.extra.confirm = (cur && cur !== "・" ? cur + "\n" : "") + add.join("\n"); render(); toast("前回の残りを入れました"); } return; }
     if (e.target.closest("[data-meet-print]")) { window.print(); return; }
     if ((t = e.target.closest("[data-sv-pstyle]"))) { pStyle = t.dataset.svPstyle; try { localStorage.setItem("portal_print_style2", pStyle); } catch (x) {} render(); return; }
     if ((t = e.target.closest("[data-sv-print]"))) { document.body.dataset.pmode = t.dataset.svPrint; document.body.dataset.pstyle = pStyle; setTimeout(function(){ window.print(); }, 30); return; }
@@ -4419,6 +4503,26 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     if (e.target.matches && e.target.matches("[data-rl-draw]")) { rl.draw = +e.target.value; try { localStorage.setItem("portal_roulette_draw", rl.draw); } catch (x) {} if (!rl.spinning) render(); }
     if (e.target.id === "ef-datepick" && e.target.value) { var dp = e.target.value.split("-"); document.getElementById("ef-date").value = (+dp[0]) + "年" + (+dp[1]) + "月" + (+dp[2]) + "日"; }
     if (e.target.id === "teamEv") { draft = null; selected = null; location.hash = "#/teams/" + e.target.value; }
+  });
+  // 打ち合わせの入力：「・」の自動入力、Enter で次のやること、⌘S で保存
+  document.addEventListener("focusin", function(e){ var ta = e.target; if (ta.matches && ta.matches(".meet-form textarea") && !ta.value) { ta.value = "・"; ta.setSelectionRange(1, 1); } });
+  document.addEventListener("focusout", function(e){ var ta = e.target; if (ta.matches && ta.matches(".meet-form textarea") && ta.value.trim() === "・") ta.value = ""; });
+  document.addEventListener("keydown", function(e){
+    if (e.isComposing || e.keyCode === 229) return;
+    var tg = e.target;
+    if ((e.metaKey || e.ctrlKey) && (e.key === "s" || e.key === "S") && document.querySelector(".meet-form")) { e.preventDefault(); saveMeeting(); return; }
+    if (e.key !== "Enter" || e.shiftKey) return;
+    if (tg.matches && tg.matches(".meet-form textarea")) {
+      var v = tg.value, pos = tg.selectionStart, ls = v.lastIndexOf("\n", pos - 1) + 1, line = v.slice(ls, pos);
+      if (line.trim() === "・") { e.preventDefault(); tg.value = v.slice(0, ls) + v.slice(pos); tg.setSelectionRange(ls, ls); tg.dispatchEvent(new Event("input", { bubbles: true })); return; }
+      if (/^・/.test(line)) { e.preventDefault(); tg.setRangeText("\n・", pos, tg.selectionEnd, "end"); tg.dispatchEvent(new Event("input", { bubbles: true })); }
+      return;
+    }
+    if (tg.dataset && tg.dataset.todoText !== undefined) {
+      e.preventDefault(); readMeetForm(); var ni = +tg.dataset.todoText + 1;
+      meetDraft.todos.splice(ni, 0, { text: "", who: "", done: false }); render();
+      var nx = document.querySelector('[data-todo-text="' + ni + '"]'); if (nx) nx.focus();
+    }
   });
   document.addEventListener("keydown", function(e){
     if (e.key === "Escape" && tp) { tpClose(); return; }
