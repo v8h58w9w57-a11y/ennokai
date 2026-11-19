@@ -2297,6 +2297,62 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   body[data-pstyle="mood"][data-mood="xmas"] .svp-head::after,body[data-pstyle="mood"][data-mood="xmas"] .svh-hd::after,body[data-pstyle="mood"][data-mood="theater"] .svp-head::after,body[data-pstyle="mood"][data-mood="theater"] .svh-hd::after{opacity:1}
   body[data-pstyle="mood"] .svp-date,body[data-pstyle="mood"] .svp-ttl,body[data-pstyle="mood"] .svp-qr{position:relative;z-index:1}
 }
+
+/* ---------- タスク管理 ---------- */
+.tk-need{display:flex;gap:12px;align-items:flex-start}.tk-need .ic{width:24px;height:24px;color:var(--peach);flex:none}.tk-need p{margin:4px 0 0;font-size:.875rem;color:var(--ink2)}
+.tk-sum{display:grid;grid-template-columns:repeat(3,auto) 1fr;gap:16px;align-items:center;padding:16px 20px;margin-top:16px}
+.tk-num{display:flex;flex-direction:column;align-items:center;min-width:56px}.tk-num b{font-family:var(--font-title);font-size:1.75rem;font-weight:900;line-height:1}.tk-num span{font-size:.75rem;font-weight:800;color:var(--muted);margin-top:4px}
+.tk-num.late b,.tk-num.late span{color:#D2364F}
+.tk-prog{display:flex;flex-direction:column;gap:6px;min-width:0}.tk-prog span{font-size:.75rem;font-weight:800;color:var(--muted)}
+.tk-prog i{display:block;height:10px;border-radius:999px;background:var(--card2);overflow:hidden}.tk-prog em{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--mint),var(--sky));transition:width .4s ease-out}
+@media (max-width:520px){.tk-sum{grid-template-columns:repeat(3,1fr);gap:12px}.tk-prog{grid-column:1/-1}}
+.tk-chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:16px 0 0;padding:2px}
+.tk-chips::-webkit-scrollbar{display:none}
+.tk-chips button{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:6px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:.8125rem;font-weight:800;cursor:pointer}
+.tk-chips button i{width:10px;height:10px;border-radius:50%;background:var(--dot)}
+.tk-chips button small{font-size:.6875rem;font-weight:900;background:var(--peach);color:#fff;border-radius:999px;padding:1px 7px}
+.tk-chips button.on{background:var(--inv);color:var(--inv-ink);border-color:var(--inv)}
+.tk-add{margin-top:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.tk-add>input,.tk-row.editing>input{width:100%;font:inherit;font-size:1rem;font-weight:800;padding:12px 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card2);color:var(--ink)}
+.tk-add-row{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px}
+.tk-add-row label,.tk-note{display:flex;flex-direction:column;gap:4px;font-size:.75rem;font-weight:800;color:var(--muted);min-width:0}
+.tk-add-row select,.tk-add-row input,.tk-note textarea{font:inherit;font-size:.875rem;font-weight:700;min-height:44px;padding:8px 10px;border-radius:12px;border:1.5px solid var(--line);background:var(--card2);color:var(--ink);min-width:0;width:100%}
+@media (max-width:560px){.tk-add-row{grid-template-columns:1fr 1fr}.tk-add-row label:first-child{grid-column:1/-1}}
+.tk-quick{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tk-quick span{font-size:.75rem;font-weight:800;color:var(--muted)}
+.tk-quick button:not(.btn){min-height:36px;padding:4px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:.75rem;font-weight:800;cursor:pointer}
+.tk-quick button.on{background:var(--inv);color:var(--inv-ink);border-color:var(--inv)}
+.tk-quick .btn{margin-left:auto;min-height:44px}
+.tk-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:20px 0 4px}
+.tk-whos{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tk-whos span{font-size:.75rem;font-weight:800;color:var(--muted);margin-right:2px}
+.tk-whos button{min-height:36px;padding:4px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:.75rem;font-weight:800;cursor:pointer}
+.tk-whos button.on{background:var(--sky-soft);border-color:var(--sky);color:var(--ink)}
+.tk-group{margin-top:16px}
+.tk-group h3{display:flex;align-items:center;gap:8px;margin:0 0 8px 4px;font-family:var(--font-title);font-size:.9375rem;font-weight:900}
+.tk-group h3 small{font-size:.75rem;font-weight:900;background:var(--card2);color:var(--muted);border-radius:999px;padding:1px 8px}
+.tk-group.late h3{color:#D2364F}.tk-group.late h3 small{background:#FDE2E6;color:#D2364F}
+.tk-group.today h3{color:var(--peach)}
+.tk-row{display:flex;align-items:center;gap:12px;padding:12px 12px 12px 14px;margin-bottom:8px;border-radius:18px;background:var(--card);box-shadow:var(--shadow);border-left:4px solid var(--dot,var(--line));animation:fadeUp .3s ease-out both}
+.tk-row.done{opacity:.6}
+.tk-row.done .tk-main b{text-decoration:line-through;color:var(--muted)}
+.tk-chk{width:36px!important;height:36px!important;border-radius:12px!important}
+.tk-row.done .tk-chk{background:var(--mint);border-color:var(--mint)}
+.tk-chk:hover{border-color:var(--mint)}
+.tk-main{flex:1;min-width:0;cursor:pointer}
+.tk-main b{display:block;font-size:.9375rem;font-weight:900;line-height:1.4;word-break:auto-phrase}
+.tk-meta{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px;font-size:.75rem;font-weight:800;color:var(--muted)}
+.tk-meta span,.tk-meta a{display:inline-flex;align-items:center;gap:3px}
+.tk-meta .ic{width:13px;height:13px}
+.tk-ev i{width:8px;height:8px;border-radius:50%;background:var(--dot)}
+.tk-due.late{color:#D2364F}.tk-due.today{color:var(--peach)}.tk-due.soon{color:color-mix(in srgb,var(--peach) 70%,var(--ink))}
+.tk-src{color:var(--lav);text-decoration:none}
+.tk-note-s{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tk-edit{flex:none;width:40px;height:40px;border-radius:12px;border:none;background:var(--card2);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.tk-edit .ic{width:18px;height:18px}
+.tk-row.editing{flex-direction:column;align-items:stretch;padding:16px;border-left-width:4px}
+.tk-ed-act{display:flex;gap:8px;align-items:center}.tk-ed-act span{flex:1}
+.tk-empty{margin-top:16px;text-align:center;padding:32px}
 </style>
 </head>
 <body>
@@ -2408,6 +2464,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     var st = await sb.from("ennokai_settings").select("*").eq("id", 1).maybeSingle();
     var t = await sb.from("ennokai_teams").select("*");
     var mt = await sb.from("ennokai_meetings").select("*").order("date");
+    var tk = await sb.from("ennokai_tasks").select("*").order("created_at");
     if (r.error || e.error) throw (r.error || e.error);
     S.roster = (r.data || []).map(function(x){ return { id: x.id, name: x.name, gender: x.gender || null, eventId: x.event_id || null, position: x.position || null }; });
     S.hasPosition = !!(r.data && r.data.length && Object.prototype.hasOwnProperty.call(r.data[0], "position"));
@@ -2420,6 +2477,8 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     S.hasTeams = !t.error;
     S.hasMeetings = !mt.error;
     S.meetings = mt.error ? [] : (mt.data || []);
+    S.hasTasks = !tk.error;
+    S.tasks = tk.error ? [] : (tk.data || []);
     S.teams = {};
     (t.data || []).forEach(function(x){ S.teams[x.event_id] = x.data || {}; });
     S.loaded = true;
@@ -3159,6 +3218,138 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     await load();
     location.hash = "#/meeting/" + res.data.id;
   }
+  /* ---------- タスク管理（主催者だけ）：タスク表＋打ち合わせの「やること」をまとめて表示 ---------- */
+  var tkEv = "", tkTab = "open", tkWho = "", tkEdit = null;
+  var WDJ = ["日", "月", "火", "水", "木", "金", "土"];
+  function isoOf(d){ return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  function dueISO(txt){ // 打ち合わせの「いつまで」（自由入力）から日付を読む
+    if (!txt) return null; if (/^\d{4}-\d{2}-\d{2}$/.test(txt)) return txt;
+    var pd = parseDate(txt); return pd && pd.exact ? pd.y + "-" + String(pd.m).padStart(2, "0") + "-" + String(pd.d).padStart(2, "0") : null;
+  }
+  function dayDiff(iso){ var t = new Date(); t.setHours(0, 0, 0, 0); var p = iso.split("-"); return Math.round((new Date(+p[0], p[1] - 1, +p[2]) - t) / 86400000); }
+  function dueLabel(iso, raw){
+    if (!iso) return raw ? { t: raw, c: "" } : null;
+    var d = dayDiff(iso), p = iso.split("-"), md = +p[1] + "/" + +p[2] + "（" + WDJ[new Date(+p[0], p[1] - 1, +p[2]).getDay()] + "）";
+    if (d < 0) return { t: (-d) + "日遅れ・" + md, c: "late" };
+    if (d === 0) return { t: "今日まで", c: "today" };
+    if (d === 1) return { t: "明日まで", c: "soon" };
+    if (d <= 7) return { t: "あと" + d + "日・" + md, c: "soon" };
+    return { t: md + "まで", c: "" };
+  }
+  function allTasks(){
+    var list = (S.tasks || []).map(function(x){ return { kind: "task", id: x.id, ev: x.event_id, title: x.title, who: x.who || "", due: x.due || null, raw: "", note: x.note || "", done: !!x.done }; });
+    (S.meetings || []).forEach(function(m){ (m.todos || []).forEach(function(t, i){ if (!(t.text || "").trim()) return; list.push({ kind: "meet", id: m.id + ":" + i, mid: m.id, idx: i, ev: m.event_id, title: t.text, who: t.who || "", due: dueISO(t.due), raw: t.due || "", note: "", done: !!t.done, m: m }); }); });
+    return list;
+  }
+  function viewTasks(){
+    if (!S.hasTasks) return '<div class="card panel tk-need">' + I('info') + '<div><b>はじめに準備が必要です</b><p>Supabase の SQL Editor で <code>sql/portal-009-tasks.sql</code> を実行すると、タスク管理が使えるようになります。</p></div></div>'
+      + '<p class="hint">打ち合わせの「やること」は、準備ができたあとこの画面にまとめて並びます。</p></div>';
+    var evs = sortedEvents(), all = allTasks(), today = todayISO();
+    var inEv = all.filter(function(x){ return !tkEv || x.ev === tkEv; });
+    var whos = []; inEv.forEach(function(x){ (x.who || "").split(/[・、,，\s]+/).forEach(function(w){ if (w && whos.indexOf(w) < 0) whos.push(w); }); });
+    if (tkWho && whos.indexOf(tkWho) < 0) tkWho = "";
+    var shown = inEv.filter(function(x){ return (!tkWho || (x.who || "").indexOf(tkWho) >= 0) && (tkTab === "all" || (tkTab === "done" ? x.done : !x.done)); });
+    var open = inEv.filter(function(x){ return !x.done; }), late = open.filter(function(x){ return x.due && x.due < today; }).length, week = open.filter(function(x){ return x.due && x.due >= today && dayDiff(x.due) <= 7; }).length;
+    var doneN = inEv.length - open.length, pct = inEv.length ? Math.round(doneN / inEv.length * 100) : 0;
+    var defEv = tkEv || (upcoming()[0] || {}).id || "";
+    var nx = S.events.find(function(e){ return e.id === defEv; }), nxPd = nx ? parseDate(nx.date) : null, eve = nxPd && nxPd.exact ? isoOf(new Date(nxPd.y, nxPd.m - 1, nxPd.d - 1)) : "";
+    var names = []; S.roster.forEach(function(p){ if (names.indexOf(p.name) < 0) names.push(p.name); });
+    var h = '<div class="tk-sum card"><div class="tk-num"><b>' + open.length + '</b><span>残り</span></div><div class="tk-num' + (late ? ' late' : '') + '"><b>' + late + '</b><span>期限切れ</span></div><div class="tk-num"><b>' + week + '</b><span>7日以内</span></div>'
+      + '<div class="tk-prog"><span>完了 ' + doneN + ' / ' + inEv.length + '</span><i><em style="width:' + pct + '%"></em></i></div></div>';
+    h += '<div class="tk-chips" role="tablist"><button class="' + (!tkEv ? 'on' : '') + '" data-tk-ev="">すべての行事</button>' + evs.map(function(e){ var th = theme(e), n = all.filter(function(x){ return x.ev === e.id && !x.done; }).length; return '<button class="' + (tkEv === e.id ? 'on' : '') + '" data-tk-ev="' + e.id + '" style="--dot:' + th.dot + '"><i></i>' + esc(e.name) + (n ? '<small>' + n + '</small>' : '') + '</button>'; }).join("") + '</div>';
+    // 追加フォーム
+    h += '<div class="card tk-add"><input type="text" id="tkTitle" placeholder="やることを入力（例：景品を買う）" autocomplete="off">'
+      + '<div class="tk-add-row"><label>行事<select id="tkEvSel"><option value="">（行事なし）</option>' + evs.map(function(e){ return '<option value="' + e.id + '"' + (e.id === defEv ? ' selected' : '') + '>' + esc(e.name) + '</option>'; }).join("") + '</select></label>'
+      + '<label>担当<input type="text" id="tkWhoIn" list="tkNames" placeholder="だれが"></label><datalist id="tkNames">' + names.map(function(n){ return '<option value="' + esc(n) + '">'; }).join("") + '</datalist>'
+      + '<label>期限<input type="date" id="tkDue"></label></div>'
+      + '<div class="tk-quick"><span>期限：</span><button data-tk-q="' + today + '">今日</button><button data-tk-q="' + isoOf(new Date(Date.now() + 86400000)) + '">明日</button><button data-tk-q="' + isoOf(new Date(Date.now() + 7 * 86400000)) + '">1週間後</button>' + (eve && eve >= today ? '<button data-tk-q="' + eve + '">行事の前日</button>' : '') + '<button data-tk-q="">なし</button>'
+      + '<button class="btn primary sm" data-tk-add>' + I('plus') + ' 追加</button></div></div>';
+    // 絞り込み
+    h += '<div class="tk-bar"><div class="seg"><button data-tk-tab="open" class="' + (tkTab === "open" ? 'on' : '') + '">未完了</button><button data-tk-tab="done" class="' + (tkTab === "done" ? 'on' : '') + '">完了</button><button data-tk-tab="all" class="' + (tkTab === "all" ? 'on' : '') + '">すべて</button></div>'
+      + (whos.length ? '<div class="tk-whos"><span>担当</span><button class="' + (!tkWho ? 'on' : '') + '" data-tk-who="">全員</button>' + whos.map(function(w){ return '<button class="' + (tkWho === w ? 'on' : '') + '" data-tk-who="' + esc(w) + '">' + esc(w) + '</button>'; }).join("") + '</div>' : '') + '</div>';
+    // グループ
+    var groups = tkTab === "done" ? [["完了したこと", shown]] : [
+      ["期限切れ", shown.filter(function(x){ return !x.done && x.due && x.due < today; }), "late"],
+      ["今日まで", shown.filter(function(x){ return !x.done && x.due === today; }), "today"],
+      ["7日以内", shown.filter(function(x){ return !x.done && x.due && x.due > today && dayDiff(x.due) <= 7; })],
+      ["それ以降", shown.filter(function(x){ return !x.done && x.due && dayDiff(x.due) > 7; })],
+      ["期限なし", shown.filter(function(x){ return !x.done && !x.due; })],
+      ["完了", shown.filter(function(x){ return x.done; })]];
+    var any = false;
+    groups.forEach(function(g){
+      if (!g[1].length) return; any = true;
+      g[1].sort(function(a, b){ return (a.due || "9999").localeCompare(b.due || "9999"); });
+      h += '<div class="tk-group' + (g[2] ? ' ' + g[2] : '') + '"><h3>' + g[0] + '<small>' + g[1].length + '</small></h3>' + g[1].map(tkRow).join("") + '</div>';
+    });
+    if (!any) h += '<div class="card empty tk-empty">' + (tkTab === "done" ? 'まだ完了したタスクはありません' : 'やることはありません 🎉') + '</div>';
+    return h + '</div>';
+  }
+  function tkRow(x){
+    var ev = S.events.find(function(e){ return e.id === x.ev; }), th = ev ? theme(ev) : null, du = dueLabel(x.due, x.raw);
+    if (tkEdit === x.id && x.kind === "task") {
+      return '<div class="tk-row editing card"><input type="text" id="tkEtTitle" value="' + esc(x.title) + '"><div class="tk-add-row"><label>行事<select id="tkEtEv"><option value="">（行事なし）</option>' + sortedEvents().map(function(e){ return '<option value="' + e.id + '"' + (e.id === x.ev ? ' selected' : '') + '>' + esc(e.name) + '</option>'; }).join("") + '</select></label>'
+        + '<label>担当<input type="text" id="tkEtWho" list="tkNames" value="' + esc(x.who) + '"></label><label>期限<input type="date" id="tkEtDue" value="' + esc(x.due || '') + '"></label></div>'
+        + '<label class="tk-note">メモ<textarea id="tkEtNote" rows="2">' + esc(x.note) + '</textarea></label>'
+        + '<div class="tk-ed-act"><button class="btn danger sm" data-tk-del="' + x.id + '">' + I('trash') + ' 削除</button><span></span><button class="btn sm" data-tk-cancel>やめる</button><button class="btn primary sm" data-tk-save="' + x.id + '">' + I('save') + ' 保存</button></div></div>';
+    }
+    return '<div class="tk-row' + (x.done ? ' done' : '') + '"' + (th ? ' style="--dot:' + th.dot + '"' : '') + '><button class="todo-chk tk-chk" data-tk-done="' + esc(x.id) + '" aria-label="' + (x.done ? '未完了に戻す' : '完了にする') + '">' + (x.done ? I('check') : '') + '</button>'
+      + '<div class="tk-main"' + (x.kind === "task" ? ' data-tk-open="' + x.id + '"' : '') + '><b>' + esc(x.title) + '</b><div class="tk-meta">'
+      + (ev ? '<span class="tk-ev"><i></i>' + esc(ev.name) + '</span>' : '')
+      + (x.who ? '<span class="tk-who">' + I('person') + esc(x.who) + '</span>' : '')
+      + (du && !x.done ? '<span class="tk-due ' + du.c + '">' + I('clock') + esc(du.t) + '</span>' : '')
+      + (x.kind === "meet" ? '<a class="tk-src" href="#/meeting/' + x.mid + '">' + I('chat') + '打ち合わせ ' + esc(fmtMeetDate(x.m)) + '</a>' : '')
+      + (x.note ? '<span class="tk-note-s">' + I('note') + esc(x.note) + '</span>' : '')
+      + '</div></div>' + (x.kind === "task" ? '<button class="tk-edit" data-tk-open="' + x.id + '" aria-label="編集">' + I('edit') + '</button>' : '') + '</div>';
+  }
+  async function tkToggle(id){
+    var x = allTasks().find(function(t){ return t.id === id; }); if (!x) return;
+    var nv = !x.done, res;
+    if (x.kind === "task") {
+      var tk = S.tasks.find(function(t){ return t.id === id; }); tk.done = nv; render();
+      res = await sb.from("ennokai_tasks").update({ done: nv, done_at: nv ? new Date().toISOString() : null, updated_at: new Date().toISOString() }).eq("id", id);
+      if (res.error) { tk.done = !nv; render(); toast("保存できませんでした"); return; }
+    } else {
+      var m = S.meetings.find(function(mm){ return mm.id === x.mid; }), td = (m.todos || []).slice(); td[x.idx] = Object.assign({}, td[x.idx], { done: nv }); var prev = m.todos; m.todos = td; render();
+      res = await sb.from("ennokai_meetings").update({ todos: td, updated_at: new Date().toISOString() }).eq("id", m.id);
+      if (res.error) { m.todos = prev; render(); toast("保存できませんでした"); return; }
+    }
+    if (nv) toast("完了しました");
+  }
+  async function tkAdd(){
+    var ti = document.getElementById("tkTitle"), title = (ti.value || "").trim(); if (!title) { ti.focus(); toast("やることを入力してください"); return; }
+    var row = { title: title, event_id: document.getElementById("tkEvSel").value || null, who: (document.getElementById("tkWhoIn").value || "").trim(), due: document.getElementById("tkDue").value || null };
+    var res = await sb.from("ennokai_tasks").insert(row).select().single();
+    if (res.error) { toast("追加できませんでした"); return; }
+    S.tasks.push(res.data); toast("追加しました"); render();
+    var t2 = document.getElementById("tkTitle"); if (t2) t2.focus();
+  }
+  async function tkSave(id){
+    var row = { title: (document.getElementById("tkEtTitle").value || "").trim(), event_id: document.getElementById("tkEtEv").value || null, who: (document.getElementById("tkEtWho").value || "").trim(), due: document.getElementById("tkEtDue").value || null, note: (document.getElementById("tkEtNote").value || "").trim(), updated_at: new Date().toISOString() };
+    if (!row.title) { toast("やることを入力してください"); return; }
+    var res = await sb.from("ennokai_tasks").update(row).eq("id", id).select().single();
+    if (res.error) { toast("保存できませんでした"); return; }
+    var i = S.tasks.findIndex(function(t){ return t.id === id; }); S.tasks[i] = res.data; tkEdit = null; toast("保存しました"); render();
+  }
+  async function tkDel(id){
+    if (!confirm("このタスクを削除しますか？")) return;
+    var res = await sb.from("ennokai_tasks").delete().eq("id", id);
+    if (res.error) { toast("削除できませんでした"); return; }
+    S.tasks = S.tasks.filter(function(t){ return t.id !== id; }); tkEdit = null; toast("削除しました"); render();
+  }
+  function tkClick(e){
+    var t;
+    if ((t = e.target.closest("[data-tk-done]"))) { tkToggle(t.dataset.tkDone); return true; }
+    if ((t = e.target.closest("[data-tk-add]"))) { tkAdd(); return true; }
+    if ((t = e.target.closest("[data-tk-q]"))) { var d = document.getElementById("tkDue"); if (d) d.value = t.dataset.tkQ; document.querySelectorAll("[data-tk-q]").forEach(function(b){ b.classList.toggle("on", b === t); }); return true; }
+    if ((t = e.target.closest("[data-tk-ev]"))) { tkEv = t.dataset.tkEv; render(); return true; }
+    if ((t = e.target.closest("[data-tk-tab]"))) { tkTab = t.dataset.tkTab; render(); return true; }
+    if ((t = e.target.closest("[data-tk-who]"))) { tkWho = t.dataset.tkWho; render(); return true; }
+    if ((t = e.target.closest("[data-tk-save]"))) { tkSave(t.dataset.tkSave); return true; }
+    if ((t = e.target.closest("[data-tk-del]"))) { tkDel(t.dataset.tkDel); return true; }
+    if (e.target.closest("[data-tk-cancel]")) { tkEdit = null; render(); return true; }
+    if (!e.target.closest("a") && (t = e.target.closest("[data-tk-open]"))) { tkEdit = t.dataset.tkOpen; render(); var f = document.getElementById("tkEtTitle"); if (f) f.focus(); return true; }
+    return false;
+  }
   function viewMeetingsAll(){
     if (!S.hasMeetings) return '<div class="warn">打ち合わせを記録するには、データベースの準備（SQLを1回実行）が必要です。</div>';
     var evs = sortedEvents();
@@ -3825,6 +4016,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     var nmEv = nm ? S.events.find(function(e){ return e.id === nm.event_id; }) : null;
     return '<div class="view"><h1 class="page">主催者メニュー</h1><p class="sub">行事の準備に使う機能は、ここにまとまっています</p>'
       + '<div class="adm-grid">'
+      + card("#/admin/tasks", "todo", "#F27BA5", "タスク管理", "準備でやること・担当・期限（打ち合わせの「やること」もまとめて）", (function(){ if (!S.hasTasks) return "SQL の実行が必要です"; var td = todayISO(), op = allTasks().filter(function(x){ return !x.done; }), lt = op.filter(function(x){ return x.due && x.due < td; }).length; return op.length ? "残り " + op.length + "件" + (lt ? "（期限切れ " + lt + "件）" : "") : "やることはありません"; })())
       + card("#/teams", "users", "#FF8A80", "チーム分け", "出席者を自動・手動でチームに分ける", nx ? esc(nx.name) + "：" + (tm ? "チーム保存済み（" + tm + "チーム）" : "まだ作っていません") : "")
       + card("#/admin/meetings", "chat", "#A08CF0", "打ち合わせ", "打ち合わせで確認すること・決まったことの記録", (nm ? "次回 " + esc(fmtMeetDate(nm)) + (nmEv ? "（" + esc(nmEv.name) + "）" : "") : "予定なし") + (openTodo ? "　｜　やること残り " + openTodo + "件" : ""))
       + card("#/edit/new", "plus", "#F6A04D", "行事を追加", "新しい行事を登録（修正は各行事のページから）", "登録済みの行事 " + S.events.length + "件")
@@ -4047,6 +4239,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     else if (tab === "admin") {
       if (!isAdmin()) app.innerHTML = viewGate(location.hash);
       else if (r[1] === "gender") app.innerHTML = adminHead("person", "名簿の男女・役職", "チーム分けで男女・役職をそろえるための設定です") + viewGender() + '</div>';
+      else if (r[1] === "tasks") app.innerHTML = adminHead("todo", "タスク管理", "行事の準備でやることを、担当と期限つきでまとめます。打ち合わせの「やること」も一緒に並びます") + viewTasks();
       else if (r[1] === "meetings") app.innerHTML = adminHead("chat", "打ち合わせ", "行事ごとの打ち合わせの記録です") + viewMeetingsAll() + '</div>';
       else app.innerHTML = viewAdminHub();
     }
@@ -4111,6 +4304,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   document.addEventListener("click", async function(e){
     var t;
     if (seClick(e)) return;
+    if (tkClick(e)) return;
     if (e.target.closest("#moodBtn")) { openMoodSheet(); return; }
     if ((t = e.target.closest("[data-mood-set]"))) { setEvMood(t.dataset.ev, t.dataset.moodSet); return; }
     if ((t = e.target.closest("[data-mood-pick]"))) { document.getElementById("ef-mood").value = t.dataset.moodPick; document.querySelectorAll("[data-mood-pick]").forEach(function(b){ var on = b === t; b.classList.toggle("on", on); b.setAttribute("aria-checked", on); }); var nm = document.getElementById("ef-name"); setMood(t.dataset.moodPick || moodOf({ name: nm ? nm.value : "" })); return; }
