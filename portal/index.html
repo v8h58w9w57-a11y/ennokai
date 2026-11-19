@@ -2436,6 +2436,32 @@ main:has(.meet-view.live){max-width:none;padding:0 16px 24px}
   .meet-view.live .mh-compact p{display:none}
 }
 }
+
+/* ---------- 暗いスタイルの仕上げ（準備の状況・入力欄） ---------- */
+@media screen{
+  body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .edit-form textarea,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .edit-form input:not([type=checkbox]),body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .edit-form select,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .todo-row input,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .todo-row select,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .tk-add input,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .tk-add select,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .tk-row.editing input,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .tk-row.editing select,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .tk-row.editing textarea{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14);color:var(--ink)}
+  body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .edit-form textarea:focus,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .edit-form input:focus,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .todo-row input:focus,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .todo-row select:focus{border-color:rgba(245,198,79,.6);box-shadow:0 0 0 3px rgba(245,198,79,.15);outline:none}
+  body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .edit-form textarea::placeholder,body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .edit-form input::placeholder{color:rgba(220,210,234,.38)}
+  body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) select option{background:#1E1832;color:#F4EEFA}
+  body:is([data-mood="night"],[data-mood="theater"],[data-mood="gold"]) .mf2 .mf-big{background:rgba(255,255,255,.04)}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-tk{position:relative;overflow:hidden}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-tk::before{content:"";position:absolute;inset:-40% 40% auto -10%;height:180px;background:radial-gradient(closest-side,rgba(255,111,174,.18),transparent);pointer-events:none}
+  body:is([data-mood="night"],[data-mood="theater"]) .tk-sum .tk-num b,body:is([data-mood="night"],[data-mood="theater"]) .hm-sum .tk-num b{background:linear-gradient(180deg,#FFF1C9,#F5C64F);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px rgba(245,198,79,.35))}
+  body:is([data-mood="night"],[data-mood="theater"]) .tk-sum .tk-num.late b,body:is([data-mood="night"],[data-mood="theater"]) .hm-sum .tk-num.late b{background:linear-gradient(180deg,#FFC0D0,#FF6F8E);-webkit-background-clip:text;background-clip:text}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-sum .tk-prog i,body:is([data-mood="night"],[data-mood="theater"]) .tk-sum .tk-prog i{background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-sum .tk-prog em,body:is([data-mood="night"],[data-mood="theater"]) .tk-sum .tk-prog em{background:linear-gradient(90deg,#F5C64F,#FF8FBF 60%,#A98BFF);box-shadow:0 0 12px rgba(255,143,191,.6)}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-row{border-top-color:rgba(245,198,79,.18)}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-row .tk-chk{border-color:rgba(245,198,79,.55);background:rgba(245,198,79,.06)}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-row .tk-chk:hover{box-shadow:0 0 12px rgba(245,198,79,.45)}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-t small .tk-due{color:#FFD98A}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-meet{background:linear-gradient(110deg,rgba(91,45,255,.28),rgba(255,61,143,.16));box-shadow:inset 0 0 0 1px rgba(245,198,79,.28)}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-meet>.ic{color:#F5C64F;filter:drop-shadow(0 0 6px rgba(245,198,79,.6))}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-meet b{color:#FFE7A8}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-meet:hover{box-shadow:inset 0 0 0 1px rgba(245,198,79,.55),0 0 24px -8px rgba(255,111,174,.6)}
+  body:is([data-mood="night"],[data-mood="theater"]) .hm-more{color:#FFD98A}
+  body:is([data-mood="night"],[data-mood="theater"]) .mf-chips button,body:is([data-mood="night"],[data-mood="theater"]) .tk-quick button:not(.btn),body:is([data-mood="night"],[data-mood="theater"]) .tk-whos button{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.14)}
+  body:is([data-mood="night"],[data-mood="theater"]) .mf-carry{background:rgba(245,198,79,.08);border-color:rgba(245,198,79,.4)}
+}
 </style>
 </head>
 <body>
