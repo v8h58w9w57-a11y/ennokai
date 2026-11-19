@@ -3329,7 +3329,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     var inEv = all.filter(function(x){ return !tkEv || x.ev === tkEv; });
     var whos = []; inEv.forEach(function(x){ (x.who || "").split(/[・、,，\s]+/).forEach(function(w){ if (w && whos.indexOf(w) < 0) whos.push(w); }); });
     if (tkWho && whos.indexOf(tkWho) < 0) tkWho = "";
-    var shown = inEv.filter(function(x){ return (!tkWho || (x.who || "").indexOf(tkWho) >= 0) && (tkTab === "all" || (tkTab === "done" ? x.done : !x.done)); });
+    var shown = inEv.filter(function(x){ return (!tkWho || (x.who || "").indexOf(tkWho) >= 0 || (x.who === "全員" && tkWho !== "全員")) && (tkTab === "all" || (tkTab === "done" ? x.done : !x.done)); });
     var open = inEv.filter(function(x){ return !x.done; }), late = open.filter(function(x){ return x.due && x.due < today; }).length, week = open.filter(function(x){ return x.due && x.due >= today && dayDiff(x.due) <= 7; }).length;
     var doneN = inEv.length - open.length, pct = inEv.length ? Math.round(doneN / inEv.length * 100) : 0;
     var defEv = tkEv || (upcoming()[0] || {}).id || "";
@@ -3367,7 +3367,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
   // 担当者は決まった3人から選ぶ（前に入れた別の名前はそのまま残す）
   var TK_WHO = ["髙橋", "齊藤", "伊藤"];
   function tkWhoOpts(cur){
-    var list = TK_WHO.slice(); if (cur && list.indexOf(cur) < 0) list.push(cur);
+    var list = TK_WHO.concat(["全員"]); if (cur && list.indexOf(cur) < 0) list.push(cur);
     return '<option value="">（未定）</option>' + list.map(function(n){ return '<option value="' + esc(n) + '"' + (n === cur ? ' selected' : '') + '>' + esc(n) + '</option>'; }).join("");
   }
   function tkRow(x){
