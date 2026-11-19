@@ -2996,13 +2996,14 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
       + MOOD_OPTS.map(function(o){ var on = o[0] === cur; return '<button type="button" role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + (!o[0] ? ' auto' : '') + '" data-mood-set="' + o[0] + '" data-ev="' + ev.id + '"><i style="background:' + MOOD_SW[o[0]] + '"></i><b>' + (o[0] === "night" ? "夜" : o[1]) + '</b>' + (!o[0] && !cur ? '<small>' + esc(((MOOD_OPTS.find(function(x){ return x[0] === eff; }) || [])[1]) || '') + '</small>' : '') + '</button>'; }).join("")
       + '</div></div>';
   }
+  // スタイルは全体で1つ：どの画面で変えても、すべての行事（＝すべての画面・印刷）に同じスタイルを保存
   async function setEvMood(id, k){
-    var ev = S.events.find(function(e){ return e.id === id; }); if (!ev) return;
-    var prev = ev.mood || "";
+    if (!S.events.length) return;
+    var prev = S.events.map(function(e){ return e.mood || null; });
     pStyle = "mood"; try { localStorage.setItem("portal_print_style2", "mood"); } catch (x) {}
-    ev.mood = k || null; render();
-    var res = await sb.from("ennokai_events").update({ mood: k || null }).eq("id", id);
-    if (res.error) { ev.mood = prev || null; render(); toast("保存できませんでした"); return; }
+    S.events.forEach(function(e){ e.mood = k || null; }); render();
+    var res = await sb.from("ennokai_events").update({ mood: k || null }).in("id", S.events.map(function(e){ return e.id; }));
+    if (res.error) { S.events.forEach(function(e, i){ e.mood = prev[i]; }); render(); toast("保存できませんでした"); return; }
     toast((MOOD_OPTS.find(function(x){ return x[0] === k; }) || ["", "自動"])[1] + "にしました");
   }
   // 見る人だけの着せ替え（主催者でない人用。端末に保存）
@@ -3012,7 +3013,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     var old = document.querySelector(".msh"); if (old) { old.remove(); return; }
     var adm = isAdmin() && S.hasMood && moodEv, ev = moodEv, cur = adm ? (ev.mood || "") : myMood(), eff = document.body.dataset.mood;
     var w = document.createElement("div"); w.className = "msh no-print";
-    w.innerHTML = '<div class="msh-p" role="dialog" aria-label="スタイルを選ぶ"><div class="msh-h"><div><b>' + I('palette') + 'スタイル</b><small>' + (adm ? '「' + esc(ev.name) + '」のスタイルを変えます（みんなの画面に反映）' : 'あなたの画面だけ変わります') + '</small></div><button class="msh-x" data-msh-close aria-label="閉じる">✕</button></div>'
+    w.innerHTML = '<div class="msh-p" role="dialog" aria-label="スタイルを選ぶ"><div class="msh-h"><div><b>' + I('palette') + 'スタイル</b><small>' + (adm ? 'すべての画面・印刷に反映されます（みんなの画面も変わります）' : 'あなたの画面だけ変わります') + '</small></div><button class="msh-x" data-msh-close aria-label="閉じる">✕</button></div>'
       + '<div class="msh-g">' + MOOD_OPTS.map(function(o){ var on = o[0] === cur; return '<button type="button" class="' + (on ? 'on' : '') + '" data-msh="' + o[0] + '" aria-pressed="' + on + '"><i style="background:' + MOOD_SW[o[0]] + '"></i><b>' + o[1] + '</b><small>' + (o[0] ? o[2] : (adm ? '行事名から（いま：' + esc(((MOOD_OPTS.find(function(x){ return x[0] === eff; }) || [])[1]) || '') + '）' : '行事に合わせる')) + '</small></button>'; }).join("") + '</div></div>';
     w.addEventListener("click", async function(e){
       var b = e.target.closest("[data-msh]");
@@ -3040,7 +3041,7 @@ a.back{min-height:40px;display:inline-flex;align-items:center}
     var payload = { name: g("name"), date: g("date"), time: g("time"), location: g("location"), schedule: document.getElementById("ef-schedule").value.replace(/\s+$/, ""), notes: document.getElementById("ef-notes").value.replace(/\s+$/, "") };
     if (!payload.name) { toast("行事名を入れてください"); return; }
     if (S.hasMood) payload.mood = document.getElementById("ef-mood").value || null;
-    if (S.hasMood) { pStyle = "mood"; try { localStorage.setItem("portal_print_style2", "mood"); } catch (x) {} }
+    if (S.hasMood) { pStyle = "mood"; try { localStorage.setItem("portal_print_style2", "mood"); } catch (x) {} var others = S.events.filter(function(e){ return e.id !== id && (e.mood || null) !== payload.mood; }).map(function(e){ return e.id; }); if (others.length) await sb.from("ennokai_events").update({ mood: payload.mood }).in("id", others); }
     var res = id === "new" ? await sb.from("ennokai_events").insert(Object.assign({ checkin_required: true }, payload)).select().single() : await sb.from("ennokai_events").update(payload).eq("id", id).select().single();
     if (res.error) { toast("保存できませんでした"); return; }
     toast("保存しました");
